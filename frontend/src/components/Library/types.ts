@@ -126,12 +126,14 @@ export interface IConnection {
   dialect: string;
   is_sample: boolean;
   options?: IConnectionOptions;
+  instructions?: string | null;
 }
 
 export interface IEditConnection {
   name: string;
   dsn?: string;
   options?: IConnectionOptions;
+  instructions?: string | null;
 }
 
 export interface IUserInfo {
@@ -142,4 +144,5 @@ export interface IUserInfo {
   sentry_enabled: boolean;
   analytics_enabled: boolean;
   hide_sql_preference: boolean;
+  default_connection_id?: string | null;
 }

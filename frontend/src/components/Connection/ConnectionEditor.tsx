@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { IConnectionOptions, IEditConnection } from "@components/Library/types";
 import { ArrowPathIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { getRouteApi, useNavigate } from "@tanstack/react-router";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { AlertIcon, AlertModal } from "@components/Library/AlertModal";
 import { enqueueSnackbar } from "notistack";
 import {
@@ -141,11 +141,9 @@ const SchemaEditor = ({
   );
 };
 
-const connectionRouteApi = getRouteApi("/_app/connection/$connectionId");
-
 export const ConnectionEditor = () => {
   const navigate = useNavigate();
-  const { connectionId } = connectionRouteApi.useParams();
+  const { connectionId } = useParams({ strict: false });
   const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
   const [showCancelAlert, setShowCancelAlert] = useState<boolean>(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
@@ -183,6 +181,7 @@ export const ConnectionEditor = () => {
   const [editFields, setEditFields] = useState<IEditConnection>({
     name: "",
     dsn: "",
+    instructions: null,
   });
 
   useEffect(() => {
@@ -190,6 +189,7 @@ export const ConnectionEditor = () => {
       name: connection?.name || prev.name,
       dsn: connection?.dsn || prev.dsn,
       options: connection?.options || prev.options,
+      instructions: connection?.instructions ?? prev.instructions,
     }));
   }, [connection]);
 
@@ -246,6 +246,7 @@ export const ConnectionEditor = () => {
         name: editFields.name,
         ...(editFields.dsn !== connection?.dsn && { dsn: editFields.dsn }), // only add dsn if it changed
         options: editFields.options,
+        instructions: editFields.instructions,
       },
     });
   }
@@ -349,6 +350,36 @@ export const ConnectionEditor = () => {
           </div>
 
           <div className="sm:col-span-6">
+            <label
+              htmlFor="instructions"
+              className="block text-sm font-medium leading-6 text-white"
+            >
+              Instructions
+            </label>
+            <div className="mt-2">
+              <textarea
+                name="instructions"
+                id="instructions"
+                rows={5}
+                value={editFields.instructions ?? ""}
+                onChange={(e) => {
+                  setEditFields({
+                    ...editFields,
+                    instructions: e.target.value || null,
+                  });
+                  setUnsavedChanges(true);
+                }}
+                className={classNames(
+                  isLoading
+                    ? "animate-pulse bg-gray-900 text-gray-400"
+                    : "bg-white/5 text-white",
+                  "block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                )}
+              />
+            </div>
+          </div>
+
+          <div className="sm:col-span-6">
             <div className="flex items-center mb-2 gap-x-2">
               <label
                 htmlFor="schema"
@@ -357,7 +388,7 @@ export const ConnectionEditor = () => {
                 Schema options
               </label>
               <Button
-                onClick={() => refreshSchema(connectionId)}
+                onClick={() => connectionId && refreshSchema(connectionId)}
                 plain
                 disabled={isRefreshing}
               >

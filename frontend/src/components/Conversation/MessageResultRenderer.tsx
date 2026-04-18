@@ -9,7 +9,7 @@ import { DynamicTable } from "../Library/DynamicTable";
 import { CodeBlock } from "./CodeBlock";
 import Chart from "../Library/Chart";
 import { useQueryClient } from "@tanstack/react-query";
-import { getMessagesQuery } from "@/hooks";
+import { getMessagesQuery, useGetUserProfile } from "@/hooks";
 import { useParams } from "@tanstack/react-router";
 
 function classNames(...classes: string[]) {
@@ -115,6 +115,29 @@ export const MessageResultRenderer = ({
   );
   const queryClient = useQueryClient();
   const { conversationId } = useParams({ from: "/_user/chat/$conversationId" });
+  const { data: profile } = useGetUserProfile();
+  const shouldHideDataResults = profile?.hide_data_results;
+  const shouldHideSql = profile?.hide_sql_preference;
+
+  function shouldRenderResult(result: IResultType) {
+    if (result.type === "SQL_QUERY_STRING_RESULT") {
+      return !shouldHideSql;
+    }
+
+    if (
+      result.type === "SELECTED_TABLES" ||
+      result.type === "SQL_QUERY_RUN_RESULT"
+    ) {
+      return !shouldHideDataResults;
+    }
+
+    return true;
+  }
+
+  const visibleUnlinkedGroup = unlinkedGroup.filter(shouldRenderResult);
+  const visibleResultGroups = resultGroups
+    .map((group) => group.filter(shouldRenderResult))
+    .filter((group) => group.length > 0);
 
   // Used by CodeBlock to replace the linked SQL query run when an SQL string is re-run
   // Necessary since the results are only present at this level and the codeblock can't modify them
@@ -203,9 +226,9 @@ export const MessageResultRenderer = ({
 
   return (
     <>
-      {unlinkedGroup.length > 0 && (
+      {visibleUnlinkedGroup.length > 0 && (
         <div className="flex flex-col gap-1 md:gap-3">
-          {unlinkedGroup.map(
+          {visibleUnlinkedGroup.map(
             (result) =>
               (result.type === "SELECTED_TABLES" && (
                 <SelectedTablesDisplay
@@ -224,18 +247,18 @@ export const MessageResultRenderer = ({
         </div>
       )}
       {/** Sort results as selected_tables first, charts second, data third, code fourth using tertiary if **/}
-      {resultGroups.map((group, index) => (
+      {visibleResultGroups.map((group, index) => (
         <div
           key={`message-${messageId}-group-${index}`}
           // Alternate between bg-gray-800 and bg-indigo-800
           className={classNames(
             // include hash of message id to randomize across messages
-            resultGroups.length > 1
+            visibleResultGroups.length > 1
               ? BACKGROUND_COLORS[
                   (hash(messageId) + index) % BACKGROUND_COLORS.length
                 ]
               : "",
-            resultGroups.length > 1
+            visibleResultGroups.length > 1
               ? "border border-gray-500 rounded-xl p-4"
               : "",
             "flex flex-col gap-1 md:gap-3"
@@ -244,19 +267,19 @@ export const MessageResultRenderer = ({
           {group.map(
             (result) =>
               (result.type === "SELECTED_TABLES" && (
-                <SelectedTablesDisplay
-                  tables={result.content.tables}
-                  key={`message-${messageId}-selectedtables-${result.result_id}`}
-                />
-              )) ||
+                  <SelectedTablesDisplay
+                    tables={result.content.tables}
+                    key={`message-${messageId}-selectedtables-${result.result_id}`}
+                  />
+                )) ||
               (result.type === "SQL_QUERY_RUN_RESULT" && (
-                <DynamicTable
-                  key={`message-${messageId}-table-${result.result_id}`}
-                  data={result.content}
-                  initialCreatedAt={new Date(result.created_at as string)}
-                  linked_id={result.linked_id}
-                />
-              )) ||
+                  <DynamicTable
+                    key={`message-${messageId}-table-${result.result_id}`}
+                    data={result.content}
+                    initialCreatedAt={new Date(result.created_at as string)}
+                    linked_id={result.linked_id}
+                  />
+                )) ||
               (result.type === "SQL_QUERY_STRING_RESULT" && (
                 <CodeBlock
                   key={`message-${messageId}-code-${result.result_id}`}
@@ -271,13 +294,13 @@ export const MessageResultRenderer = ({
                 />
               )) ||
               (result.type === "CHART_GENERATION_RESULT" && (
-                <Chart
-                  resultId={result.result_id}
-                  key={`message-${messageId}-chart-${result.result_id}-${result.created_at}`}
-                  initialData={JSON.parse(result.content.chartjs_json)}
-                  initialCreatedAt={new Date(result.created_at as string)}
-                ></Chart>
-              ))
+                  <Chart
+                    resultId={result.result_id}
+                    key={`message-${messageId}-chart-${result.result_id}-${result.created_at}`}
+                    initialData={JSON.parse(result.content.chartjs_json)}
+                    initialCreatedAt={new Date(result.created_at as string)}
+                  ></Chart>
+                ))
           )}
         </div>
       ))}

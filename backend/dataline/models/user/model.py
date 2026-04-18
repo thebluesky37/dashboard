@@ -1,8 +1,8 @@
-from sqlalchemy import Boolean, String
+from sqlalchemy import Boolean, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import true, false
 
-from dataline.models.base import DBModel, UUIDMixin
+from dataline.models.base import CustomUUIDType, DBModel, UUIDMixin
 
 
 class UserModel(DBModel, UUIDMixin, kw_only=True):
@@ -15,3 +15,9 @@ class UserModel(DBModel, UUIDMixin, kw_only=True):
     analytics_enabled: Mapped[bool] = mapped_column("analytics_enabled", Boolean, server_default=true())
     hide_sql_preference: Mapped[bool] = mapped_column("hide_sql_preference", Boolean, server_default=false())
     openai_base_url: Mapped[str | None] = mapped_column("openai_base_url", String, nullable=True)
+    default_connection_id: Mapped[str | None] = mapped_column(
+        "default_connection_id",
+        CustomUUIDType,
+        ForeignKey("connections.id", ondelete="SET NULL"),
+        nullable=True,
+    )

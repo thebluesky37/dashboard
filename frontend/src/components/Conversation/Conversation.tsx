@@ -33,7 +33,7 @@ const templateMessages = [
 ];
 
 export const Conversation = () => {
-  const params = useParams({ from: "/_app/chat/$conversationId" });
+  const params = useParams({ from: "/_user/chat/$conversationId" });
   // Load messages from conversation via API on load
   const { data: connectionsData } = useGetConnections();
   const { data: conversationsData } = useGetConversations();

@@ -114,7 +114,7 @@ export const MessageResultRenderer = ({
     [results]
   );
   const queryClient = useQueryClient();
-  const { conversationId } = useParams({ from: "/_app/chat/$conversationId" });
+  const { conversationId } = useParams({ from: "/_user/chat/$conversationId" });
 
   // Used by CodeBlock to replace the linked SQL query run when an SQL string is re-run
   // Necessary since the results are only present at this level and the codeblock can't modify them

@@ -220,7 +220,7 @@ export function useRunSqlInConversation(
   },
   options: UseMutationOptions<IResult> = {}
 ) {
-  const { conversationId } = useParams({ from: "/_app/chat/$conversationId" });
+  const { conversationId } = useParams({ from: "/_user/chat/$conversationId" });
   return useMutation({
     mutationFn: async () =>
       (await api.runSQL(conversationId, sql.replace(/\s+/g, " "), resultId))

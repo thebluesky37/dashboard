@@ -22,7 +22,7 @@ export const Primary: Story = {
   parameters: {
     // Place in conversation context
     router: {
-      routes: ["/", "/_app/chat/$conversationId"],
+      routes: ["/", "/_user/chat/$conversationId"],
       initialEntries: ["/_app/chat/dummy-conversation-id"],
       routeParams: {
         conversationId: "dummy-conversation-id",

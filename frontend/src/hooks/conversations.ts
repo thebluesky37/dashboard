@@ -127,7 +127,7 @@ export function useGenerateConversationTitle(options = {}) {
  * @returns ConnectionResult
  */
 export function useGetRelatedConnection() {
-  const params = useParams({ from: "/_app/chat/$conversationId" });
+  const params = useParams({ from: "/_user/chat/$conversationId" });
   const { data: connectionsData } = useGetConnections();
   const { data: conversationsData } = useGetConversations();
   const currConversation = conversationsData?.find(

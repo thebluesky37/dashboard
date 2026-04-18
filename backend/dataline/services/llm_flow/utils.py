@@ -2,6 +2,7 @@ from typing import Any, Generator, Protocol, Self, Sequence, cast
 
 from langchain_community.utilities.sql_database import SQLDatabase
 from sqlalchemy import Engine, MetaData, Row, create_engine, inspect, text
+from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.engine import CursorResult
 from sqlalchemy.schema import CreateTable
 
@@ -146,6 +147,35 @@ class DatalineSQLDatabase(SQLDatabase):
         columns = list(result.keys())
         return columns, rows
 
+    def _get_sample_rows(self, table: Any) -> str:
+        """Get sample rows for table info with a SQLite fallback for type conversion errors."""
+        try:
+            return super()._get_sample_rows(table)
+        except TypeError:
+            if self.dialect != "sqlite":
+                raise
+
+            columns_str = "\t".join([col.name for col in table.columns])
+            table_name = f'"{table.name}"'
+            if table.schema:
+                table_name = f'"{table.schema}".{table_name}'
+
+            command = f"SELECT * FROM {table_name} LIMIT {self._sample_rows_in_table_info}"
+
+            try:
+                with self._engine.connect() as connection:
+                    sample_rows_result = connection.exec_driver_sql(command)
+                    sample_rows = list(map(lambda ls: [str(i)[:100] for i in ls], sample_rows_result))
+                sample_rows_str = "\n".join(["\t".join(row) for row in sample_rows])
+            except ProgrammingError:
+                sample_rows_str = ""
+
+            return (
+                f"{self._sample_rows_in_table_info} rows from {table.name} table:\n"
+                f"{columns_str}\n"
+                f"{sample_rows_str}"
+            )
+
     @classmethod
     def from_dataline_connection(
         cls, connection: ConnectionProtocol, engine_args: dict | None = None, **kwargs: Any
@@ -207,7 +237,10 @@ class DatalineSQLDatabase(SQLDatabase):
             if self._indexes_in_table_info:
                 table_info += f"\n{self._get_table_indexes(table)}\n"
             if self._sample_rows_in_table_info:
-                table_info += f"\n{self._get_sample_rows(table)}\n"
+                try:
+                    table_info += f"\n{self._get_sample_rows(table)}\n"
+                except TypeError:
+                    table_info += "\nSample rows unavailable due to a data type conversion error.\n"
             if has_extra_info:
                 table_info += "*/"
             tables.append(table_info)

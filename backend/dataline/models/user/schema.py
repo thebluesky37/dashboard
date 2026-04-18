@@ -16,6 +16,7 @@ class UserUpdateIn(BaseModel):
     sentry_enabled: Optional[bool] = None
     analytics_enabled: Optional[bool] = None
     hide_sql_preference: Optional[bool] = None
+    hide_data_results: Optional[bool] = None
     default_connection_id: uuid.UUID | None = None
 
     @field_serializer("openai_api_key")
@@ -38,6 +39,7 @@ class UserOut(BaseModel):
     sentry_enabled: bool
     analytics_enabled: Optional[bool] = None
     hide_sql_preference: Optional[bool] = None
+    hide_data_results: Optional[bool] = None
     default_connection_id: uuid.UUID | None = None
 
 

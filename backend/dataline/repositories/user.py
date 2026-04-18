@@ -19,6 +19,7 @@ class UserCreate(BaseModel):
     sentry_enabled: Optional[bool] = True
     analytics_enabled: Optional[bool] = True
     hide_sql_preference: Optional[bool] = False
+    hide_data_results: Optional[bool] = False
     default_connection_id: UUID | None = None
 
 
@@ -26,6 +27,7 @@ class UserUpdate(UserCreate):
     sentry_enabled: Optional[bool] = None
     analytics_enabled: Optional[bool] = None
     hide_sql_preference: Optional[bool] = None
+    hide_data_results: Optional[bool] = None
 
 
 class UserRepository(BaseRepository[UserModel, UserCreate, UserUpdate]):

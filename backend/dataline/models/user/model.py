@@ -14,6 +14,7 @@ class UserModel(DBModel, UUIDMixin, kw_only=True):
     sentry_enabled: Mapped[bool] = mapped_column("sentry_enabled", Boolean, server_default=true())
     analytics_enabled: Mapped[bool] = mapped_column("analytics_enabled", Boolean, server_default=true())
     hide_sql_preference: Mapped[bool] = mapped_column("hide_sql_preference", Boolean, server_default=false())
+    hide_data_results: Mapped[bool] = mapped_column("hide_data_results", Boolean, server_default=false())
     openai_base_url: Mapped[str | None] = mapped_column("openai_base_url", String, nullable=True)
     default_connection_id: Mapped[str | None] = mapped_column(
         "default_connection_id",

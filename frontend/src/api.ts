@@ -239,7 +239,7 @@ const getMessages = async (
   ).data;
 };
 
-export const DEFAULT_OPTIONS = { secure_data: true };
+export const DEFAULT_OPTIONS = { secure_data: false };
 
 export type QueryOut = ApiResponse<{
   human_message: IMessageOut;
@@ -455,6 +455,7 @@ export const adminLogin = async (
   username: string,
   password: string
 ): Promise<void> => {
+  configureAxiosInstance(true);
   await login(username, password);
 };
 
@@ -463,6 +464,7 @@ export const checkAdminAuth = async (): Promise<boolean> => {
     await backendApi({
       url: "/connections",
       method: "GET",
+      withCredentials: true,
     });
     return true;
   } catch (error) {

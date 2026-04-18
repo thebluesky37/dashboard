@@ -29,9 +29,18 @@ async def test_update_user_info_name(client: TestClient) -> None:
             "sentry_enabled": True,
             "analytics_enabled": True,
             "hide_sql_preference": False,
+            "hide_data_results": False,
             "default_connection_id": None,
         },
     }
+
+
+@pytest.mark.asyncio
+async def test_update_user_info_hide_data_results(client: TestClient) -> None:
+    response = client.patch("/settings/info", json={"hide_data_results": True})
+
+    assert response.status_code == 200
+    assert response.json()["data"]["hide_data_results"] is True
 
 
 @pytest.mark.asyncio

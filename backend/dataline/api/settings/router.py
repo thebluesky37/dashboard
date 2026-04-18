@@ -2,13 +2,19 @@ import base64
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, BackgroundTasks
 
+from dataline.models.connection.schema import Connection as ConnectionSchema
 from dataline.models.user.schema import AvatarOut, UserOut, UserUpdateIn
 from dataline.old_models import SuccessResponse
 from dataline.repositories.base import AsyncSession, get_session
+from dataline.repositories.connection import ConnectionRepository
+from dataline.repositories.user import UserCreate, UserRepository
 from dataline.services.settings import SettingsService
 from dataline.utils.posthog import posthog_capture
 
 router = APIRouter(prefix="/settings", tags=["settings"])
+public_settings_router = APIRouter(tags=["settings"])
+user_repo = UserRepository()
+connection_repo = ConnectionRepository()
 
 
 @router.post("/avatar")
@@ -53,3 +59,18 @@ async def get_info(
 ) -> SuccessResponse[UserOut]:
     user_info = await settings_service.get_user_info(session)
     return SuccessResponse(data=user_info)
+
+
+@public_settings_router.get("/settings/default-connection")
+async def get_default_connection(
+    session: AsyncSession = Depends(get_session),
+) -> ConnectionSchema | None:
+    user = await user_repo.get_one_or_none(session)
+    if user is None:
+        user = await user_repo.create(session, UserCreate())
+
+    if user.default_connection_id is None:
+        return None
+
+    connection = await connection_repo.get_by_uuid(session, user.default_connection_id)
+    return ConnectionSchema.model_validate(connection)

@@ -199,3 +199,17 @@ async def test_get_settings_returns_default_connection(client: TestClient, dvdre
     )
     response = client.get("/settings/info")
     assert response.json()["data"]["default_connection_id"] == str(dvdrental_connection.id)
+
+
+def test_anonymous_can_read_default_connection() -> None:
+    # This must work WITHOUT any auth credentials
+    # The endpoint should be registered with no auth dependencies
+    from dataline.main import app
+    from fastapi.testclient import TestClient
+    import os
+
+    os.environ["AUTH_USERNAME"] = "admin"
+    os.environ["AUTH_PASSWORD"] = "adminpass"
+    client = TestClient(app, raise_server_exceptions=False)
+    response = client.get("/settings/default-connection")
+    assert response.status_code == 200

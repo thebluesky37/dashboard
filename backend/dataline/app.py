@@ -10,7 +10,7 @@ from dataline.api.auth.router import router as auth_router
 from dataline.api.connection.router import router as connection_router
 from dataline.api.conversation.router import router as conversation_router
 from dataline.api.result.router import router as result_router
-from dataline.api.settings.router import router as settings_router
+from dataline.api.settings.router import public_settings_router, router as settings_router
 from dataline.auth import authenticate, require_admin
 from dataline.config import config
 from dataline.errors import UserFacingError, ValidationError
@@ -57,6 +57,7 @@ class App(fastapi.FastAPI):
 
         # Admin-only: connection management, settings
         self.include_router(settings_router, dependencies=admin_deps)
+        self.include_router(public_settings_router)
         self.include_router(connection_router, dependencies=admin_deps)
 
         # User-accessible (no auth required): conversations, results

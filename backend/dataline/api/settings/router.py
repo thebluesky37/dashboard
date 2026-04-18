@@ -2,6 +2,7 @@ import base64
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, BackgroundTasks
 
+from dataline.auth import require_admin
 from dataline.models.connection.schema import Connection as ConnectionSchema
 from dataline.models.user.schema import AvatarOut, UserOut, UserUpdateIn
 from dataline.old_models import SuccessResponse
@@ -21,6 +22,7 @@ connection_repo = ConnectionRepository()
 async def upload_avatar(
     file: UploadFile,
     background_tasks: BackgroundTasks,
+    _: None = Depends(require_admin),
     settings_service: SettingsService = Depends(SettingsService),
     session: AsyncSession = Depends(get_session),
 ) -> SuccessResponse[AvatarOut]:
@@ -46,6 +48,7 @@ async def get_avatar(
 @router.patch("/info")
 async def update_info(
     data: UserUpdateIn,
+    _: None = Depends(require_admin),
     settings_service: SettingsService = Depends(SettingsService),
     session: AsyncSession = Depends(get_session),
 ) -> SuccessResponse[UserOut]:

@@ -17,15 +17,15 @@ def test_require_admin_raises_403_for_anonymous(monkeypatch):
     assert exc_info.value.status_code == 403
 
 
-def test_anonymous_cannot_access_connections(monkeypatch):
+def test_anonymous_can_access_connections(monkeypatch):
     monkeypatch.setattr("dataline.config.config.auth_username", "admin")
     monkeypatch.setattr("dataline.config.config.auth_password", "adminpass")
     from dataline.app import App
     test_app = App()
     client = TestClient(test_app, raise_server_exceptions=False)
-    # No auth at all — anonymous request
+    # No auth at all — anonymous request should still read connections
     response = client.get("/connections")
-    assert response.status_code == 403
+    assert response.status_code not in (401, 403)
 
 
 def test_admin_can_access_connections(monkeypatch):
@@ -37,6 +37,41 @@ def test_admin_can_access_connections(monkeypatch):
     # HTTPBasicCustomized reads from cookie "Authorization", not the HTTP header
     encoded = base64.b64encode(b"admin:adminpass").decode()
     response = client.get("/connections", cookies={"Authorization": f"Basic {encoded}"})
+    assert response.status_code not in (401, 403)
+
+
+def test_anonymous_cannot_create_connections(monkeypatch):
+    monkeypatch.setattr("dataline.config.config.auth_username", "admin")
+    monkeypatch.setattr("dataline.config.config.auth_password", "adminpass")
+    from dataline.app import App
+
+    test_app = App()
+    client = TestClient(test_app, raise_server_exceptions=False)
+    response = client.post("/connect", json={"dsn": "sqlite:///test.db", "name": "Test"})
+    assert response.status_code == 403
+
+
+def test_anonymous_can_access_settings_info(monkeypatch):
+    monkeypatch.setattr("dataline.config.config.auth_username", "admin")
+    monkeypatch.setattr("dataline.config.config.auth_password", "adminpass")
+    from dataline.app import App
+
+    test_app = App()
+    client = TestClient(test_app, raise_server_exceptions=False)
+    response = client.get("/settings/info")
+    # Can be 200 when user exists or 404 when not created yet; auth should not block.
+    assert response.status_code not in (401, 403)
+
+
+def test_anonymous_can_access_settings_avatar(monkeypatch):
+    monkeypatch.setattr("dataline.config.config.auth_username", "admin")
+    monkeypatch.setattr("dataline.config.config.auth_password", "adminpass")
+    from dataline.app import App
+
+    test_app = App()
+    client = TestClient(test_app, raise_server_exceptions=False)
+    response = client.get("/settings/avatar")
+    # Can be 200 when avatar exists or 404 when missing; auth should not block.
     assert response.status_code not in (401, 403)
 
 

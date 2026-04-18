@@ -5,6 +5,7 @@ from uuid import UUID
 from fastapi import APIRouter, BackgroundTasks, Body, Depends, HTTPException, UploadFile
 from pydantic import BaseModel
 
+from dataline.auth import require_admin
 from dataline.models.connection.schema import (
     DB_SAMPLES,
     ConnectionOut,
@@ -29,6 +30,7 @@ router = APIRouter(tags=["connections"])
 @router.post("/connect", response_model_exclude_none=True)
 async def connect_db(
     req: ConnectRequest,
+    _: Annotated[None, Depends(require_admin)],
     session: Annotated[AsyncSession, Depends(get_session)],
     connection_service: Annotated[ConnectionService, Depends(ConnectionService)],
     background_tasks: BackgroundTasks,
@@ -42,6 +44,7 @@ async def connect_db(
 @router.post("/connect/sample", response_model_exclude_none=True)
 async def connect_sample_db(
     req: ConnectSampleIn,
+    _: Annotated[None, Depends(require_admin)],
     session: Annotated[AsyncSession, Depends(get_session)],
     connection_service: Annotated[ConnectionService, Depends(ConnectionService)],
     background_tasks: BackgroundTasks,
@@ -65,6 +68,7 @@ async def connect_db_from_file(
     file: UploadFile,
     type: Annotated[FileConnectionType, Body(...)],
     name: Annotated[str, Body(...)],
+    _: Annotated[None, Depends(require_admin)],
     session: Annotated[AsyncSession, Depends(get_session)],
     connection_service: Annotated[ConnectionService, Depends(ConnectionService)],
     background_tasks: BackgroundTasks,
@@ -101,6 +105,7 @@ async def connect_db_from_file(
 @router.get("/connection/{connection_id}")
 async def get_connection(
     connection_id: UUID,
+    _: Annotated[None, Depends(require_admin)],
     session: AsyncSession = Depends(get_session),
     connection_service: ConnectionService = Depends(ConnectionService),
 ) -> SuccessResponse[ConnectionOut]:
@@ -131,6 +136,7 @@ async def get_connections(
 @router.delete("/connection/{connection_id}")
 async def delete_connection(
     connection_id: UUID,
+    _: Annotated[None, Depends(require_admin)],
     connection_service: Annotated[ConnectionService, Depends(ConnectionService)],
     session: Annotated[AsyncSession, Depends(get_session)],
 ) -> SuccessResponse[None]:
@@ -142,6 +148,7 @@ async def delete_connection(
 async def update_connection(
     connection_id: UUID,
     req: ConnectionUpdateIn,
+    _: Annotated[None, Depends(require_admin)],
     session: Annotated[AsyncSession, Depends(get_session)],
     connection_service: Annotated[ConnectionService, Depends(ConnectionService)],
     background_tasks: BackgroundTasks,
@@ -159,7 +166,9 @@ async def update_connection(
 
 
 @router.get("/samples")
-async def get_sample_connections() -> SuccessListResponse[SampleOut]:
+async def get_sample_connections(
+    _: Annotated[None, Depends(require_admin)],
+) -> SuccessListResponse[SampleOut]:
     return SuccessListResponse(
         data=[
             SampleOut(key=key, title=sample[0], file=get_sqlite_dsn(sample[1]), link=sample[2])
@@ -171,6 +180,7 @@ async def get_sample_connections() -> SuccessListResponse[SampleOut]:
 @router.post("/connection/{connection_id}/refresh")
 async def refresh_connection_schema(
     connection_id: UUID,
+    _: Annotated[None, Depends(require_admin)],
     session: Annotated[AsyncSession, Depends(get_session)],
     connection_service: Annotated[ConnectionService, Depends(ConnectionService)],
     background_tasks: BackgroundTasks,

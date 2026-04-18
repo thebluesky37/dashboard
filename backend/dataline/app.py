@@ -11,7 +11,7 @@ from dataline.api.connection.router import router as connection_router
 from dataline.api.conversation.router import router as conversation_router
 from dataline.api.result.router import router as result_router
 from dataline.api.settings.router import public_settings_router, router as settings_router
-from dataline.auth import authenticate, require_admin
+from dataline.auth import authenticate
 from dataline.config import config
 from dataline.errors import UserFacingError, ValidationError
 from dataline.repositories.base import NotFoundError, NotUniqueError
@@ -48,17 +48,13 @@ class App(fastapi.FastAPI):
         )
 
         if config.has_auth:
-            admin_deps = [Depends(require_admin)]
-
             # Add route for login
             self.include_router(auth_router)
-        else:
-            admin_deps = []
 
-        # Admin-only: connection management, settings
-        self.include_router(settings_router, dependencies=admin_deps)
+        # Settings and connection routes perform endpoint-level auth checks.
+        self.include_router(settings_router)
         self.include_router(public_settings_router)
-        self.include_router(connection_router, dependencies=admin_deps)
+        self.include_router(connection_router)
 
         # User-accessible (no auth required): conversations, results
         self.include_router(conversation_router)

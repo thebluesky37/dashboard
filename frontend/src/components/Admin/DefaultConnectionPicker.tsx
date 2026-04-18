@@ -10,10 +10,11 @@ import {
 export default function DefaultConnectionPicker() {
   const qc = useQueryClient();
 
-  const { data: connections } = useQuery({
+  const { data: connectionsData } = useQuery({
     queryKey: ["CONNECTIONS"],
-    queryFn: async () => (await api.listConnections()).data.connections,
+    queryFn: async () => (await api.listConnections()).data,
   });
+  const connections = connectionsData?.connections;
 
   const { data: userInfo } = useQuery(userProfileQuery());
 

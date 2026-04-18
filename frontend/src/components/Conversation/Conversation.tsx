@@ -130,9 +130,8 @@ export const Conversation = () => {
   }
 
   if (
-    (isAxiosError(getMessagesError) &&
-      getMessagesError.response?.status === 404) ||
-    !connectionsData?.connections?.length
+    isAxiosError(getMessagesError) &&
+    getMessagesError.response?.status === 404
   ) {
     return <Navigate to={"/"} />;
   }
@@ -194,7 +193,7 @@ export const Conversation = () => {
 
       <div ref={messageListRef}></div>
 
-      <div className="fixed bottom-0 left-0 lg:left-72 right-0 flex flex-col items-center justify-center backdrop-blur-md pt-0">
+      <div className="fixed bottom-0 left-0 lg:left-60 right-0 flex flex-col items-center justify-center backdrop-blur-md pt-0">
         {messages.length === 0 && !currentConversationIsQuerying && (
           <div className="w-full md:max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-2 justify-between px-2 sm:px-3 my-4">
             {templateMessages.map((template) => (

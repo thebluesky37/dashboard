@@ -50,6 +50,7 @@ class QueryGraphService:
             raise e
 
         self.db._sample_rows_in_table_info = 0  # Preventative security
+        self.connection = connection
         self.toolkit = SQLDatabaseToolkit(db=self.db)
         all_tools = self.toolkit.get_tools() + [ChartGeneratorTool()]
         self.tool_executor = ToolExecutor(tools=all_tools)
@@ -73,7 +74,11 @@ class QueryGraphService:
 
         initial_state = {
             "messages": [
-                *self.get_prompt_messages(query, history),
+                *self.get_prompt_messages(
+                    query,
+                    history,
+                    extra_instructions=getattr(self.connection, "instructions", None),
+                ),
             ],
             "results": [],
             "options": options,
@@ -103,10 +108,17 @@ class QueryGraphService:
         return graph
 
     def get_prompt_messages(
-        self, query: str, history: Sequence[BaseMessage], top_k: int = 10, suffix: str = SQL_FUNCTIONS_SUFFIX
+        self,
+        query: str,
+        history: Sequence[BaseMessage],
+        top_k: int = 10,
+        suffix: str = SQL_FUNCTIONS_SUFFIX,
+        extra_instructions: str | None = None,
     ):
         prefix = SQL_PREFIX
         prefix = prefix.format(dialect=self.toolkit.dialect, top_k=top_k)
+        if extra_instructions:
+            prefix = f"{prefix}\n\nAdditional instructions:\n{extra_instructions}"
 
         if not history:
             return [

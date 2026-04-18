@@ -30,6 +30,7 @@ class Config(BaseSettings):
     sample_netflix_path: str = str(Path(__file__).parent.parent / "samples" / "netflix.sqlite3")
     sample_titanic_path: str = str(Path(__file__).parent.parent / "samples" / "titanic.sqlite3")
     sample_spotify_path: str = str(Path(__file__).parent.parent / "samples" / "spotify.sqlite3")
+    sample_travel_path: str = str(Path(__file__).parent.parent / "samples" / "travel.sqlite")
 
     default_model: str = "gpt-3.5-turbo"
     templates_path: Path = Path(__file__).parent.parent / "templates"

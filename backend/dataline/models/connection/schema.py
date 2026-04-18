@@ -178,6 +178,7 @@ class SampleName(Enum):
     netflix = "netflix"
     titanic = "titanic"
     spotify = "spotify"
+    travel = "travel"
 
 
 class ConnectSampleIn(BaseModel):
@@ -201,5 +202,10 @@ DB_SAMPLES = {
         "Spotify",
         config.sample_spotify_path,
         "https://www.kaggle.com/datasets/ambaliyagati/spotify-dataset-for-playing-around-with-sql",
+    ),
+    "travel": (
+        "Airline Dataset",
+        config.sample_travel_path,
+        "https://www.kaggle.com/datasets/ilariotikidis/airline-dataset",
     ),
 }

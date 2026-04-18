@@ -1,7 +1,9 @@
 import asyncio
+import base64
 
 import pytest
 from fastapi import HTTPException
+from fastapi.testclient import TestClient
 
 from dataline.auth import require_admin
 
@@ -13,3 +15,37 @@ def test_require_admin_raises_403_for_anonymous(monkeypatch):
     with pytest.raises(HTTPException) as exc_info:
         asyncio.get_event_loop().run_until_complete(require_admin(None))
     assert exc_info.value.status_code == 403
+
+
+def test_anonymous_cannot_access_connections(monkeypatch):
+    monkeypatch.setattr("dataline.config.config.auth_username", "admin")
+    monkeypatch.setattr("dataline.config.config.auth_password", "adminpass")
+    from dataline.app import App
+    test_app = App()
+    client = TestClient(test_app, raise_server_exceptions=False)
+    # No auth at all — anonymous request
+    response = client.get("/connections")
+    assert response.status_code == 403
+
+
+def test_admin_can_access_connections(monkeypatch):
+    monkeypatch.setattr("dataline.config.config.auth_username", "admin")
+    monkeypatch.setattr("dataline.config.config.auth_password", "adminpass")
+    from dataline.app import App
+    test_app = App()
+    client = TestClient(test_app, raise_server_exceptions=False)
+    # HTTPBasicCustomized reads from cookie "Authorization", not the HTTP header
+    encoded = base64.b64encode(b"admin:adminpass").decode()
+    response = client.get("/connections", cookies={"Authorization": f"Basic {encoded}"})
+    assert response.status_code not in (401, 403)
+
+
+def test_anonymous_can_access_conversations(monkeypatch):
+    monkeypatch.setattr("dataline.config.config.auth_username", "admin")
+    monkeypatch.setattr("dataline.config.config.auth_password", "adminpass")
+    from dataline.app import App
+    test_app = App()
+    client = TestClient(test_app, raise_server_exceptions=False)
+    # No auth — anonymous user can list conversations
+    response = client.get("/conversations")
+    assert response.status_code not in (401, 403)

@@ -11,7 +11,7 @@ from dataline.api.connection.router import router as connection_router
 from dataline.api.conversation.router import router as conversation_router
 from dataline.api.result.router import router as result_router
 from dataline.api.settings.router import router as settings_router
-from dataline.auth import authenticate
+from dataline.auth import authenticate, require_admin
 from dataline.config import config
 from dataline.errors import UserFacingError, ValidationError
 from dataline.repositories.base import NotFoundError, NotUniqueError
@@ -47,17 +47,21 @@ class App(fastapi.FastAPI):
             allow_headers=["*"],
         )
 
-        common_dependencies = []
         if config.has_auth:
-            common_dependencies = [Depends(authenticate)]
+            admin_deps = [Depends(require_admin)]
 
             # Add route for login
             self.include_router(auth_router)
+        else:
+            admin_deps = []
 
-        self.include_router(settings_router, dependencies=common_dependencies)
-        self.include_router(connection_router, dependencies=common_dependencies)
-        self.include_router(conversation_router, dependencies=common_dependencies)
-        self.include_router(result_router, dependencies=common_dependencies)
+        # Admin-only: connection management, settings
+        self.include_router(settings_router, dependencies=admin_deps)
+        self.include_router(connection_router, dependencies=admin_deps)
+
+        # User-accessible (no auth required): conversations, results
+        self.include_router(conversation_router)
+        self.include_router(result_router)
 
         # Handle 500s separately to play well with TestClient and allow re-raising in tests
         self.add_exception_handler(NotFoundError, handle_exceptions)

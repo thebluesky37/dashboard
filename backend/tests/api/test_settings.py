@@ -8,6 +8,8 @@ import pytest_asyncio
 from fastapi.testclient import TestClient
 from openai.resources.models import Models as OpenAIModels
 
+from dataline.models.connection.schema import Connection
+
 logger = logging.getLogger(__name__)
 
 
@@ -27,6 +29,7 @@ async def test_update_user_info_name(client: TestClient) -> None:
             "sentry_enabled": True,
             "analytics_enabled": True,
             "hide_sql_preference": False,
+            "default_connection_id": None,
         },
     }
 
@@ -175,3 +178,24 @@ async def test_get_avatar(client: TestClient, avatar: str) -> None:
 async def test_get_avatar_no_avatar(client: TestClient) -> None:
     response = client.get("/settings/avatar")
     assert response.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_set_default_connection(client: TestClient, dvdrental_connection: Connection) -> None:
+    response = client.patch(
+        "/settings/info",
+        json={"default_connection_id": str(dvdrental_connection.id)},
+    )
+    assert response.status_code == 200
+    assert response.json()["data"]["default_connection_id"] == str(dvdrental_connection.id)
+
+
+@pytest.mark.asyncio
+async def test_get_settings_returns_default_connection(client: TestClient, dvdrental_connection: Connection) -> None:
+    # Set first
+    client.patch(
+        "/settings/info",
+        json={"default_connection_id": str(dvdrental_connection.id)},
+    )
+    response = client.get("/settings/info")
+    assert response.json()["data"]["default_connection_id"] == str(dvdrental_connection.id)

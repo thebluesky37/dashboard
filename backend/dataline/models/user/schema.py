@@ -1,4 +1,5 @@
 import logging
+import uuid
 from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, Field, SecretStr, field_serializer
@@ -15,6 +16,7 @@ class UserUpdateIn(BaseModel):
     sentry_enabled: Optional[bool] = None
     analytics_enabled: Optional[bool] = None
     hide_sql_preference: Optional[bool] = None
+    default_connection_id: uuid.UUID | None = None
 
     @field_serializer("openai_api_key")
     def dump_openai_api_key(self, v: SecretStr) -> str:
@@ -36,6 +38,7 @@ class UserOut(BaseModel):
     sentry_enabled: bool
     analytics_enabled: Optional[bool] = None
     hide_sql_preference: Optional[bool] = None
+    default_connection_id: uuid.UUID | None = None
 
 
 class UserWithKeys(BaseModel):

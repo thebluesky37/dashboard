@@ -1,4 +1,5 @@
 from typing import Optional, Type
+from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy import select
@@ -18,6 +19,7 @@ class UserCreate(BaseModel):
     sentry_enabled: Optional[bool] = True
     analytics_enabled: Optional[bool] = True
     hide_sql_preference: Optional[bool] = False
+    default_connection_id: UUID | None = None
 
 
 class UserUpdate(UserCreate):

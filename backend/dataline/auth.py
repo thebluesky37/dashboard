@@ -43,6 +43,7 @@ class HTTPBasicCustomized(HTTPBasic):
 
 
 security = HTTPBasicCustomized()
+security_optional = HTTPBasicCustomized(auto_error=False)
 
 
 def validate_credentials(username: str, password: str) -> bool:
@@ -60,4 +61,18 @@ def validate_credentials(username: str, password: str) -> bool:
 
 
 def authenticate(credentials: HTTPBasicCredentials = Depends(security)) -> None:
+    validate_credentials(credentials.username, credentials.password)
+
+
+async def require_admin(
+    credentials: Optional[HTTPBasicCredentials] = Depends(security_optional),
+) -> None:
+    """Dependency that allows only valid admin credentials. Rejects anonymous with 403."""
+    if not config.has_auth:
+        return  # auth disabled → allow all
+    if credentials is None:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required",
+        )
     validate_credentials(credentials.username, credentials.password)

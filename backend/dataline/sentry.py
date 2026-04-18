@@ -3,6 +3,7 @@ import logging
 import sentry_sdk
 from sentry_sdk.hub import GLOBAL_HUB
 from sentry_sdk.integrations.fastapi import FastApiIntegration
+from sqlalchemy.exc import OperationalError
 
 from dataline.config import config
 from dataline.repositories.base import SessionCreator
@@ -29,8 +30,11 @@ def opt_out_of_sentry() -> None:
 
 
 async def maybe_init_sentry() -> None:
-    async with SessionCreator.begin() as session:
-        user_repo = UserRepository()
-        user_info = await user_repo.get_one_or_none(session)
-        if user_info is not None and user_info.sentry_enabled:
-            setup_sentry()
+    try:
+        async with SessionCreator.begin() as session:
+            user_repo = UserRepository()
+            user_info = await user_repo.get_one_or_none(session)
+            if user_info is not None and user_info.sentry_enabled:
+                setup_sentry()
+    except OperationalError:
+        logger.warning("Skipping Sentry initialization because the database schema is not up to date yet.")

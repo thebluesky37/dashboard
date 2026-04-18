@@ -2,6 +2,7 @@ import logging
 
 from posthog import Posthog
 from posthog.client import Client as PosthogClient
+from sqlalchemy.exc import OperationalError
 
 from dataline.config import EnvironmentType, config
 from dataline.models.user.model import UserModel
@@ -26,18 +27,23 @@ class PosthogAnalytics:
     """
 
     async def __aenter__(self) -> tuple[PosthogClient, UserModel | None]:
-        async with SessionCreator.begin() as session:
-            user_repo = UserRepository()
-            user_info = await user_repo.get_one_or_none(session)
-            is_enabled = (
-                user_info is not None
-                and user_info.analytics_enabled
-                and config.environment == EnvironmentType.production  # disable in dev mode
-            )
+        try:
+            async with SessionCreator.begin() as session:
+                user_repo = UserRepository()
+                user_info = await user_repo.get_one_or_none(session)
+                is_enabled = (
+                    user_info is not None
+                    and user_info.analytics_enabled
+                    and config.environment == EnvironmentType.production  # disable in dev mode
+                )
 
-            posthog.disabled = not is_enabled
+                posthog.disabled = not is_enabled
 
-            return posthog, user_info
+                return posthog, user_info
+        except OperationalError:
+            logger.warning("Skipping PostHog initialization because the database schema is not up to date yet.")
+            posthog.disabled = True
+            return posthog, None
 
     async def __aexit__(self, exc_type: Exception, exc_val: Exception, exc_tb: Exception) -> None:
         pass

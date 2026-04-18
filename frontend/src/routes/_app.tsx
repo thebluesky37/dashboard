@@ -1,4 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import { AppLayout } from "@/components/Home/Main";
 
 export const Route = createFileRoute("/_app")({
   beforeLoad: () => {
@@ -6,4 +7,5 @@ export const Route = createFileRoute("/_app")({
       throw redirect({ to: "/" });
     }
   },
+  component: AppLayout,
 });

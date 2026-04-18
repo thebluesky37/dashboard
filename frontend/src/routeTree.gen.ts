@@ -8,183 +8,394 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as AdminLoginRouteImport } from './routes/admin-login'
+import { Route as UserRouteImport } from './routes/_user'
+import { Route as LandingRouteImport } from './routes/_landing'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as AdminRouteImport } from './routes/_admin'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as UserChatRouteImport } from './routes/_user/chat'
+import { Route as LandingPrivacyRouteImport } from './routes/_landing/privacy'
+import { Route as LandingFaqRouteImport } from './routes/_landing/faq'
+import { Route as LandingBlogRouteImport } from './routes/_landing/blog'
+import { Route as LandingAboutRouteImport } from './routes/_landing/about'
+import { Route as AppUserRouteImport } from './routes/_app/user'
+import { Route as AdminSettingsRouteImport } from './routes/_admin/settings'
+import { Route as AdminConnectionsRouteImport } from './routes/_admin/connections'
+import { Route as UserChatConversationIdRouteImport } from './routes/_user/chat.$conversationId'
+import { Route as AppConnectionNewRouteImport } from './routes/_app/connection/new'
+import { Route as AppConnectionConnectionIdRouteImport } from './routes/_app/connection/$connectionId'
+import { Route as AdminConnectionsConnectionIdRouteImport } from './routes/_admin/connections.$connectionId'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as LandingImport } from './routes/_landing'
-import { Route as AppImport } from './routes/_app'
-import { Route as IndexImport } from './routes/index'
-import { Route as LandingPrivacyImport } from './routes/_landing/privacy'
-import { Route as LandingFaqImport } from './routes/_landing/faq'
-import { Route as LandingBlogImport } from './routes/_landing/blog'
-import { Route as LandingAboutImport } from './routes/_landing/about'
-import { Route as AppUserImport } from './routes/_app/user'
-import { Route as AppConnectionNewImport } from './routes/_app/connection/new'
-import { Route as AppConnectionConnectionIdImport } from './routes/_app/connection/$connectionId'
-import { Route as AppChatConversationIdImport } from './routes/_app/chat/$conversationId'
-
-// Create/Update Routes
-
-const LandingRoute = LandingImport.update({
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin-login',
+  path: '/admin-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UserRoute = UserRouteImport.update({
+  id: '/_user',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LandingRoute = LandingRouteImport.update({
   id: '/_landing',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AppRoute = AppImport.update({
+const AppRoute = AppRouteImport.update({
   id: '/_app',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const AdminRoute = AdminRouteImport.update({
+  id: '/_admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const LandingPrivacyRoute = LandingPrivacyImport.update({
+const UserChatRoute = UserChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => UserRoute,
+} as any)
+const LandingPrivacyRoute = LandingPrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
   getParentRoute: () => LandingRoute,
 } as any)
-
-const LandingFaqRoute = LandingFaqImport.update({
+const LandingFaqRoute = LandingFaqRouteImport.update({
   id: '/faq',
   path: '/faq',
   getParentRoute: () => LandingRoute,
 } as any)
-
-const LandingBlogRoute = LandingBlogImport.update({
+const LandingBlogRoute = LandingBlogRouteImport.update({
   id: '/blog',
   path: '/blog',
   getParentRoute: () => LandingRoute,
 } as any)
-
-const LandingAboutRoute = LandingAboutImport.update({
+const LandingAboutRoute = LandingAboutRouteImport.update({
   id: '/about',
   path: '/about',
   getParentRoute: () => LandingRoute,
 } as any)
-
-const AppUserRoute = AppUserImport.update({
+const AppUserRoute = AppUserRouteImport.update({
   id: '/user',
   path: '/user',
   getParentRoute: () => AppRoute,
 } as any)
-
-const AppConnectionNewRoute = AppConnectionNewImport.update({
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminConnectionsRoute = AdminConnectionsRouteImport.update({
+  id: '/connections',
+  path: '/connections',
+  getParentRoute: () => AdminRoute,
+} as any)
+const UserChatConversationIdRoute = UserChatConversationIdRouteImport.update({
+  id: '/$conversationId',
+  path: '/$conversationId',
+  getParentRoute: () => UserChatRoute,
+} as any)
+const AppConnectionNewRoute = AppConnectionNewRouteImport.update({
   id: '/connection/new',
   path: '/connection/new',
   getParentRoute: () => AppRoute,
 } as any)
+const AppConnectionConnectionIdRoute =
+  AppConnectionConnectionIdRouteImport.update({
+    id: '/connection/$connectionId',
+    path: '/connection/$connectionId',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AdminConnectionsConnectionIdRoute =
+  AdminConnectionsConnectionIdRouteImport.update({
+    id: '/$connectionId',
+    path: '/$connectionId',
+    getParentRoute: () => AdminConnectionsRoute,
+  } as any)
 
-const AppConnectionConnectionIdRoute = AppConnectionConnectionIdImport.update({
-  id: '/connection/$connectionId',
-  path: '/connection/$connectionId',
-  getParentRoute: () => AppRoute,
-} as any)
-
-const AppChatConversationIdRoute = AppChatConversationIdImport.update({
-  id: '/chat/$conversationId',
-  path: '/chat/$conversationId',
-  getParentRoute: () => AppRoute,
-} as any)
-
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin-login': typeof AdminLoginRoute
+  '/connections': typeof AdminConnectionsRouteWithChildren
+  '/settings': typeof AdminSettingsRoute
+  '/user': typeof AppUserRoute
+  '/about': typeof LandingAboutRoute
+  '/blog': typeof LandingBlogRoute
+  '/faq': typeof LandingFaqRoute
+  '/privacy': typeof LandingPrivacyRoute
+  '/chat': typeof UserChatRouteWithChildren
+  '/connections/$connectionId': typeof AdminConnectionsConnectionIdRoute
+  '/connection/$connectionId': typeof AppConnectionConnectionIdRoute
+  '/connection/new': typeof AppConnectionNewRoute
+  '/chat/$conversationId': typeof UserChatConversationIdRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin-login': typeof AdminLoginRoute
+  '/connections': typeof AdminConnectionsRouteWithChildren
+  '/settings': typeof AdminSettingsRoute
+  '/user': typeof AppUserRoute
+  '/about': typeof LandingAboutRoute
+  '/blog': typeof LandingBlogRoute
+  '/faq': typeof LandingFaqRoute
+  '/privacy': typeof LandingPrivacyRoute
+  '/chat': typeof UserChatRouteWithChildren
+  '/connections/$connectionId': typeof AdminConnectionsConnectionIdRoute
+  '/connection/$connectionId': typeof AppConnectionConnectionIdRoute
+  '/connection/new': typeof AppConnectionNewRoute
+  '/chat/$conversationId': typeof UserChatConversationIdRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/_admin': typeof AdminRouteWithChildren
+  '/_app': typeof AppRouteWithChildren
+  '/_landing': typeof LandingRouteWithChildren
+  '/_user': typeof UserRouteWithChildren
+  '/admin-login': typeof AdminLoginRoute
+  '/_admin/connections': typeof AdminConnectionsRouteWithChildren
+  '/_admin/settings': typeof AdminSettingsRoute
+  '/_app/user': typeof AppUserRoute
+  '/_landing/about': typeof LandingAboutRoute
+  '/_landing/blog': typeof LandingBlogRoute
+  '/_landing/faq': typeof LandingFaqRoute
+  '/_landing/privacy': typeof LandingPrivacyRoute
+  '/_user/chat': typeof UserChatRouteWithChildren
+  '/_admin/connections/$connectionId': typeof AdminConnectionsConnectionIdRoute
+  '/_app/connection/$connectionId': typeof AppConnectionConnectionIdRoute
+  '/_app/connection/new': typeof AppConnectionNewRoute
+  '/_user/chat/$conversationId': typeof UserChatConversationIdRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin-login'
+    | '/connections'
+    | '/settings'
+    | '/user'
+    | '/about'
+    | '/blog'
+    | '/faq'
+    | '/privacy'
+    | '/chat'
+    | '/connections/$connectionId'
+    | '/connection/$connectionId'
+    | '/connection/new'
+    | '/chat/$conversationId'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin-login'
+    | '/connections'
+    | '/settings'
+    | '/user'
+    | '/about'
+    | '/blog'
+    | '/faq'
+    | '/privacy'
+    | '/chat'
+    | '/connections/$connectionId'
+    | '/connection/$connectionId'
+    | '/connection/new'
+    | '/chat/$conversationId'
+  id:
+    | '__root__'
+    | '/'
+    | '/_admin'
+    | '/_app'
+    | '/_landing'
+    | '/_user'
+    | '/admin-login'
+    | '/_admin/connections'
+    | '/_admin/settings'
+    | '/_app/user'
+    | '/_landing/about'
+    | '/_landing/blog'
+    | '/_landing/faq'
+    | '/_landing/privacy'
+    | '/_user/chat'
+    | '/_admin/connections/$connectionId'
+    | '/_app/connection/$connectionId'
+    | '/_app/connection/new'
+    | '/_user/chat/$conversationId'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  AppRoute: typeof AppRouteWithChildren
+  LandingRoute: typeof LandingRouteWithChildren
+  UserRoute: typeof UserRouteWithChildren
+  AdminLoginRoute: typeof AdminLoginRoute
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
+    '/admin-login': {
+      id: '/admin-login'
+      path: '/admin-login'
+      fullPath: '/admin-login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_app': {
-      id: '/_app'
+    '/_user': {
+      id: '/_user'
       path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AppImport
-      parentRoute: typeof rootRoute
+      fullPath: '/'
+      preLoaderRoute: typeof UserRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_landing': {
       id: '/_landing'
       path: ''
-      fullPath: ''
-      preLoaderRoute: typeof LandingImport
-      parentRoute: typeof rootRoute
+      fullPath: '/'
+      preLoaderRoute: typeof LandingRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_app/user': {
-      id: '/_app/user'
-      path: '/user'
-      fullPath: '/user'
-      preLoaderRoute: typeof AppUserImport
-      parentRoute: typeof AppImport
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_landing/about': {
-      id: '/_landing/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof LandingAboutImport
-      parentRoute: typeof LandingImport
+    '/_admin': {
+      id: '/_admin'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_landing/blog': {
-      id: '/_landing/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof LandingBlogImport
-      parentRoute: typeof LandingImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_landing/faq': {
-      id: '/_landing/faq'
-      path: '/faq'
-      fullPath: '/faq'
-      preLoaderRoute: typeof LandingFaqImport
-      parentRoute: typeof LandingImport
+    '/_user/chat': {
+      id: '/_user/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof UserChatRouteImport
+      parentRoute: typeof UserRoute
     }
     '/_landing/privacy': {
       id: '/_landing/privacy'
       path: '/privacy'
       fullPath: '/privacy'
-      preLoaderRoute: typeof LandingPrivacyImport
-      parentRoute: typeof LandingImport
+      preLoaderRoute: typeof LandingPrivacyRouteImport
+      parentRoute: typeof LandingRoute
     }
-    '/_app/chat/$conversationId': {
-      id: '/_app/chat/$conversationId'
-      path: '/chat/$conversationId'
+    '/_landing/faq': {
+      id: '/_landing/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof LandingFaqRouteImport
+      parentRoute: typeof LandingRoute
+    }
+    '/_landing/blog': {
+      id: '/_landing/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof LandingBlogRouteImport
+      parentRoute: typeof LandingRoute
+    }
+    '/_landing/about': {
+      id: '/_landing/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof LandingAboutRouteImport
+      parentRoute: typeof LandingRoute
+    }
+    '/_app/user': {
+      id: '/_app/user'
+      path: '/user'
+      fullPath: '/user'
+      preLoaderRoute: typeof AppUserRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_admin/settings': {
+      id: '/_admin/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_admin/connections': {
+      id: '/_admin/connections'
+      path: '/connections'
+      fullPath: '/connections'
+      preLoaderRoute: typeof AdminConnectionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_user/chat/$conversationId': {
+      id: '/_user/chat/$conversationId'
+      path: '/$conversationId'
       fullPath: '/chat/$conversationId'
-      preLoaderRoute: typeof AppChatConversationIdImport
-      parentRoute: typeof AppImport
-    }
-    '/_app/connection/$connectionId': {
-      id: '/_app/connection/$connectionId'
-      path: '/connection/$connectionId'
-      fullPath: '/connection/$connectionId'
-      preLoaderRoute: typeof AppConnectionConnectionIdImport
-      parentRoute: typeof AppImport
+      preLoaderRoute: typeof UserChatConversationIdRouteImport
+      parentRoute: typeof UserChatRoute
     }
     '/_app/connection/new': {
       id: '/_app/connection/new'
       path: '/connection/new'
       fullPath: '/connection/new'
-      preLoaderRoute: typeof AppConnectionNewImport
-      parentRoute: typeof AppImport
+      preLoaderRoute: typeof AppConnectionNewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/connection/$connectionId': {
+      id: '/_app/connection/$connectionId'
+      path: '/connection/$connectionId'
+      fullPath: '/connection/$connectionId'
+      preLoaderRoute: typeof AppConnectionConnectionIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_admin/connections/$connectionId': {
+      id: '/_admin/connections/$connectionId'
+      path: '/$connectionId'
+      fullPath: '/connections/$connectionId'
+      preLoaderRoute: typeof AdminConnectionsConnectionIdRouteImport
+      parentRoute: typeof AdminConnectionsRoute
     }
   }
 }
 
-// Create and export the route tree
+interface AdminConnectionsRouteChildren {
+  AdminConnectionsConnectionIdRoute: typeof AdminConnectionsConnectionIdRoute
+}
+
+const AdminConnectionsRouteChildren: AdminConnectionsRouteChildren = {
+  AdminConnectionsConnectionIdRoute: AdminConnectionsConnectionIdRoute,
+}
+
+const AdminConnectionsRouteWithChildren =
+  AdminConnectionsRoute._addFileChildren(AdminConnectionsRouteChildren)
+
+interface AdminRouteChildren {
+  AdminConnectionsRoute: typeof AdminConnectionsRouteWithChildren
+  AdminSettingsRoute: typeof AdminSettingsRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminConnectionsRoute: AdminConnectionsRouteWithChildren,
+  AdminSettingsRoute: AdminSettingsRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface AppRouteChildren {
   AppUserRoute: typeof AppUserRoute
-  AppChatConversationIdRoute: typeof AppChatConversationIdRoute
   AppConnectionConnectionIdRoute: typeof AppConnectionConnectionIdRoute
   AppConnectionNewRoute: typeof AppConnectionNewRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppUserRoute: AppUserRoute,
-  AppChatConversationIdRoute: AppChatConversationIdRoute,
   AppConnectionConnectionIdRoute: AppConnectionConnectionIdRoute,
   AppConnectionNewRoute: AppConnectionNewRoute,
 }
@@ -208,168 +419,36 @@ const LandingRouteChildren: LandingRouteChildren = {
 const LandingRouteWithChildren =
   LandingRoute._addFileChildren(LandingRouteChildren)
 
-export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '': typeof LandingRouteWithChildren
-  '/user': typeof AppUserRoute
-  '/about': typeof LandingAboutRoute
-  '/blog': typeof LandingBlogRoute
-  '/faq': typeof LandingFaqRoute
-  '/privacy': typeof LandingPrivacyRoute
-  '/chat/$conversationId': typeof AppChatConversationIdRoute
-  '/connection/$connectionId': typeof AppConnectionConnectionIdRoute
-  '/connection/new': typeof AppConnectionNewRoute
+interface UserChatRouteChildren {
+  UserChatConversationIdRoute: typeof UserChatConversationIdRoute
 }
 
-export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '': typeof LandingRouteWithChildren
-  '/user': typeof AppUserRoute
-  '/about': typeof LandingAboutRoute
-  '/blog': typeof LandingBlogRoute
-  '/faq': typeof LandingFaqRoute
-  '/privacy': typeof LandingPrivacyRoute
-  '/chat/$conversationId': typeof AppChatConversationIdRoute
-  '/connection/$connectionId': typeof AppConnectionConnectionIdRoute
-  '/connection/new': typeof AppConnectionNewRoute
+const UserChatRouteChildren: UserChatRouteChildren = {
+  UserChatConversationIdRoute: UserChatConversationIdRoute,
 }
 
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/_app': typeof AppRouteWithChildren
-  '/_landing': typeof LandingRouteWithChildren
-  '/_app/user': typeof AppUserRoute
-  '/_landing/about': typeof LandingAboutRoute
-  '/_landing/blog': typeof LandingBlogRoute
-  '/_landing/faq': typeof LandingFaqRoute
-  '/_landing/privacy': typeof LandingPrivacyRoute
-  '/_app/chat/$conversationId': typeof AppChatConversationIdRoute
-  '/_app/connection/$connectionId': typeof AppConnectionConnectionIdRoute
-  '/_app/connection/new': typeof AppConnectionNewRoute
+const UserChatRouteWithChildren = UserChatRoute._addFileChildren(
+  UserChatRouteChildren,
+)
+
+interface UserRouteChildren {
+  UserChatRoute: typeof UserChatRouteWithChildren
 }
 
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | ''
-    | '/user'
-    | '/about'
-    | '/blog'
-    | '/faq'
-    | '/privacy'
-    | '/chat/$conversationId'
-    | '/connection/$connectionId'
-    | '/connection/new'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | ''
-    | '/user'
-    | '/about'
-    | '/blog'
-    | '/faq'
-    | '/privacy'
-    | '/chat/$conversationId'
-    | '/connection/$connectionId'
-    | '/connection/new'
-  id:
-    | '__root__'
-    | '/'
-    | '/_app'
-    | '/_landing'
-    | '/_app/user'
-    | '/_landing/about'
-    | '/_landing/blog'
-    | '/_landing/faq'
-    | '/_landing/privacy'
-    | '/_app/chat/$conversationId'
-    | '/_app/connection/$connectionId'
-    | '/_app/connection/new'
-  fileRoutesById: FileRoutesById
+const UserRouteChildren: UserRouteChildren = {
+  UserChatRoute: UserChatRouteWithChildren,
 }
 
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AppRoute: typeof AppRouteWithChildren
-  LandingRoute: typeof LandingRouteWithChildren
-}
+const UserRouteWithChildren = UserRoute._addFileChildren(UserRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   AppRoute: AppRouteWithChildren,
   LandingRoute: LandingRouteWithChildren,
+  UserRoute: UserRouteWithChildren,
+  AdminLoginRoute: AdminLoginRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/_app",
-        "/_landing"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/_app": {
-      "filePath": "_app.tsx",
-      "children": [
-        "/_app/user",
-        "/_app/chat/$conversationId",
-        "/_app/connection/$connectionId",
-        "/_app/connection/new"
-      ]
-    },
-    "/_landing": {
-      "filePath": "_landing.tsx",
-      "children": [
-        "/_landing/about",
-        "/_landing/blog",
-        "/_landing/faq",
-        "/_landing/privacy"
-      ]
-    },
-    "/_app/user": {
-      "filePath": "_app/user.tsx",
-      "parent": "/_app"
-    },
-    "/_landing/about": {
-      "filePath": "_landing/about.tsx",
-      "parent": "/_landing"
-    },
-    "/_landing/blog": {
-      "filePath": "_landing/blog.tsx",
-      "parent": "/_landing"
-    },
-    "/_landing/faq": {
-      "filePath": "_landing/faq.tsx",
-      "parent": "/_landing"
-    },
-    "/_landing/privacy": {
-      "filePath": "_landing/privacy.tsx",
-      "parent": "/_landing"
-    },
-    "/_app/chat/$conversationId": {
-      "filePath": "_app/chat/$conversationId.tsx",
-      "parent": "/_app"
-    },
-    "/_app/connection/$connectionId": {
-      "filePath": "_app/connection/$connectionId.tsx",
-      "parent": "/_app"
-    },
-    "/_app/connection/new": {
-      "filePath": "_app/connection/new.tsx",
-      "parent": "/_app"
-    }
-  }
-}
-ROUTE_MANIFEST_END */

@@ -352,6 +352,7 @@ const updateUserInfo = async (options: {
   sentry_enabled?: boolean;
   analytics_enabled?: boolean;
   hide_sql_preference?: boolean;
+  default_connection_id?: string | null;
 }) => {
   const {
     name,
@@ -361,6 +362,7 @@ const updateUserInfo = async (options: {
     sentry_enabled,
     analytics_enabled,
     hide_sql_preference,
+    default_connection_id,
   } = options;
   // send only the filled in fields
   const data: Partial<IUserInfo> = {
@@ -378,6 +380,9 @@ const updateUserInfo = async (options: {
   if (openai_base_url !== undefined) {
     // When deleting the base URL
     data.openai_base_url = openai_base_url === "" ? null : openai_base_url;
+  }
+  if (default_connection_id !== undefined) {
+    data.default_connection_id = default_connection_id;
   }
   const response = await backendApi<UpdateUserInfoResult>({
     url: "/settings/info",
@@ -446,6 +451,38 @@ const logout = async () => {
   return response;
 };
 
+export const adminLogin = async (
+  username: string,
+  password: string
+): Promise<void> => {
+  await login(username, password);
+};
+
+export const checkAdminAuth = async (): Promise<boolean> => {
+  try {
+    await backendApi({
+      url: "/connections",
+      method: "GET",
+    });
+    return true;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        return false;
+      }
+    }
+    return false;
+  }
+};
+
+export const getDefaultConnection = async (): Promise<IConnection | null> => {
+  const response = await backendApi<IConnection | null>({
+    method: "GET",
+    url: "/settings/default-connection",
+  });
+  return response.data;
+};
+
 export type GetExportDataUrlResult = ApiResponse<string>;
 const getExportDataUrl = (resultId: string) => {
   const baseURL = apiURL.endsWith("/") ? apiURL : apiURL + "/";
@@ -467,7 +504,10 @@ export const api = {
   listConversations,
   generateConversationTitle,
   login,
+  adminLogin,
+  checkAdminAuth,
   logout,
+  getDefaultConnection,
   createConversation,
   updateConversation,
   deleteConversation,

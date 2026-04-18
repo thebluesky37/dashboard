@@ -3,6 +3,7 @@ db.sqlite3
 *_schema_index.json
 
 .vscode/
+.worktrees/
 
 src-tauri/
 

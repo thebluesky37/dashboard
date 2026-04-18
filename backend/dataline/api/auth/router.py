@@ -26,14 +26,14 @@ async def login(
     ascii_encoded = f"{username}:{password}".encode("ascii")
     token = base64.b64encode(ascii_encoded).decode("utf-8")
     response.status_code = 200
-    response.set_cookie(key="Authorization", value=f"Basic {token}", secure=True, httponly=True)
+    response.set_cookie(key="Authorization", value=f"Basic {token}", secure=False, httponly=True)
     return response
 
 
 @router.post("/logout")
 async def logout(response: Response) -> Response:
     response.status_code = 200
-    response.delete_cookie(key="Authorization", secure=True, httponly=True)
+    response.delete_cookie(key="Authorization", secure=False, httponly=True)
     return response
 
 

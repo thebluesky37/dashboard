@@ -16,6 +16,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UserChatRouteImport } from './routes/_user/chat'
+import { Route as UserChatIndexRouteImport } from './routes/_user/chat.index'
 import { Route as LandingPrivacyRouteImport } from './routes/_landing/privacy'
 import { Route as LandingFaqRouteImport } from './routes/_landing/faq'
 import { Route as LandingBlogRouteImport } from './routes/_landing/blog'
@@ -94,6 +95,12 @@ const AdminConnectionsRoute = AdminConnectionsRouteImport.update({
   path: '/connections',
   getParentRoute: () => AdminRoute,
 } as any)
+const UserChatIndexRoute = UserChatIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => UserChatRoute,
+} as any)
+
 const UserChatConversationIdRoute = UserChatConversationIdRouteImport.update({
   id: '/$conversationId',
   path: '/$conversationId',
@@ -128,6 +135,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof LandingFaqRoute
   '/privacy': typeof LandingPrivacyRoute
   '/chat': typeof UserChatRouteWithChildren
+  '/chat/': typeof UserChatIndexRoute
   '/connections/$connectionId': typeof AdminConnectionsConnectionIdRoute
   '/connection/$connectionId': typeof AppConnectionConnectionIdRoute
   '/connection/new': typeof AppConnectionNewRoute
@@ -144,6 +152,7 @@ export interface FileRoutesByTo {
   '/faq': typeof LandingFaqRoute
   '/privacy': typeof LandingPrivacyRoute
   '/chat': typeof UserChatRouteWithChildren
+  '/chat/': typeof UserChatIndexRoute
   '/connections/$connectionId': typeof AdminConnectionsConnectionIdRoute
   '/connection/$connectionId': typeof AppConnectionConnectionIdRoute
   '/connection/new': typeof AppConnectionNewRoute
@@ -165,6 +174,7 @@ export interface FileRoutesById {
   '/_landing/faq': typeof LandingFaqRoute
   '/_landing/privacy': typeof LandingPrivacyRoute
   '/_user/chat': typeof UserChatRouteWithChildren
+  '/_user/chat/': typeof UserChatIndexRoute
   '/_admin/connections/$connectionId': typeof AdminConnectionsConnectionIdRoute
   '/_app/connection/$connectionId': typeof AppConnectionConnectionIdRoute
   '/_app/connection/new': typeof AppConnectionNewRoute
@@ -183,6 +193,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/privacy'
     | '/chat'
+    | '/chat/'
     | '/connections/$connectionId'
     | '/connection/$connectionId'
     | '/connection/new'
@@ -199,6 +210,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/privacy'
     | '/chat'
+    | '/chat/'
     | '/connections/$connectionId'
     | '/connection/$connectionId'
     | '/connection/new'
@@ -219,6 +231,7 @@ export interface FileRouteTypes {
     | '/_landing/faq'
     | '/_landing/privacy'
     | '/_user/chat'
+    | '/_user/chat/'
     | '/_admin/connections/$connectionId'
     | '/_app/connection/$connectionId'
     | '/_app/connection/new'
@@ -277,6 +290,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_user/chat/': {
+      id: '/_user/chat/'
+      path: '/'
+      fullPath: '/chat/'
+      preLoaderRoute: typeof UserChatIndexRouteImport
+      parentRoute: typeof UserChatRoute
     }
     '/_user/chat': {
       id: '/_user/chat'
@@ -421,10 +441,12 @@ const LandingRouteWithChildren =
 
 interface UserChatRouteChildren {
   UserChatConversationIdRoute: typeof UserChatConversationIdRoute
+  UserChatIndexRoute: typeof UserChatIndexRoute
 }
 
 const UserChatRouteChildren: UserChatRouteChildren = {
   UserChatConversationIdRoute: UserChatConversationIdRoute,
+  UserChatIndexRoute: UserChatIndexRoute,
 }
 
 const UserChatRouteWithChildren = UserChatRoute._addFileChildren(

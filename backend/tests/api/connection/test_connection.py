@@ -124,3 +124,13 @@ async def test_delete_connection(client: TestClient, dvdrental_connection: Conne
     response = client.get("/connections")
     data = response.json()["data"]
     assert len(data["connections"]) == 0
+
+
+@pytest.mark.asyncio
+async def test_update_connection_instructions(client: TestClient, dvdrental_connection: Connection) -> None:
+    response = client.patch(
+        f"/connection/{str(dvdrental_connection.id)}",
+        json={"instructions": "Always explain results in French."},
+    )
+    assert response.status_code == 200
+    assert response.json()["data"]["connection"]["instructions"] == "Always explain results in French."

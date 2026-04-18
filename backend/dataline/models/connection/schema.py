@@ -34,6 +34,7 @@ class Connection(BaseModel):
     type: str
     is_sample: bool
     options: Optional[ConnectionOptions] = None
+    instructions: Optional[str] = None
 
 
 class ConnectionOut(Connection):
@@ -158,6 +159,7 @@ class ConnectionUpdateIn(BaseModel):
     name: Optional[str] = None
     dsn: Optional[str] = None
     options: Optional[ConnectionOptions] = None
+    instructions: Optional[str] = None
 
     @field_validator("dsn")
     def validate_dsn_format(cls, value: str) -> str:

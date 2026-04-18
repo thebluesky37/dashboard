@@ -41,6 +41,7 @@ class ConnectionUpdate(BaseModel):
     type: str | None = None
     is_sample: bool | None = None
     options: ConnectionOptions | None = None
+    instructions: str | None = None
 
 
 class ConnectionRepository(BaseRepository[ConnectionModel, ConnectionCreate, ConnectionUpdate]):

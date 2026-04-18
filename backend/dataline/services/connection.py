@@ -138,6 +138,9 @@ class ConnectionService:
         if data.name:
             update.name = data.name
 
+        if data.instructions is not None:
+            update.instructions = data.instructions
+
         updated_connection = await self.connection_repo.update_by_uuid(session, connection_uuid, update)
         return ConnectionOut.model_validate(updated_connection)
 

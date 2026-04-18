@@ -2,7 +2,7 @@ import logo from "@/assets/images/logo_md.png";
 
 export const CenteredLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="h-full relative isolate overflow-hidden bg-white dark:bg-gray-900">
+    <div className="h-full relative isolate overflow-hidden bg-white">
       <svg
         className="absolute inset-0 -z-10 h-full w-full stroke-white/10 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
         aria-hidden="true"

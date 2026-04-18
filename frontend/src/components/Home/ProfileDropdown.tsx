@@ -25,7 +25,7 @@ export const ProfileDropdown = ({ topRight }: { topRight?: boolean }) => {
   });
   const { data: hasAuthEnabled } = useQuery(hasAuthQuery());
 
-  const userNavigation = [{ name: "Settings", href: "/user" }];
+  const userNavigation = [{ name: "Settings", href: "/config" }];
 
   return (
     <>
@@ -39,7 +39,7 @@ export const ProfileDropdown = ({ topRight }: { topRight?: boolean }) => {
               alt=""
             />
           ) : (
-            <UserCircleIcon className="text-gray-300 h-10 w-10 rounded-full " />
+            <UserCircleIcon className="text-gray-500 h-10 w-10 rounded-full " />
           )}
         </MenuButton>
 
@@ -57,14 +57,14 @@ export const ProfileDropdown = ({ topRight }: { topRight?: boolean }) => {
               topRight
                 ? "right-0 top-12 origin-top-right"
                 : "left-0 bottom-14 origin-bottom-left",
-              "absolute z-10 mt-2.5 w-32 rounded-md bg-gray-700 shadow-lg ring-1 ring-gray-500 focus:outline-none"
+              "absolute z-10 mt-2.5 w-32 rounded-md bg-white shadow-lg ring-1 ring-gray-200 focus:outline-none"
             )}
           >
             {userNavigation.map((item) => (
               <MenuItem key={item.name}>
                 <Link
                   to={item.href}
-                  className="cursor-pointer block px-3 py-2 m-1 rounded-md text-sm leading-6 text-white overflow-hidden transition-colors duration-100 data-[focus]:bg-gray-600"
+                  className="cursor-pointer block px-3 py-2 m-1 rounded-md text-sm leading-6 text-gray-700 overflow-hidden transition-colors duration-100 data-[focus]:bg-gray-100"
                 >
                   {item.name}
                 </Link>
@@ -76,7 +76,7 @@ export const ProfileDropdown = ({ topRight }: { topRight?: boolean }) => {
               <MenuItem key="logout">
                 <div
                   onClick={async () => await logout()}
-                  className="cursor-pointer block px-3 py-2 m-1 rounded-md text-sm leading-6 text-white overflow-hidden transition-colors duration-100 data-[focus]:bg-gray-600"
+                  className="cursor-pointer block px-3 py-2 m-1 rounded-md text-sm leading-6 text-gray-700 overflow-hidden transition-colors duration-100 data-[focus]:bg-gray-100"
                 >
                   Logout
                 </div>

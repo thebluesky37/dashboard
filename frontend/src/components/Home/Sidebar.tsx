@@ -162,7 +162,7 @@ export const Sidebar = () => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-gray-900/80" />
+            <div className="fixed inset-0 bg-gray-900/10" />
           </HeadlessTransitionChild>
 
           <div className="fixed inset-0 flex">
@@ -191,7 +191,7 @@ export const Sidebar = () => {
                     >
                       <span className="sr-only">Close sidebar</span>
                       <XMarkIcon
-                        className="h-6 w-6 text-white"
+                        className="h-6 w-6 text-gray-700"
                         aria-hidden="true"
                       />
                     </button>
@@ -199,7 +199,7 @@ export const Sidebar = () => {
                 </HeadlessTransitionChild>
 
                 {/* Hideable sidebar for small screens */}
-                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-2 ring-1 ring-white/10">
+                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-2 ring-1 ring-gray-200">
                   <div className="flex h-16 shrink-0 items-center">
                     <img className="h-8 w-auto" src={logo} alt="DataLine" />
                   </div>
@@ -209,7 +209,7 @@ export const Sidebar = () => {
                         <ul role="list" className="-mx-2 space-y-1">
                           <Link
                             to="/"
-                            className="py-3 px-2 rounded-md flex justify-start items-center border border-gray-600 text-gray-200 hover:bg-gray-800 transition-all duration-150 cursor-pointer"
+                            className="py-3 px-2 rounded-md flex justify-start items-center border border-gray-300 text-gray-800 hover:bg-gray-100 transition-all duration-150 cursor-pointer"
                           >
                             <PlusIcon className="h-5 w-5 shrink-0 mr-2 [&>path]:stroke-[1]"></PlusIcon>
                             <div>New chat</div>
@@ -225,8 +225,8 @@ export const Sidebar = () => {
                                 }}
                                 className={classNames(
                                   conversation.id === currentConversation?.id
-                                    ? "bg-gray-700 text-white"
-                                    : "text-gray-400 hover:text-white hover:bg-gray-800",
+                                    ? "bg-gray-100 text-gray-900"
+                                    : "text-gray-700 hover:text-gray-900 hover:bg-gray-100",
                                   "group flex gap-x-3 rounded-md px-3 py-2 text-md leading-6 items-center text-md transition-all duration-150 cursor-pointer mt-2"
                                 )}
                               >
@@ -268,7 +268,7 @@ export const Sidebar = () => {
                       </li>
 
                       <li>
-                        <hr className="border-gray-800 -mt-2 mb-4" />
+                        <hr className="border-gray-200 -mt-2 mb-4" />
                       </li>
                     </ul>
                   </nav>
@@ -280,7 +280,7 @@ export const Sidebar = () => {
       </HeadlessTransition>
 
       {/* BIG SCREENS */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col border-r border-gray-600">
+      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col border-r border-gray-200 bg-white">
         {/* Dataline logo */}
         <Link to="/" className="flex h-16 shrink-0 items-center px-6">
           <img className="h-8 w-auto" src={logo} alt="DataLine" />
@@ -288,7 +288,7 @@ export const Sidebar = () => {
         {/* New chat button */}
         <Link
           to="/"
-          className="mt-9 mb-4 mx-2 py-3 px-2 rounded-md flex justify-start items-center border border-gray-600 text-gray-200 hover:bg-gray-800 transition-all duration-150 cursor-pointer"
+          className="mt-9 mb-4 mx-2 py-3 px-2 rounded-md flex justify-start items-center border border-gray-300 text-gray-800 hover:bg-gray-100 transition-all duration-150 cursor-pointer"
         >
           <PlusIcon className="h-5 w-5 shrink-0 mr-2 [&>path]:stroke-[1]"></PlusIcon>
           <div>New chat</div>
@@ -309,8 +309,8 @@ export const Sidebar = () => {
                       }
                       className={classNames(
                         conversation.id === params.conversationId
-                          ? "bg-gray-700 text-white"
-                          : "text-gray-400 hover:text-white hover:bg-gray-800",
+                          ? "bg-gray-100 text-gray-900"
+                          : "text-gray-700 hover:text-gray-900 hover:bg-gray-100",
                         "group flex gap-x-3 rounded-md px-3 py-2 text-md leading-6 items-center text-md transition-all duration-150 cursor-pointer"
                       )}
                     >
@@ -347,7 +347,7 @@ export const Sidebar = () => {
                         >
                           <div
                             onClick={handleEditClick}
-                            className="transition-colors duration-150 cursor-pointer rounded-md hover:text-white hover:bg-gray-700 text-gray-300"
+                            className="transition-colors duration-150 cursor-pointer rounded-md hover:text-gray-900 hover:bg-gray-200 text-gray-600"
                           >
                             <PencilSquareIcon className="w-5 h-5" />
                           </div>
@@ -362,8 +362,8 @@ export const Sidebar = () => {
                     <div
                       className={classNames(
                         conversation.id === params.conversationId
-                          ? "bg-gray-700 text-white"
-                          : "text-gray-400 hover:text-white hover:bg-gray-800",
+                          ? "bg-gray-100 text-gray-900"
+                          : "text-gray-700 hover:text-gray-900 hover:bg-gray-100",
                         "group flex gap-x-3 rounded-md px-3 py-2 text-md leading-6 items-center text-md transition-all duration-150 cursor-pointer"
                       )}
                     >
@@ -381,7 +381,7 @@ export const Sidebar = () => {
                           onKeyDown={handleKeyPress}
                           onBlur={handleSaveClick}
                           autoFocus
-                          className="flex-none max-w-[70%] h-6 text-md font-medium leading-6 text-white bg-gray-800 focus:outline-none outline-none border-none ring-gray-300 pl-1"
+                          className="flex-none max-w-[70%] h-6 text-md font-medium leading-6 text-gray-900 bg-gray-100 focus:outline-none outline-none border-none ring-gray-300 pl-1"
                         />
                       ) : (
                         <div className="flex flex-col overflow-hidden">
@@ -403,7 +403,7 @@ export const Sidebar = () => {
                       {conversation.id === params.conversationId && (
                         <div
                           onClick={handleSaveClick}
-                          className="transition-colors duration-150 cursor-pointer rounded-md hover:text-white hover:bg-gray-700 text-gray-300"
+                          className="transition-colors duration-150 cursor-pointer rounded-md hover:text-gray-900 hover:bg-gray-200 text-gray-600"
                         >
                           <CheckIcon className="w-5 h-5 [&>path]:stroke-[2]" />
                         </div>
@@ -444,18 +444,18 @@ export const Sidebar = () => {
               </ul> */}
         </nav>
         {/* Separator */}
-        <hr className="border-gray-800 mt-1 mx-6" />
+        <hr className="border-gray-200 mt-1 mx-6" />
         {/* User Settings */}
-        <div className="flex items-center px-2 gap-x-4 py-4 text-md font-medium leading-6 text-white">
+        <div className="flex items-center px-2 gap-x-4 py-4 text-md font-medium leading-6 text-gray-900">
           <ProfileDropdown />
         </div>
       </div>
 
       {/* SMALL SCREENS */}
-      <div className="fixed w-full h-16 top-0 z-40 flex items-center justify-between gap-x-6 px-4 py-4 shadow-sm sm:px-6 lg:hidden backdrop-filter backdrop-blur-lg">
+      <div className="fixed w-full h-16 top-0 z-40 flex items-center justify-between gap-x-6 px-4 py-4 shadow-sm sm:px-6 lg:hidden backdrop-filter backdrop-blur-lg bg-white/90 border-b border-gray-200">
         <button
           type="button"
-          className="-m-2.5 p-2.5 text-white lg:hidden"
+          className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
           onClick={() => setSidebarOpen(true)}
         >
           <span className="sr-only">Open sidebar</span>
@@ -465,7 +465,7 @@ export const Sidebar = () => {
           />
         </button>
         {isEditing && params.conversationId !== undefined ? (
-          <div className="flex-1 inline-flex justify-center items-center gap-3 text-center text-md font-medium leading-6 text-white">
+          <div className="flex-1 inline-flex justify-center items-center gap-3 text-center text-md font-medium leading-6 text-gray-900">
             <input
               type="text"
               value={editedName}
@@ -473,18 +473,18 @@ export const Sidebar = () => {
               onKeyDown={handleKeyPress}
               autoFocus
               onBlur={handleSaveClick}
-              className="text-md font-medium leading-6 text-white bg-transparent border-b-2 border-white"
+              className="text-md font-medium leading-6 text-gray-900 bg-transparent border-b-2 border-gray-300"
             />
           </div>
         ) : (
           params.conversationId !== undefined && (
-            <div className="flex-1 inline-flex justify-center items-center gap-3 text-center text-md font-medium leading-6 text-white">
+            <div className="flex-1 inline-flex justify-center items-center gap-3 text-center text-md font-medium leading-6 text-gray-900">
               {editedName || "New chat"}
 
               {!isEditing && (
                 <div
                   onClick={handleEditClick}
-                  className=" transition-colors duration-150 cursor-pointer p-1 rounded-md hover:text-white hover:bg-gray-700 text-gray-300"
+                  className=" transition-colors duration-150 cursor-pointer p-1 rounded-md hover:text-gray-900 hover:bg-gray-200 text-gray-600"
                 >
                   <PencilSquareIcon className="w-5 h-5 " />
                 </div>

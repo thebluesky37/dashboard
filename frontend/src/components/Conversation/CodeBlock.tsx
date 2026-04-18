@@ -270,7 +270,7 @@ export const CodeBlock = ({
       minimized={minimized}
       setMinimized={setMinimized}
       label="Code block"
-      classes="bg-gray-900"
+      classes="bg-white border border-gray-200"
     >
       <div
         role="button"
@@ -282,7 +282,7 @@ export const CodeBlock = ({
         <textarea
           spellCheck={false}
           ref={textareaRef}
-          className="absolute h-full w-full border-0 inset-0 resize-none bg-transparent overflow-y-hidden overflow-x-scroll text-transparent p-2 font-mono caret-white outline-none focus:outline-none focus:border focus:ring-0 focus:rounded-xl whitespace-pre"
+          className="absolute h-full w-full border-0 inset-0 resize-none bg-transparent overflow-y-hidden overflow-x-scroll text-transparent p-2 font-mono caret-gray-900 outline-none focus:outline-none focus:border focus:ring-0 focus:rounded-xl whitespace-pre"
           onChange={handleTextUpdate}
           onKeyDown={handleKeyboardInput}
           onScroll={mirrorScroll}
@@ -292,7 +292,14 @@ export const CodeBlock = ({
           id={syntaxHighlighterId}
           children={formattedCode}
           language="sql" // TODO: make dynamic to support multiple DB dialects?
-          style={monokai}
+          style={{
+            ...monokai,
+            hljs: {
+              ...monokai.hljs,
+              color: "#111827",
+              background: "transparent",
+            },
+          }}
           wrapLines={true}
           customStyle={{
             flex: "1",
@@ -384,11 +391,15 @@ export const CodeBlock = ({
 
         {/* Help for editing queries when codeblock is linked to a chart */}
         {forChart && (
-          <Alert className="lg:ml-72" open={isHelpOpen} onClose={setIsHelpOpen}>
-            <AlertTitle>
+          <Alert
+            className="lg:ml-72"
+            open={isHelpOpen}
+            onClose={setIsHelpOpen}
+          >
+            <AlertTitle className="text-gray-900">
               Quick overview of how you can edit chart-linked queries
             </AlertTitle>
-            <AlertDescription>
+            <AlertDescription className="text-gray-600">
               Charts are generated from the SQL results automatically. <br />
               <br />
               The first column returned by the query is used as the x-axis, and
@@ -403,7 +414,11 @@ export const CodeBlock = ({
               types to work (labels and values respectively).
             </AlertDescription>
             <AlertActions>
-              <Button plain onClick={() => setIsHelpOpen(false)}>
+              <Button
+                outline
+                className="border-gray-300 text-gray-800 data-[hover]:bg-gray-50"
+                onClick={() => setIsHelpOpen(false)}
+              >
                 Got it!
               </Button>
             </AlertActions>

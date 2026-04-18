@@ -22,7 +22,5 @@ type Story = StoryObj<typeof NewConnection>;
  * to learn how to use render functions.
  */
 export const Primary: Story = {
-  args: {
-    isOpen: true,
-  },
+  args: {},
 };

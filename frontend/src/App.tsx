@@ -3,6 +3,7 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 
 import { QueryClientProvider } from "@tanstack/react-query";
+import { Flowbite } from "flowbite-react";
 import { closeSnackbar, SnackbarKey, SnackbarProvider } from "notistack";
 import { queryClient } from "./queryClient";
 
@@ -30,6 +31,7 @@ declare module "@tanstack/react-router" {
 
 export const App = () => {
   return (
+    <Flowbite theme={{ dark: false }}>
     <QueryClientProvider client={queryClient}>
       <SnackbarProvider
         autoHideDuration={5000}
@@ -40,5 +42,6 @@ export const App = () => {
         <RouterProvider router={router} />
       </SnackbarProvider>
     </QueryClientProvider>
+    </Flowbite>
   );
 };

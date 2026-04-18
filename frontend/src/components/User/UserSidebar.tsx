@@ -5,11 +5,15 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useParams } from "@tanstack/react-router";
+import { useDeleteConversation } from "@/hooks/conversations";
+import { TrashIcon } from "@heroicons/react/24/outline";
+import { CustomTooltip } from "@/components/Library/Tooltip";
 
 export default function UserSidebar() {
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const params = useParams({ strict: false });
 
   const { data: conversations } = useQuery({
     queryKey: CONVERSATIONS_QUERY_KEY,
@@ -37,19 +41,43 @@ export default function UserSidebar() {
     },
   });
 
+  const { mutate: deleteConversation, isPending: isDeletingConversation } =
+    useDeleteConversation({
+      onSuccess: (_data: unknown, deletedConversationId: string) => {
+        const activeConversationId =
+          typeof params.conversationId === "string"
+            ? params.conversationId
+            : undefined;
+        const remainingConversations = (conversations ?? []).filter(
+          (conversation) => conversation.id !== deletedConversationId
+        );
+
+        if (activeConversationId === deletedConversationId) {
+          const newestRemainingConversation = remainingConversations[0];
+          if (newestRemainingConversation) {
+            navigate({
+              to: "/chat/$conversationId",
+              params: { conversationId: newestRemainingConversation.id },
+            });
+            return;
+          }
+          navigate({ to: "/chat" });
+        }
+      },
+    });
+
   return (
-    <nav className="w-60 flex-shrink-0 flex flex-col p-4 bg-gray-900 border-r border-gray-800 h-full">
+    <nav className="w-60 flex-shrink-0 flex flex-col p-3 pt-14 bg-white border-r border-gray-200 h-full shadow-sm">
       <button
         onClick={() => createConversation.mutate()}
         disabled={!defaultConnection?.id || createConversation.isPending}
-        className="mb-3 px-3 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 rounded text-sm font-medium"
-        title={!defaultConnection?.id ? "Admin has not set a default connection" : ""}
+        className="mb-3 w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-800 hover:bg-gray-50 disabled:opacity-40"
       >
         + New Chat
       </button>
 
       {!defaultConnection?.id && (
-        <p className="text-xs text-yellow-500 mb-2">
+        <p className="text-xs text-amber-600 mb-2">
           No default connection configured.
         </p>
       )}
@@ -60,9 +88,24 @@ export default function UserSidebar() {
             key={conversation.id}
             to="/chat/$conversationId"
             params={{ conversationId: conversation.id }}
-            className="truncate px-2 py-1.5 rounded hover:bg-gray-800 text-sm text-gray-300"
+            className="group flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-gray-100 text-sm text-gray-700 [&.active]:bg-gray-100 [&.active]:font-medium"
           >
-            {conversation.name}
+            <span className="flex-1 truncate">{conversation.name}</span>
+            <CustomTooltip hoverText="Delete" unstyledTrigger>
+              <button
+                type="button"
+                aria-label="Delete conversation"
+                disabled={isDeletingConversation}
+                className="opacity-0 transition-opacity text-gray-400 hover:text-gray-700 group-hover:opacity-100 focus:opacity-100 disabled:opacity-50"
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  deleteConversation(conversation.id);
+                }}
+              >
+                <TrashIcon className="h-4 w-4" aria-hidden="true" />
+              </button>
+            </CustomTooltip>
           </Link>
         ))}
       </div>

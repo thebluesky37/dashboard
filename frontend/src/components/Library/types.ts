@@ -144,5 +144,6 @@ export interface IUserInfo {
   sentry_enabled: boolean;
   analytics_enabled: boolean;
   hide_sql_preference: boolean;
+  hide_data_results: boolean;
   default_connection_id?: string | null;
 }

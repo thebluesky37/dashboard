@@ -50,9 +50,9 @@ const ExpandingInput = forwardRef<HTMLTextAreaElement, ExpandingInputProps>(
           id="email"
           className={classNames(
             disabled
-              ? "placeholder:text-gray-600 text-gray-800 dark:text-gray-400 dark:bg-gray-800 focus:ring-0"
-              : "placeholder:text-gray-400 text-gray-900 dark:text-gray-200 dark:bg-gray-900",
-            "block rounded-xl border p-4 shadow-sm sm:text-md sm:leading-6 resize-none dark:border-gray-600 pr-12 overflow-y-hidden mr-1"
+              ? "placeholder:text-gray-500 text-gray-500 bg-gray-100 focus:ring-0"
+              : "placeholder:text-gray-400 text-gray-900 bg-white",
+            "block rounded-xl border border-gray-300 p-4 shadow-sm sm:text-md sm:leading-6 resize-none pr-12 overflow-y-hidden mr-1"
           )}
           style={{ height: "auto" }}
           rows={1}
@@ -66,9 +66,9 @@ const ExpandingInput = forwardRef<HTMLTextAreaElement, ExpandingInputProps>(
           onClick={handleSubmit}
           className={classNames(
             inputValue.length > 0 && !disabled
-              ? "dark:text-gray-700 dark:bg-gray-300 dark:hover:cursor-pointer"
+              ? "text-gray-700 bg-gray-100 hover:cursor-pointer"
               : "",
-            "group absolute right-0 mr-4 -rotate-90 dark:text-gray-400 p-1 rounded-md transition-all duration-150"
+            "group absolute right-0 mr-4 -rotate-90 text-gray-500 p-1 rounded-md transition-all duration-150"
           )}
         >
           <PaperAirplaneIcon

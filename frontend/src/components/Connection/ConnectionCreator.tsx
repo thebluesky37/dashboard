@@ -4,7 +4,6 @@ import React, { useRef, useState } from "react";
 import { Input } from "@catalyst/input";
 import { Button } from "@catalyst/button";
 import { enqueueSnackbar } from "notistack";
-import { useNavigate } from "@tanstack/react-router";
 import { CloudArrowUpIcon, DocumentCheckIcon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useCreateConnection, useCreateFileConnection } from "@/hooks";
@@ -70,14 +69,14 @@ const FileDragAndDrop = ({
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}
       className={classNames(
-        "mt-2 flex justify-center rounded-lg border border-dashed border-white/60 px-6 py-10",
-        dragActive ? "bg-gray-700" : ""
+        "mt-2 flex justify-center rounded-lg border border-dashed border-gray-300 px-6 py-10",
+        dragActive ? "bg-gray-50" : ""
       )}
     >
       <div className={classNames(currentFile ? "" : "hidden", "text-center")}>
         <div className="relative inline-block">
           <DocumentCheckIcon
-            className="h-12 w-12 text-gray-300"
+            className="h-12 w-12 text-gray-400"
             aria-hidden="true"
           />
           <div
@@ -90,20 +89,20 @@ const FileDragAndDrop = ({
             />
           </div>
         </div>
-        <p className="mt-2 text-sm leading-6 text-gray-400">
+        <p className="mt-2 text-sm leading-6 text-gray-600">
           {currentFile && currentFile.name}
         </p>
       </div>
       <div className={classNames(currentFile ? "hidden" : "", "text-center")}>
         <CloudArrowUpIcon
           onClick={handleFileClick}
-          className="cursor-pointer mx-auto h-12 w-12 text-gray-300"
+          className="cursor-pointer mx-auto h-12 w-12 text-gray-400"
           aria-hidden="true"
         />
-        <div className="mt-4 flex text-sm leading-6 text-gray-400 justify-center">
+        <div className="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
           <label
             htmlFor="file-upload"
-            className="px-1 relative cursor-pointer rounded-md bg-gray-900 font-semibold text-white focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:ring-offset-gray-900 hover:text-indigo-500"
+            className="px-1 relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 border border-gray-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:ring-offset-white hover:text-indigo-700"
           >
             <span>Upload a file</span>
             {/** Set a key so that the input is re-rendered and cleared when the file is removed */}
@@ -119,7 +118,7 @@ const FileDragAndDrop = ({
           </label>
           <p>or drag and drop</p>
         </div>
-        <p className="text-xs leading-5 text-gray-400 px-12 mt-4">
+        <p className="text-xs leading-5 text-gray-600 px-12 mt-4">
           Creates a copy of your {fileTypeLabel} in DataLine. Changes you make
           to the file will not be accessible to DataLine as it will work on the
           copy you upload.
@@ -137,15 +136,13 @@ const fileTypeLabelMap: { [K in DatabaseFileType]: string } = {
   excel: "Excel file",
 };
 
-const ConnectionCreator = ({ name = null }: { name: string | null }) => {
+const ConnectionCreator = ({ name = null, onDone }: { name: string | null; onDone?: () => void }) => {
   const [selectedRadio, setSelectedRadio] = useState<RadioValue>(null);
   const [dsn, setDsn] = useState<string | null>(null);
   const [file, setFile] = useState<File>();
   const { mutate: createConnection, isPending } = useCreateConnection();
   const { mutate: createFileConnection, isPending: isFilePending } =
     useCreateFileConnection();
-
-  const navigate = useNavigate();
 
   const handleCustomCreate = async () => {
     // Call api with name and dsn
@@ -164,7 +161,7 @@ const ConnectionCreator = ({ name = null }: { name: string | null }) => {
             variant: "success",
             message: "Connection created",
           });
-          navigate({ to: "/" });
+          onDone?.();
         },
       }
     );
@@ -204,7 +201,7 @@ const ConnectionCreator = ({ name = null }: { name: string | null }) => {
             variant: "success",
             message: "Connection created",
           });
-          navigate({ to: "/" });
+          onDone?.();
         },
       }
     );
@@ -221,26 +218,26 @@ const ConnectionCreator = ({ name = null }: { name: string | null }) => {
           }
         >
           <RadioField>
-            <Radio value="database" color="white" />
-            <Label className="cursor-pointer">
+            <Radio value="database" />
+            <Label className="cursor-pointer text-gray-900">
               Postgres, MySQL, Snowflake, or MS SQL Server connection string
             </Label>
           </RadioField>
           <RadioField>
-            <Radio value="sqlite" color="white" />
-            <Label className="cursor-pointer">SQLite file</Label>
+            <Radio value="sqlite" />
+            <Label className="cursor-pointer text-gray-900">SQLite file</Label>
           </RadioField>
           <RadioField>
-            <Radio value="csv" color="white" />
-            <Label className="cursor-pointer">CSV file</Label>
+            <Radio value="csv" />
+            <Label className="cursor-pointer text-gray-900">CSV file</Label>
           </RadioField>
           <RadioField>
-            <Radio value="excel" color="white" />
-            <Label className="cursor-pointer">Excel file</Label>
+            <Radio value="excel" />
+            <Label className="cursor-pointer text-gray-900">Excel file</Label>
           </RadioField>
           <RadioField>
-            <Radio value="sas7bdat" color="white" />
-            <Label className="cursor-pointer">sas7bdat file</Label>
+            <Radio value="sas7bdat" />
+            <Label className="cursor-pointer text-gray-900">sas7bdat file</Label>
           </RadioField>
         </RadioGroup>
       </Fieldset>
@@ -248,7 +245,7 @@ const ConnectionCreator = ({ name = null }: { name: string | null }) => {
         {selectedRadio === "database" ? (
           <div>
             <Field>
-              <Label>Connection DSN</Label>
+              <Label className="text-gray-900">Connection DSN</Label>
               <Input
                 type="text"
                 placeholder="postgres://myuser:mypassword@localhost:5432/mydatabase"
@@ -256,6 +253,7 @@ const ConnectionCreator = ({ name = null }: { name: string | null }) => {
               />
             </Field>
             <Button
+              color="light"
               className="cursor-pointer mt-4"
               onClick={handleCustomCreate}
               disabled={isPending}
@@ -267,7 +265,7 @@ const ConnectionCreator = ({ name = null }: { name: string | null }) => {
           selectedRadio && (
             <div>
               <Field>
-                <Label>{fileTypeLabelMap[selectedRadio]}</Label>
+                <Label className="text-gray-900">{fileTypeLabelMap[selectedRadio]}</Label>
                 <FileDragAndDrop
                   setFile={setFile}
                   currentFile={file}
@@ -275,6 +273,7 @@ const ConnectionCreator = ({ name = null }: { name: string | null }) => {
                 />
               </Field>
               <Button
+                color="light"
                 className="cursor-pointer mt-4"
                 onClick={() => handleFileCreate(selectedRadio)}
                 disabled={isFilePending}

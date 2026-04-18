@@ -39,7 +39,7 @@ export const DynamicTable: React.FC<{
       minimized={minimized}
       setMinimized={setMinimized}
       label="Data results"
-      classes="bg-gray-800"
+      classes="bg-white border border-gray-200"
     >
       <div className="relative">
         <Table

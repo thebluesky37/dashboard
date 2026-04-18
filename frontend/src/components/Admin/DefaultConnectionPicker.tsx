@@ -1,44 +1,37 @@
 import { api } from "@/api";
 import { IConnection } from "@/components/Library/types";
-import { userProfileQuery } from "@/hooks/settings";
-import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-export default function DefaultConnectionPicker() {
-  const qc = useQueryClient();
+interface DefaultConnectionPickerProps {
+  value: string | null | undefined;
+  onChange: (connectionId: string | null) => void;
+  disabled?: boolean;
+}
 
+export default function DefaultConnectionPicker({
+  value,
+  onChange,
+  disabled = false,
+}: DefaultConnectionPickerProps) {
   const { data: connectionsData } = useQuery({
     queryKey: ["CONNECTIONS"],
     queryFn: async () => (await api.listConnections()).data,
   });
   const connections = connectionsData?.connections;
 
-  const { data: userInfo } = useQuery(userProfileQuery());
-
-  const updateDefaultConnection = useMutation({
-    mutationFn: async (defaultConnectionId: string | null) =>
-      api.updateUserInfo({ default_connection_id: defaultConnectionId }),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["USER_INFO"] });
-    },
-  });
-
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-gray-300">
+      <label className="text-sm font-medium text-gray-900">
         Default Connection
       </label>
       <select
-        className="bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-gray-100"
-        value={userInfo?.default_connection_id ?? ""}
+        className="bg-white border border-gray-300 rounded px-3 py-2 text-sm text-gray-900"
+        value={value ?? ""}
         onChange={(e) => {
-          const value = e.target.value || null;
-          updateDefaultConnection.mutate(value);
+          const selectedValue = e.target.value || null;
+          onChange(selectedValue);
         }}
-        disabled={updateDefaultConnection.isPending}
+        disabled={disabled}
       >
         <option value="">- None -</option>
         {(connections ?? []).map((connection: IConnection) => (
@@ -47,7 +40,7 @@ export default function DefaultConnectionPicker() {
           </option>
         ))}
       </select>
-      <p className="text-xs text-gray-500">
+      <p className="text-xs text-gray-600">
         Users will automatically chat against this connection.
       </p>
     </div>

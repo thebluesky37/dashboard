@@ -122,7 +122,7 @@ export const Conversation = () => {
 
   if (isPendingGetMessages) {
     return (
-      <div className="w-full h-screen flex gap-2 justify-center items-center text-white">
+      <div className="w-full h-screen flex gap-2 justify-center items-center text-gray-700">
         <Spinner />
         Loading...
       </div>
@@ -138,14 +138,14 @@ export const Conversation = () => {
 
   if (!isSuccessGetMessages) {
     return (
-      <div className="w-full h-screen flex justify-center items-center text-white">
+      <div className="w-full h-screen flex justify-center items-center text-gray-900">
         Something went wrong!
       </div>
     );
   }
 
   return (
-    <div className="bg-gray-900 w-full h-[calc(100%-4rem)] relative flex flex-col">
+    <div className="bg-white w-full h-[calc(100%-4rem)] relative flex flex-col">
       <Transition
         key={params.conversationId}
         enter="transition duration-200"
@@ -154,7 +154,7 @@ export const Conversation = () => {
         show={true}
         appear={true}
       >
-        <div className="overflow-y-auto pb-36 bg-gray-900">
+        <div className="overflow-y-auto pb-36 bg-white">
           {messages.map((message) => (
             <Message
               key={(params.conversationId as string) + message.message.id}
@@ -171,7 +171,7 @@ export const Conversation = () => {
                     id: generateUUID(),
                   },
                 }}
-                className="dark:text-gray-400"
+                className="text-gray-500"
               />
               <Message
                 key={new Date().toJSON()}
@@ -193,7 +193,7 @@ export const Conversation = () => {
 
       <div ref={messageListRef}></div>
 
-      <div className="fixed bottom-0 left-0 lg:left-60 right-0 flex flex-col items-center justify-center backdrop-blur-md pt-0">
+      <div className="fixed bottom-0 left-0 right-0 flex flex-col items-center justify-center bg-white backdrop-blur-md pt-0">
         {messages.length === 0 && !currentConversationIsQuerying && (
           <div className="w-full md:max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-2 justify-between px-2 sm:px-3 my-4">
             {templateMessages.map((template) => (
@@ -224,7 +224,7 @@ export const Conversation = () => {
             disabled={currentConversationIsQuerying}
             ref={expandingInputRef}
           />
-          <p className="text-gray-400 text-sm">
+          <p className="text-gray-600 text-sm">
             Current Connection: {currConnection?.name}
           </p>
         </div>

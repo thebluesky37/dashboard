@@ -6,11 +6,7 @@ import { SampleResult } from "../../api";
 import { enqueueSnackbar } from "notistack";
 import { Button } from "@catalyst/button";
 import { useCreateSampleConnection, useGetSamples } from "@/hooks";
-import { useNavigate } from "@tanstack/react-router";
-
-export const SampleSelector = ({ name = null }: { name: string | null }) => {
-  const navigate = useNavigate();
-
+export const SampleSelector = ({ name = null, onDone }: { name: string | null; onDone?: () => void }) => {
   const { data } = useGetSamples();
   const samples = data || [];
   const { mutate } = useCreateSampleConnection({
@@ -19,7 +15,7 @@ export const SampleSelector = ({ name = null }: { name: string | null }) => {
         variant: "success",
         message: "Sample connection created",
       });
-      navigate({ to: "/" });
+      onDone?.();
     },
   });
 
@@ -50,19 +46,19 @@ export const SampleSelector = ({ name = null }: { name: string | null }) => {
 
   return (
     <Fieldset>
-      <Legend>Data Samples</Legend>
-      <Text>Pick a sample dataset to get started.</Text>
+      <Legend className="text-gray-900">Data Samples</Legend>
+      <Text className="text-gray-600">Pick a sample dataset to get started.</Text>
       <RadioGroup name="sample" defaultValue="" onChange={handleRadioChange}>
         {samples.map((sample, index) => (
           <RadioField key={index}>
-            <Radio value={sample.key} color="white" />
-            <Label className="cursor-pointer">{sample.title}</Label>
-            <Description>{sample.link}</Description>
+            <Radio value={sample.key} />
+            <Label className="cursor-pointer text-gray-900">{sample.title}</Label>
+            <Description className="text-gray-600">{sample.link}</Description>
           </RadioField>
         ))}
       </RadioGroup>
 
-      <Button className="cursor-pointer mt-4" onClick={handleButtonClick}>
+      <Button color="light" className="cursor-pointer mt-4" onClick={handleButtonClick}>
         Create sample
       </Button>
     </Fieldset>

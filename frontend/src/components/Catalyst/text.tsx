@@ -11,7 +11,7 @@ export function Text({
       data-slot="text"
       className={clsx(
         className,
-        "text-base/6 text-gray-500 sm:text-sm/6 dark:text-gray-400"
+        "text-base/6 text-gray-500 sm:text-sm/6"
       )}
     />
   );
@@ -26,7 +26,7 @@ export function TextLink({
       {...props}
       className={clsx(
         className,
-        "text-gray-950 underline decoration-gray-950/50 data-[hover]:decoration-gray-950 dark:text-white dark:decoration-white/50 dark:data-[hover]:decoration-white"
+        "text-gray-950 underline decoration-gray-950/50 data-[hover]:decoration-gray-950"
       )}
     />
   );
@@ -39,7 +39,7 @@ export function Strong({
   return (
     <strong
       {...props}
-      className={clsx(className, "font-medium text-gray-950 dark:text-white")}
+      className={clsx(className, "font-medium text-gray-950")}
     />
   );
 }
@@ -53,7 +53,7 @@ export function Code({
       {...props}
       className={clsx(
         className,
-        "rounded border border-gray-950/10 bg-gray-950/[2.5%] px-0.5 text-sm font-medium text-gray-950 sm:text-[0.8125rem] dark:border-white/20 dark:bg-white/5 dark:text-white"
+        "rounded border border-gray-950/10 bg-gray-950/[2.5%] px-0.5 text-sm font-medium text-gray-950 sm:text-[0.8125rem]"
       )}
     />
   );

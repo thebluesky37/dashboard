@@ -27,11 +27,11 @@ const Minimizer = ({
   return (
     <div
       ref={parent}
-      className={clsx("max-w-7xl border border-gray-500 rounded-xl", classes)}
+      className={clsx("max-w-7xl border border-gray-200 rounded-xl", classes)}
     >
       {minimized && (
         <div
-          className="flex items-center justify-between p-2 cursor-pointer text-gray-300"
+          className="flex items-center justify-between p-2 cursor-pointer text-gray-700"
           onClick={() => setMinimized(false)}
         >
           <div className="ml-2">{label}</div>

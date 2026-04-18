@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { IConnectionOptions, IEditConnection } from "@components/Library/types";
 import { ArrowPathIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useNavigate, useParams } from "@tanstack/react-router";
 import { AlertIcon, AlertModal } from "@components/Library/AlertModal";
-import { enqueueSnackbar } from "notistack";
 import {
   useDeleteConnection,
   useGetConnection,
@@ -19,6 +17,7 @@ import { Switch } from "@components/Catalyst/switch";
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
+
 const SchemaEditor = ({
   options,
   setOptions,
@@ -31,17 +30,16 @@ const SchemaEditor = ({
   );
 
   return (
-    <div className="mt-2 divide-y divide-white/5 rounded-xl bg-white/5">
+    <div className="mt-2 divide-y divide-gray-200 rounded-xl border border-gray-200 bg-white">
       {options.schemas.map((schema, schema_index) =>
         schema.tables.length === 0 ? null : (
           <div className="flex flex-col" key={schema_index}>
-            <div className="flex w-full items-center p-6" key={schema_index}>
+            <div className="flex w-full items-center p-4" key={schema_index}>
               <Switch
                 color="green"
                 name="select_schema"
                 checked={schema.enabled}
                 onChange={(checked) =>
-                  // Check/Uncheck schema and its tables
                   setOptions({
                     schemas: options.schemas.map((prev_schema, prev_idx) =>
                       prev_idx === schema_index
@@ -69,15 +67,17 @@ const SchemaEditor = ({
               >
                 <span
                   className={classNames(
-                    "ml-4 text-sm/6 font-medium group-hover:text-white/80 grow",
-                    schema.enabled ? "text-white" : "text-white/50"
+                    "ml-4 text-sm/6 font-medium grow",
+                    schema.enabled
+                      ? "text-gray-900 group-hover:text-gray-700"
+                      : "text-gray-400"
                   )}
                 >
                   {schema.name}
                 </span>
                 <ChevronDownIcon
                   className={classNames(
-                    "size-5 fill-white/60 group-hover:fill-white/50",
+                    "size-5 fill-gray-400 group-hover:fill-gray-500",
                     expanded[schema.name] ? "rotate-180" : ""
                   )}
                 />
@@ -87,17 +87,13 @@ const SchemaEditor = ({
             <Transition show={expanded[schema.name] || false}>
               <div className="transition ease-in-out translate-x-0 data-[closed]:opacity-0 data-[closed]:-translate-y-3">
                 {schema.tables.map((table, table_index) => (
-                  <div className="p-6 pt-0 pl-12" key={table_index}>
-                    <div
-                      className="flex w-full items-center"
-                      key={schema_index}
-                    >
+                  <div className="p-4 pt-0 pl-12" key={table_index}>
+                    <div className="flex w-full items-center" key={schema_index}>
                       <Switch
                         color="green"
                         name="select_schema"
                         checked={table.enabled && schema.enabled}
                         onChange={(checked) =>
-                          // Check/Uncheck table
                           setOptions({
                             schemas: options.schemas.map(
                               (prev_schema, prev_idx) =>
@@ -107,10 +103,7 @@ const SchemaEditor = ({
                                       tables: prev_schema.tables.map(
                                         (table, inner_table_idx) =>
                                           inner_table_idx === table_index
-                                            ? {
-                                                ...table,
-                                                enabled: checked,
-                                              }
+                                            ? { ...table, enabled: checked }
                                             : table
                                       ),
                                     }
@@ -123,8 +116,8 @@ const SchemaEditor = ({
                         className={classNames(
                           "ml-4 text-sm/5",
                           schema.enabled && table.enabled
-                            ? "text-white"
-                            : "text-white/50"
+                            ? "text-gray-900"
+                            : "text-gray-400"
                         )}
                       >
                         {table.name}
@@ -141,9 +134,13 @@ const SchemaEditor = ({
   );
 };
 
-export const ConnectionEditor = () => {
-  const navigate = useNavigate();
-  const { connectionId } = useParams({ strict: false });
+export const ConnectionEditor = ({
+  connectionId,
+  onClose,
+}: {
+  connectionId: string;
+  onClose: () => void;
+}) => {
   const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
   const [showCancelAlert, setShowCancelAlert] = useState<boolean>(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
@@ -159,25 +156,21 @@ export const ConnectionEditor = () => {
 
   const { mutate: deleteConnection } = useDeleteConnection({
     onSuccess() {
-      navigate({ to: "/" });
+      onClose();
     },
   });
 
   const { mutate: updateConnection } = useUpdateConnection({
     onSuccess() {
-      navigate({ to: "/" });
+      onClose();
     },
   });
 
   const { mutate: refreshSchema, isPending: isRefreshing } =
     useRefreshConnectionSchema((data) => {
-      setEditFields((prev) => ({
-        ...prev,
-        options: data.options,
-      }));
+      setEditFields((prev) => ({ ...prev, options: data.options }));
     });
 
-  // Form state
   const [editFields, setEditFields] = useState<IEditConnection>({
     name: "",
     dsn: "",
@@ -193,37 +186,20 @@ export const ConnectionEditor = () => {
     }));
   }, [connection]);
 
-  if (!connectionId) {
-    enqueueSnackbar({
-      variant: "error",
-      message: "No connection id provided - something went wrong",
-    });
-  }
-
-  // Handle navigating back only if there are no unsaved changes
   const handleBack = useCallback(() => {
     if (unsavedChanges) {
       setShowCancelAlert(true);
     } else {
-      navigate({ to: "/" });
+      onClose();
     }
-  }, [navigate, unsavedChanges]);
+  }, [onClose, unsavedChanges]);
 
-  // Handle navigating back when escape is pressed
   useEffect(() => {
     const handleKeyPress = (event: { key: string }) => {
-      if (event.key === "Escape") {
-        handleBack();
-      }
+      if (event.key === "Escape") handleBack();
     };
-
-    // Add an event listener for the "Escape" key press
     document.addEventListener("keydown", handleKeyPress);
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      document.removeEventListener("keydown", handleKeyPress);
-    };
+    return () => document.removeEventListener("keydown", handleKeyPress);
   }, [handleBack, unsavedChanges]);
 
   function handleDelete() {
@@ -233,40 +209,39 @@ export const ConnectionEditor = () => {
 
   function handleSubmit() {
     if (!unsavedChanges) {
-      navigate({ to: "/" }); // Return to previous page
-
+      onClose();
       return;
     }
-
     if (!connectionId) return;
-
     updateConnection({
       id: connectionId,
       payload: {
         name: editFields.name,
-        ...(editFields.dsn !== connection?.dsn && { dsn: editFields.dsn }), // only add dsn if it changed
+        ...(editFields.dsn !== connection?.dsn && { dsn: editFields.dsn }),
         options: editFields.options,
         instructions: editFields.instructions,
       },
     });
   }
 
+  const inputClass = classNames(
+    isLoading ? "animate-pulse bg-gray-100 text-gray-400" : "bg-white text-gray-900",
+    "block w-full rounded-md border border-gray-300 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 px-3"
+  );
+
   return (
-    <div className="dark:bg-gray-900 w-full h-full relative flex flex-col mt-16 lg:mt-0">
+    <div className="w-full min-h-screen bg-gray-50">
       <AlertModal
         isOpen={showCancelAlert}
         title="Discard Unsaved Changes?"
         message="You have unsaved changes. Discard changes?"
         okText="OK"
-        // color="red"
         icon={AlertIcon.Warning}
         onSuccess={() => {
           setShowCancelAlert(false);
-          history.back();
+          onClose();
         }}
-        onCancel={() => {
-          setShowCancelAlert(false);
-        }}
+        onCancel={() => setShowCancelAlert(false)}
       />
       <AlertModal
         isOpen={showDeleteAlert}
@@ -278,25 +253,28 @@ export const ConnectionEditor = () => {
           setShowDeleteAlert(false);
           handleDelete();
         }}
-        onCancel={() => {
-          setShowDeleteAlert(false);
-        }}
+        onCancel={() => setShowDeleteAlert(false)}
       />
-      <div className="flex flex-col lg:mt-0 p-4 lg:p-24">
-        <div className="flex flex-row justify-between">
-          <div className="text-gray-50 text-md md:text-2xl font-semibold">
+
+      <div className="max-w-3xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-xl font-semibold text-gray-900">
             Edit connection
-          </div>
-          <div className="cursor-pointer" onClick={handleBack}>
-            <XMarkIcon className="w-10 h-10 text-white [&>path]:stroke-[1]" />
-          </div>
+          </h2>
+          <button
+            type="button"
+            onClick={handleBack}
+            className="rounded-md p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+          >
+            <XMarkIcon className="w-6 h-6" />
+          </button>
         </div>
 
-        <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 gap-x-6">
           <div className="sm:col-span-3">
             <label
               htmlFor="name"
-              className="block text-sm font-medium leading-6 text-white"
+              className="block text-sm font-medium leading-6 text-gray-900"
             >
               Name
             </label>
@@ -305,46 +283,34 @@ export const ConnectionEditor = () => {
                 type="text"
                 name="name"
                 id="name"
-                disabled={false}
                 value={editFields.name}
                 onChange={(e) => {
                   setEditFields({ ...editFields, name: e.target.value });
                   setUnsavedChanges(true);
                 }}
-                className={classNames(
-                  isLoading
-                    ? "animate-pulse bg-gray-900 text-gray-400"
-                    : "bg-white/5 text-white",
-                  "block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                )}
+                className={inputClass}
               />
             </div>
           </div>
 
           <div className="sm:col-span-6">
             <label
-              htmlFor="name"
-              className="block text-sm font-medium leading-6 text-white"
+              htmlFor="dsn"
+              className="block text-sm font-medium leading-6 text-gray-900"
             >
               Database Connection String
             </label>
             <div className="mt-2">
               <input
                 type="text"
-                name="name"
-                id="name"
-                disabled={false}
+                name="dsn"
+                id="dsn"
                 value={editFields.dsn}
                 onChange={(e) => {
                   setEditFields({ ...editFields, dsn: e.target.value });
                   setUnsavedChanges(true);
                 }}
-                className={classNames(
-                  isLoading
-                    ? "animate-pulse bg-gray-900 text-gray-400"
-                    : "bg-white/5 text-white",
-                  "block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                )}
+                className={inputClass}
               />
             </div>
           </div>
@@ -352,7 +318,7 @@ export const ConnectionEditor = () => {
           <div className="sm:col-span-6">
             <label
               htmlFor="instructions"
-              className="block text-sm font-medium leading-6 text-white"
+              className="block text-sm font-medium leading-6 text-gray-900"
             >
               Instructions
             </label>
@@ -369,12 +335,7 @@ export const ConnectionEditor = () => {
                   });
                   setUnsavedChanges(true);
                 }}
-                className={classNames(
-                  isLoading
-                    ? "animate-pulse bg-gray-900 text-gray-400"
-                    : "bg-white/5 text-white",
-                  "block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                )}
+                className={inputClass}
               />
             </div>
           </div>
@@ -383,7 +344,7 @@ export const ConnectionEditor = () => {
             <div className="flex items-center mb-2 gap-x-2">
               <label
                 htmlFor="schema"
-                className="block text-sm font-medium leading-6 text-white"
+                className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Schema options
               </label>
@@ -394,7 +355,7 @@ export const ConnectionEditor = () => {
               >
                 <ArrowPathIcon
                   className={classNames(
-                    "w-6 h-6 [&>path]:stroke-[2] group-hover:-rotate-6",
+                    "w-5 h-5 text-gray-500",
                     isRefreshing ? "animate-spin" : ""
                   )}
                 />
@@ -404,20 +365,16 @@ export const ConnectionEditor = () => {
               <SchemaEditor
                 options={editFields.options}
                 setOptions={(newOptions) => {
-                  setEditFields((prev) => ({
-                    ...prev,
-                    options: newOptions,
-                  }));
+                  setEditFields((prev) => ({ ...prev, options: newOptions }));
                   setUnsavedChanges(true);
                 }}
               />
             )}
           </div>
 
-          <div className="sm:col-span-6 flex items-center justify-end gap-x-6">
+          <div className="sm:col-span-6 flex items-center justify-end gap-x-3 pt-2 border-t border-gray-200">
             <Button
-              color="dark/zinc/red"
-              // className=" hover:bg-red-700 px-3 py-2 text-sm font-medium text-red-400 hover:text-white border border-gray-600 hover:border-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 transition-colors duration-150"
+              outline
               onClick={() => {
                 if (relatedConversations.length > 0) {
                   setShowDeleteAlert(true);
@@ -426,20 +383,12 @@ export const ConnectionEditor = () => {
                 }
               }}
             >
-              Delete this connection
+              Delete
             </Button>
-            <Button
-              onClick={handleBack}
-              color="dark/zinc"
-              // className="rounded-md bg-gray-600 px-3 py-2 text-sm font-medium text-white border border-gray-500 hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 transition-colors duration-150"
-            >
+            <Button outline onClick={handleBack}>
               Cancel
             </Button>
-            <Button
-              onClick={handleSubmit}
-              color="green"
-              // className="rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm border bg-green-600 border-green-500 hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 transition-colors duration-150"
-            >
+            <Button color="light" onClick={handleSubmit}>
               Save
             </Button>
           </div>

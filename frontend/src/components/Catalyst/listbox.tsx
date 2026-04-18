@@ -42,9 +42,6 @@ export function Listbox<T>({
           // Background color + shadow applied to inset pseudo element, so shadow blends with border in light mode
           "before:absolute before:inset-px before:rounded-[calc(theme(borderRadius.lg)-1px)] before:bg-white before:shadow",
 
-          // Background color is moved to control and shadow is removed in dark mode so hide `before` pseudo
-          "dark:before:hidden",
-
           // Hide default focus styles
           "focus:outline-none",
 
@@ -76,24 +73,24 @@ export function Listbox<T>({
             "pl-[calc(theme(spacing[3.5])-1px)] pr-[calc(theme(spacing.7)-1px)] sm:pl-[calc(theme(spacing.3)-1px)]",
 
             // Typography
-            "text-left text-base/6 text-gray-950 placeholder:text-gray-500 sm:text-sm/6 dark:text-white forced-colors:text-[CanvasText]",
+            "text-left text-base/6 text-gray-950 placeholder:text-gray-500 sm:text-sm/6 forced-colors:text-[CanvasText]",
 
             // Border
-            "border border-gray-950/10 group-data-[active]:border-gray-950/20 group-data-[hover]:border-gray-950/20 dark:border-white/10 dark:group-data-[active]:border-white/20 dark:group-data-[hover]:border-white/20",
+            "border border-gray-950/10 group-data-[active]:border-gray-950/20 group-data-[hover]:border-gray-950/20",
 
             // Background color
-            "bg-transparent dark:bg-white/5",
+            "bg-transparent",
 
             // Invalid state
-            "group-data-[invalid]:border-red-500 group-data-[invalid]:group-data-[hover]:border-red-500 group-data-[invalid]:dark:border-red-600 group-data-[invalid]:data-[hover]:dark:border-red-600",
+            "group-data-[invalid]:border-red-500 group-data-[invalid]:group-data-[hover]:border-red-500",
 
             // Disabled state
-            "group-data-[disabled]:border-gray-950/20 group-data-[disabled]:opacity-100 group-data-[disabled]:dark:border-white/15 group-data-[disabled]:dark:bg-white/[2.5%] dark:data-[hover]:group-data-[disabled]:border-white/15",
+            "group-data-[disabled]:border-gray-950/20 group-data-[disabled]:opacity-100",
           ])}
         />
         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
           <svg
-            className="size-5 stroke-gray-500 group-data-[disabled]:stroke-gray-600 sm:size-4 dark:stroke-gray-400 forced-colors:stroke-[CanvasText]"
+            className="size-5 stroke-gray-500 group-data-[disabled]:stroke-gray-600 sm:size-4 forced-colors:stroke-[CanvasText]"
             viewBox="0 0 16 16"
             aria-hidden="true"
             fill="none"
@@ -140,10 +137,10 @@ export function Listbox<T>({
             "overflow-y-scroll overscroll-contain",
 
             // Popover background
-            "bg-white/75 backdrop-blur-xl dark:bg-gray-800/75",
+            "bg-white/75 backdrop-blur-xl",
 
             // Shadows
-            "shadow-lg ring-1 ring-gray-950/10 dark:ring-inset dark:ring-white/10"
+            "shadow-lg ring-1 ring-gray-950/10"
           )}
         >
           {options}
@@ -185,7 +182,7 @@ export function ListboxOption<T>({
               "group/option grid cursor-default grid-cols-[theme(spacing.5),1fr] items-baseline gap-x-1.5 rounded-lg py-2.5 pl-2.5 pr-3.5 sm:grid-cols-[theme(spacing.4),1fr] sm:py-1.5 sm:pl-2 sm:pr-3",
 
               // Typography
-              "text-base/6 text-gray-950 sm:text-sm/6 dark:text-white forced-colors:text-[CanvasText]",
+              "text-base/6 text-gray-950 sm:text-sm/6 forced-colors:text-[CanvasText]",
 
               // Focus
               "outline-none data-[focus]:bg-blue-500 data-[focus]:text-white",
@@ -244,7 +241,7 @@ export function ListboxDescription({
     <span
       className={clsx(
         className,
-        "flex flex-1 overflow-hidden text-gray-500 before:w-2 before:min-w-0 before:shrink group-data-[focus]/option:text-white dark:text-gray-400"
+        "flex flex-1 overflow-hidden text-gray-500 before:w-2 before:min-w-0 before:shrink group-data-[focus]/option:text-white"
       )}
       {...props}
     >

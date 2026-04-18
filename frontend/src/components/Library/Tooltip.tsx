@@ -4,12 +4,14 @@ interface TooltipProps {
   children: React.ReactNode;
   hoverText?: string;
   clickText?: string;
+  unstyledTrigger?: boolean;
 }
 
 const CustomTooltip: React.FC<TooltipProps> = ({
   children,
   hoverText,
   clickText,
+  unstyledTrigger = false,
 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipText, setTooltipText] = useState(hoverText);
@@ -48,13 +50,13 @@ const CustomTooltip: React.FC<TooltipProps> = ({
       >
         {showTooltip && (
           <span className="absolute bottom-full mb-2.5 flex justify-center transition ease-in duration-100 opacity-100">
-            <span className="rounded-md bg-gray-600 px-3 py-1 text-[0.625rem] font-semibold uppercase leading-4 tracking-wide text-white drop-shadow-md filter">
+            <span className="rounded-md border border-gray-200 bg-white px-3 py-1 text-[0.625rem] font-semibold uppercase leading-4 tracking-wide text-gray-700 shadow-sm">
               <svg
                 aria-hidden="true"
                 width="16"
                 height="6"
                 viewBox="0 0 16 6"
-                className="absolute left-1/2 top-full -ml-4 -mt-px text-gray-600"
+                className="absolute left-1/2 top-full -ml-4 -mt-px text-white"
               >
                 <path
                   fillRule="evenodd"
@@ -67,7 +69,13 @@ const CustomTooltip: React.FC<TooltipProps> = ({
             </span>
           </span>
         )}
-        <div className="group flex ml-auto gap-2 rounded-md bg-gray-700/50 hover:bg-gray-100/90 hover:text-gray-700/90 text-gray-100/50 transition-all duration-150 ease-in-out border border-gray-950/10 data-[hover]:border-gray-950/20 dark:border-white/10 dark:data-[hover]:border-white/20">
+        <div
+          className={
+            unstyledTrigger
+              ? "group inline-flex"
+              : "group inline-flex items-center justify-center rounded-md border border-gray-300 bg-white text-gray-700 shadow-sm transition-all duration-150 ease-in-out hover:bg-gray-100"
+          }
+        >
           {children}
         </div>
       </div>
@@ -75,57 +83,4 @@ const CustomTooltip: React.FC<TooltipProps> = ({
   );
 };
 
-const InfoTooltip: React.FC<TooltipProps> = ({
-  children,
-  hoverText,
-  clickText,
-}) => {
-  const [showTooltip, setShowTooltip] = useState(false);
-  const [tooltipText, setTooltipText] = useState(hoverText);
-
-  const handleButtonClick = () => {
-    if (clickText) {
-      setShowTooltip(true);
-      setTooltipText(clickText);
-      setTimeout(() => {
-        setShowTooltip(false);
-        setTooltipText(hoverText); // reset the tooltip text
-      }, 2000);
-    }
-  };
-
-  const handleHover = () => {
-    if (hoverText) {
-      setShowTooltip(true);
-      setTooltipText(hoverText);
-    }
-  };
-
-  const handleNoHover = () => {
-    if (hoverText) {
-      setShowTooltip(false);
-    }
-  };
-
-  return (
-    <div style={{ position: "relative" }}>
-      <div
-        onClick={handleButtonClick}
-        onMouseEnter={handleHover}
-        onMouseLeave={handleNoHover}
-        style={{ position: "relative", display: "inline-block" }}
-      >
-        {showTooltip && (
-          <span className="absolute top-full mt-2 flex justify-center transition ease-in duration-100 opacity-100 w-64 z-10">
-            <span className="rounded-md bg-gray-700 px-3 py-1 text-sm text-white drop-shadow-md filter">
-              {tooltipText}
-            </span>
-          </span>
-        )}
-        {children}
-      </div>
-    </div>
-  );
-};
-
-export { CustomTooltip, InfoTooltip };
+export { CustomTooltip };

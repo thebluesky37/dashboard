@@ -41,13 +41,25 @@
 }
 
 :root {
-  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(31, 41, 55, 0);
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
 }
 
 .simplebar-scrollbar::before {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .simplebar-track {
   margin: 2px;
+}
+
+/* Force light theme text palette: never render white/light text classes. */
+@layer utilities {
+  [class*="text-white"],
+  [class*="text-gray-50"],
+  [class*="text-gray-100"],
+  [class*="text-gray-200"],
+  [class*="text-gray-300"] {
+    color: #1f2937 !important;
+  }
+
 }

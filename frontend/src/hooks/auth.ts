@@ -68,7 +68,7 @@ export function useLogout({ onLogout }: { onLogout: () => void }) {
   // navigates to Router.Login (using the onLogout function)
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async () => await api.logout(),
+    mutationFn: async () => await api.adminLogout(),
     onError() {
       enqueueSnackbar("Something went wrong", { variant: "error" });
     },

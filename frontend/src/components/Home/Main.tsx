@@ -100,7 +100,7 @@ export const Main = () => {
   /** If the user has not set up their OpenAI API key, show a popup to do that */
   if (profile?.openai_api_key) {
     return (
-      <div className="w-full bg-gray-900">
+      <div className="w-full bg-gray-50 text-gray-900">
         <Sidebar></Sidebar>
         <main className="lg:pl-72 w-full mt-16 lg:mt-0">
           <Outlet></Outlet>

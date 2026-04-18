@@ -9,45 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AdminLoginRouteImport } from './routes/admin-login'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as UserRouteImport } from './routes/_user'
-import { Route as LandingRouteImport } from './routes/_landing'
-import { Route as AppRouteImport } from './routes/_app'
-import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UserChatRouteImport } from './routes/_user/chat'
+import { Route as AdminConfigRouteImport } from './routes/_admin/config'
 import { Route as UserChatIndexRouteImport } from './routes/_user/chat.index'
-import { Route as LandingPrivacyRouteImport } from './routes/_landing/privacy'
-import { Route as LandingFaqRouteImport } from './routes/_landing/faq'
-import { Route as LandingBlogRouteImport } from './routes/_landing/blog'
-import { Route as LandingAboutRouteImport } from './routes/_landing/about'
-import { Route as AppUserRouteImport } from './routes/_app/user'
-import { Route as AdminSettingsRouteImport } from './routes/_admin/settings'
-import { Route as AdminConnectionsRouteImport } from './routes/_admin/connections'
 import { Route as UserChatConversationIdRouteImport } from './routes/_user/chat.$conversationId'
-import { Route as AppConnectionNewRouteImport } from './routes/_app/connection/new'
-import { Route as AppConnectionConnectionIdRouteImport } from './routes/_app/connection/$connectionId'
-import { Route as AdminConnectionsConnectionIdRouteImport } from './routes/_admin/connections.$connectionId'
 
-const AdminLoginRoute = AdminLoginRouteImport.update({
-  id: '/admin-login',
-  path: '/admin-login',
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UserRoute = UserRouteImport.update({
   id: '/_user',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LandingRoute = LandingRouteImport.update({
-  id: '/_landing',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppRoute = AppRouteImport.update({
-  id: '/_app',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/_admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -60,200 +36,83 @@ const UserChatRoute = UserChatRouteImport.update({
   path: '/chat',
   getParentRoute: () => UserRoute,
 } as any)
-const LandingPrivacyRoute = LandingPrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => LandingRoute,
-} as any)
-const LandingFaqRoute = LandingFaqRouteImport.update({
-  id: '/faq',
-  path: '/faq',
-  getParentRoute: () => LandingRoute,
-} as any)
-const LandingBlogRoute = LandingBlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
-  getParentRoute: () => LandingRoute,
-} as any)
-const LandingAboutRoute = LandingAboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => LandingRoute,
-} as any)
-const AppUserRoute = AppUserRouteImport.update({
-  id: '/user',
-  path: '/user',
-  getParentRoute: () => AppRoute,
-} as any)
-const AdminSettingsRoute = AdminSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminConnectionsRoute = AdminConnectionsRouteImport.update({
-  id: '/connections',
-  path: '/connections',
-  getParentRoute: () => AdminRoute,
+const AdminConfigRoute = AdminConfigRouteImport.update({
+  id: '/_admin/config',
+  path: '/config',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const UserChatIndexRoute = UserChatIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => UserChatRoute,
 } as any)
-
 const UserChatConversationIdRoute = UserChatConversationIdRouteImport.update({
   id: '/$conversationId',
   path: '/$conversationId',
   getParentRoute: () => UserChatRoute,
 } as any)
-const AppConnectionNewRoute = AppConnectionNewRouteImport.update({
-  id: '/connection/new',
-  path: '/connection/new',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppConnectionConnectionIdRoute =
-  AppConnectionConnectionIdRouteImport.update({
-    id: '/connection/$connectionId',
-    path: '/connection/$connectionId',
-    getParentRoute: () => AppRoute,
-  } as any)
-const AdminConnectionsConnectionIdRoute =
-  AdminConnectionsConnectionIdRouteImport.update({
-    id: '/$connectionId',
-    path: '/$connectionId',
-    getParentRoute: () => AdminConnectionsRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin-login': typeof AdminLoginRoute
-  '/connections': typeof AdminConnectionsRouteWithChildren
-  '/settings': typeof AdminSettingsRoute
-  '/user': typeof AppUserRoute
-  '/about': typeof LandingAboutRoute
-  '/blog': typeof LandingBlogRoute
-  '/faq': typeof LandingFaqRoute
-  '/privacy': typeof LandingPrivacyRoute
+  '/admin': typeof AdminRoute
+  '/config': typeof AdminConfigRoute
   '/chat': typeof UserChatRouteWithChildren
-  '/chat/': typeof UserChatIndexRoute
-  '/connections/$connectionId': typeof AdminConnectionsConnectionIdRoute
-  '/connection/$connectionId': typeof AppConnectionConnectionIdRoute
-  '/connection/new': typeof AppConnectionNewRoute
   '/chat/$conversationId': typeof UserChatConversationIdRoute
+  '/chat/': typeof UserChatIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin-login': typeof AdminLoginRoute
-  '/connections': typeof AdminConnectionsRouteWithChildren
-  '/settings': typeof AdminSettingsRoute
-  '/user': typeof AppUserRoute
-  '/about': typeof LandingAboutRoute
-  '/blog': typeof LandingBlogRoute
-  '/faq': typeof LandingFaqRoute
-  '/privacy': typeof LandingPrivacyRoute
-  '/chat': typeof UserChatRouteWithChildren
-  '/chat/': typeof UserChatIndexRoute
-  '/connections/$connectionId': typeof AdminConnectionsConnectionIdRoute
-  '/connection/$connectionId': typeof AppConnectionConnectionIdRoute
-  '/connection/new': typeof AppConnectionNewRoute
+  '/admin': typeof AdminRoute
+  '/config': typeof AdminConfigRoute
   '/chat/$conversationId': typeof UserChatConversationIdRoute
+  '/chat': typeof UserChatIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_admin': typeof AdminRouteWithChildren
-  '/_app': typeof AppRouteWithChildren
-  '/_landing': typeof LandingRouteWithChildren
   '/_user': typeof UserRouteWithChildren
-  '/admin-login': typeof AdminLoginRoute
-  '/_admin/connections': typeof AdminConnectionsRouteWithChildren
-  '/_admin/settings': typeof AdminSettingsRoute
-  '/_app/user': typeof AppUserRoute
-  '/_landing/about': typeof LandingAboutRoute
-  '/_landing/blog': typeof LandingBlogRoute
-  '/_landing/faq': typeof LandingFaqRoute
-  '/_landing/privacy': typeof LandingPrivacyRoute
+  '/admin': typeof AdminRoute
+  '/_admin/config': typeof AdminConfigRoute
   '/_user/chat': typeof UserChatRouteWithChildren
-  '/_user/chat/': typeof UserChatIndexRoute
-  '/_admin/connections/$connectionId': typeof AdminConnectionsConnectionIdRoute
-  '/_app/connection/$connectionId': typeof AppConnectionConnectionIdRoute
-  '/_app/connection/new': typeof AppConnectionNewRoute
   '/_user/chat/$conversationId': typeof UserChatConversationIdRoute
+  '/_user/chat/': typeof UserChatIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/admin-login'
-    | '/connections'
-    | '/settings'
-    | '/user'
-    | '/about'
-    | '/blog'
-    | '/faq'
-    | '/privacy'
+    | '/admin'
+    | '/config'
     | '/chat'
-    | '/chat/'
-    | '/connections/$connectionId'
-    | '/connection/$connectionId'
-    | '/connection/new'
     | '/chat/$conversationId'
+    | '/chat/'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/admin-login'
-    | '/connections'
-    | '/settings'
-    | '/user'
-    | '/about'
-    | '/blog'
-    | '/faq'
-    | '/privacy'
-    | '/chat'
-    | '/chat/'
-    | '/connections/$connectionId'
-    | '/connection/$connectionId'
-    | '/connection/new'
-    | '/chat/$conversationId'
+  to: '/' | '/admin' | '/config' | '/chat/$conversationId' | '/chat'
   id:
     | '__root__'
     | '/'
-    | '/_admin'
-    | '/_app'
-    | '/_landing'
     | '/_user'
-    | '/admin-login'
-    | '/_admin/connections'
-    | '/_admin/settings'
-    | '/_app/user'
-    | '/_landing/about'
-    | '/_landing/blog'
-    | '/_landing/faq'
-    | '/_landing/privacy'
+    | '/admin'
+    | '/_admin/config'
     | '/_user/chat'
-    | '/_user/chat/'
-    | '/_admin/connections/$connectionId'
-    | '/_app/connection/$connectionId'
-    | '/_app/connection/new'
     | '/_user/chat/$conversationId'
+    | '/_user/chat/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRouteWithChildren
-  AppRoute: typeof AppRouteWithChildren
-  LandingRoute: typeof LandingRouteWithChildren
   UserRoute: typeof UserRouteWithChildren
-  AdminLoginRoute: typeof AdminLoginRoute
+  AdminRoute: typeof AdminRoute
+  AdminConfigRoute: typeof AdminConfigRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/admin-login': {
-      id: '/admin-login'
-      path: '/admin-login'
-      fullPath: '/admin-login'
-      preLoaderRoute: typeof AdminLoginRouteImport
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_user': {
@@ -263,32 +122,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_landing': {
-      id: '/_landing'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof LandingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_app': {
-      id: '/_app'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AppRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_admin': {
-      id: '/_admin'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_user/chat': {
+      id: '/_user/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof UserChatRouteImport
+      parentRoute: typeof UserRoute
+    }
+    '/_admin/config': {
+      id: '/_admin/config'
+      path: '/config'
+      fullPath: '/config'
+      preLoaderRoute: typeof AdminConfigRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_user/chat/': {
@@ -298,62 +150,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserChatIndexRouteImport
       parentRoute: typeof UserChatRoute
     }
-    '/_user/chat': {
-      id: '/_user/chat'
-      path: '/chat'
-      fullPath: '/chat'
-      preLoaderRoute: typeof UserChatRouteImport
-      parentRoute: typeof UserRoute
-    }
-    '/_landing/privacy': {
-      id: '/_landing/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof LandingPrivacyRouteImport
-      parentRoute: typeof LandingRoute
-    }
-    '/_landing/faq': {
-      id: '/_landing/faq'
-      path: '/faq'
-      fullPath: '/faq'
-      preLoaderRoute: typeof LandingFaqRouteImport
-      parentRoute: typeof LandingRoute
-    }
-    '/_landing/blog': {
-      id: '/_landing/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof LandingBlogRouteImport
-      parentRoute: typeof LandingRoute
-    }
-    '/_landing/about': {
-      id: '/_landing/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof LandingAboutRouteImport
-      parentRoute: typeof LandingRoute
-    }
-    '/_app/user': {
-      id: '/_app/user'
-      path: '/user'
-      fullPath: '/user'
-      preLoaderRoute: typeof AppUserRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_admin/settings': {
-      id: '/_admin/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof AdminSettingsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/_admin/connections': {
-      id: '/_admin/connections'
-      path: '/connections'
-      fullPath: '/connections'
-      preLoaderRoute: typeof AdminConnectionsRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/_user/chat/$conversationId': {
       id: '/_user/chat/$conversationId'
       path: '/$conversationId'
@@ -361,83 +157,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserChatConversationIdRouteImport
       parentRoute: typeof UserChatRoute
     }
-    '/_app/connection/new': {
-      id: '/_app/connection/new'
-      path: '/connection/new'
-      fullPath: '/connection/new'
-      preLoaderRoute: typeof AppConnectionNewRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/connection/$connectionId': {
-      id: '/_app/connection/$connectionId'
-      path: '/connection/$connectionId'
-      fullPath: '/connection/$connectionId'
-      preLoaderRoute: typeof AppConnectionConnectionIdRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_admin/connections/$connectionId': {
-      id: '/_admin/connections/$connectionId'
-      path: '/$connectionId'
-      fullPath: '/connections/$connectionId'
-      preLoaderRoute: typeof AdminConnectionsConnectionIdRouteImport
-      parentRoute: typeof AdminConnectionsRoute
-    }
   }
 }
-
-interface AdminConnectionsRouteChildren {
-  AdminConnectionsConnectionIdRoute: typeof AdminConnectionsConnectionIdRoute
-}
-
-const AdminConnectionsRouteChildren: AdminConnectionsRouteChildren = {
-  AdminConnectionsConnectionIdRoute: AdminConnectionsConnectionIdRoute,
-}
-
-const AdminConnectionsRouteWithChildren =
-  AdminConnectionsRoute._addFileChildren(AdminConnectionsRouteChildren)
-
-interface AdminRouteChildren {
-  AdminConnectionsRoute: typeof AdminConnectionsRouteWithChildren
-  AdminSettingsRoute: typeof AdminSettingsRoute
-}
-
-const AdminRouteChildren: AdminRouteChildren = {
-  AdminConnectionsRoute: AdminConnectionsRouteWithChildren,
-  AdminSettingsRoute: AdminSettingsRoute,
-}
-
-const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
-
-interface AppRouteChildren {
-  AppUserRoute: typeof AppUserRoute
-  AppConnectionConnectionIdRoute: typeof AppConnectionConnectionIdRoute
-  AppConnectionNewRoute: typeof AppConnectionNewRoute
-}
-
-const AppRouteChildren: AppRouteChildren = {
-  AppUserRoute: AppUserRoute,
-  AppConnectionConnectionIdRoute: AppConnectionConnectionIdRoute,
-  AppConnectionNewRoute: AppConnectionNewRoute,
-}
-
-const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
-
-interface LandingRouteChildren {
-  LandingAboutRoute: typeof LandingAboutRoute
-  LandingBlogRoute: typeof LandingBlogRoute
-  LandingFaqRoute: typeof LandingFaqRoute
-  LandingPrivacyRoute: typeof LandingPrivacyRoute
-}
-
-const LandingRouteChildren: LandingRouteChildren = {
-  LandingAboutRoute: LandingAboutRoute,
-  LandingBlogRoute: LandingBlogRoute,
-  LandingFaqRoute: LandingFaqRoute,
-  LandingPrivacyRoute: LandingPrivacyRoute,
-}
-
-const LandingRouteWithChildren =
-  LandingRoute._addFileChildren(LandingRouteChildren)
 
 interface UserChatRouteChildren {
   UserChatConversationIdRoute: typeof UserChatConversationIdRoute
@@ -465,11 +186,9 @@ const UserRouteWithChildren = UserRoute._addFileChildren(UserRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRouteWithChildren,
-  AppRoute: AppRouteWithChildren,
-  LandingRoute: LandingRouteWithChildren,
   UserRoute: UserRouteWithChildren,
-  AdminLoginRoute: AdminLoginRoute,
+  AdminRoute: AdminRoute,
+  AdminConfigRoute: AdminConfigRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

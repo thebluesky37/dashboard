@@ -69,6 +69,7 @@ const createConnection = async (
       name: name,
       is_sample: isSample,
     },
+    withCredentials: true,
   });
   return response.data;
 };
@@ -81,6 +82,7 @@ const createSampleConnection = async (
     url: "/connect/sample",
     method: "post",
     data: { sample_name: sampleName, connection_name: connectionName },
+    withCredentials: true,
   });
   return response.data;
 };
@@ -98,6 +100,7 @@ const createFileConnection = async (
     url: "/connect/file",
     method: "post",
     data: formData,
+    withCredentials: true,
   });
   return response.data;
 };
@@ -106,7 +109,7 @@ export type ListConnectionsResult = ApiResponse<{
   connections: IConnection[];
 }>;
 const listConnections = async (): Promise<ListConnectionsResult> => {
-  return (await backendApi<ListConnectionsResult>({ url: "/connections" }))
+  return (await backendApi<ListConnectionsResult>({ url: "/connections", withCredentials: true }))
     .data;
 };
 
@@ -117,6 +120,7 @@ const getConnection = async (
   return (
     await backendApi<GetConnectionResult>({
       url: `/connection/${connectionId}`,
+      withCredentials: true,
     })
   ).data;
 };
@@ -129,7 +133,10 @@ export type SampleResult = {
 };
 export type GetSamplesResult = ApiResponse<SampleResult[]>;
 const getSamples = async (): Promise<GetSamplesResult> => {
-  const response = await backendApi<GetSamplesResult>({ url: "/samples" });
+  const response = await backendApi<GetSamplesResult>({ 
+    url: "/samples",
+    withCredentials: true,
+  });
   return response.data;
 };
 
@@ -144,6 +151,7 @@ const updateConnection = async (
     url: `/connection/${connectionId}`,
     method: "patch",
     data: edits,
+    withCredentials: true,
   });
   return response.data;
 };
@@ -154,6 +162,7 @@ const deleteConnection = async (
   const response = await backendApi<ApiResponse<void>>({
     url: `/connection/${connectionId}`,
     method: "delete",
+    withCredentials: true,
   });
   return response.data;
 };
@@ -169,6 +178,7 @@ const createConversation = async (connectionId: string, name: string) => {
       connection_id: connectionId,
       name,
     },
+    withCredentials: true,
   });
   return response.data;
 };
@@ -180,6 +190,7 @@ const refreshConnectionSchema = async (
   const response = await backendApi<RefreshConnectionSchemaResult>({
     url: `/connection/${connectionId}/refresh`,
     method: "post",
+    withCredentials: true,
   });
   return response.data;
 };
@@ -195,6 +206,7 @@ const updateConversation = async (
     data: {
       name,
     },
+    withCredentials: true,
   });
   return response.data;
 };
@@ -208,6 +220,7 @@ const generateConversationTitle = async (
   const response = await backendApi<ConversationTitleGenerationResult>({
     url: `/conversation/${conversationId}/generate-title`,
     method: "post",
+    withCredentials: true,
   });
   return response.data;
 };
@@ -217,6 +230,7 @@ const deleteConversation = async (conversationId: string) => {
   const response = await backendApi<ConversationDeletionResult>({
     url: `/conversation/${conversationId}`,
     method: "delete",
+    withCredentials: true,
   });
   return response.data;
 };
@@ -225,7 +239,7 @@ export type ListConversations = ApiResponse<
   IConversationWithMessagesWithResultsOut[]
 >;
 const listConversations = async (): Promise<ListConversations> => {
-  return (await backendApi<ListConversations>({ url: "/conversations" })).data;
+  return (await backendApi<ListConversations>({ url: "/conversations", withCredentials: true })).data;
 };
 
 export type GetMessagesResponse = ApiResponse<IMessageWithResultsOut[]>;
@@ -235,6 +249,7 @@ const getMessages = async (
   return (
     await backendApi<GetMessagesResponse>({
       url: `/conversation/${conversationId}/messages`,
+      withCredentials: true,
     })
   ).data;
 };
@@ -257,6 +272,7 @@ const query = async (
       params: { query, execute },
       data: { message_options },
       method: "POST",
+      withCredentials: true,
     })
   ).data;
 };
@@ -315,6 +331,7 @@ const runSQL = async (
     await backendApi<RunSQLResult>({
       url: `/conversation/${conversationId}/run-sql`,
       params: { sql: code, linked_id: linkedId },
+      withCredentials: true,
     })
   ).data;
 };
@@ -338,6 +355,7 @@ const updateAvatar = async (file: File) => {
     headers: {
       "Content-Type": "multipart/form-data",
     },
+    withCredentials: true,
   });
   return response.data;
 };
@@ -352,6 +370,7 @@ const updateUserInfo = async (options: {
   sentry_enabled?: boolean;
   analytics_enabled?: boolean;
   hide_sql_preference?: boolean;
+  hide_data_results?: boolean;
   default_connection_id?: string | null;
 }) => {
   const {
@@ -362,6 +381,7 @@ const updateUserInfo = async (options: {
     sentry_enabled,
     analytics_enabled,
     hide_sql_preference,
+    hide_data_results,
     default_connection_id,
   } = options;
   // send only the filled in fields
@@ -371,6 +391,7 @@ const updateUserInfo = async (options: {
     ...(sentry_enabled != null && { sentry_enabled }),
     ...(analytics_enabled != null && { analytics_enabled }),
     ...(hide_sql_preference != null && { hide_sql_preference }),
+    ...(hide_data_results != null && { hide_data_results }),
   };
   if (langsmith_api_key !== undefined) {
     // When deleting the langsmith API key
@@ -388,6 +409,7 @@ const updateUserInfo = async (options: {
     url: "/settings/info",
     method: "patch",
     data,
+    withCredentials: true,
   });
   return response.data;
 };
@@ -406,6 +428,7 @@ const refreshChart = async (chartResultId: string) => {
     await backendApi<RefreshChartResult>({
       url: `/result/chart/${chartResultId}/refresh`,
       method: "patch",
+      withCredentials: true,
     })
   ).data;
 };
@@ -425,6 +448,7 @@ const updateSQLQueryString = async (
       sql: code,
       for_chart: forChart,
     },
+    withCredentials: true,
   });
 
   if (forChart) return response.data as RefreshChartResult;
@@ -443,10 +467,11 @@ const login = async (username: string, password: string) => {
 };
 
 export type LogoutResponse = ApiResponse<void>;
-const logout = async () => {
+export const adminLogout = async () => {
   const response = await backendApi<LogoutResponse>({
     method: "POST",
     url: "/auth/logout",
+    withCredentials: true,
   });
   return response;
 };
@@ -508,7 +533,7 @@ export const api = {
   login,
   adminLogin,
   checkAdminAuth,
-  logout,
+  adminLogout,
   getDefaultConnection,
   createConversation,
   updateConversation,

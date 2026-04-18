@@ -3,15 +3,18 @@ import { useState } from "react";
 import { IConnection, IConversation } from "../Library/types";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import { useCreateConversation, useGetConnections } from "@/hooks";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 
-export const ConnectionSelector = () => {
+export const ConnectionSelector = ({
+  onNewConnection,
+  onEditConnection,
+}: {
+  onNewConnection: () => void;
+  onEditConnection: (id: string) => void;
+}) => {
   const navigate = useNavigate();
   const [, setConversation] = useState<IConversation | null>();
   const { data } = useGetConnections();
-  const createConnection = () => {
-    navigate({ to: "/connection/new" });
-  };
 
   const { mutate } = useCreateConversation({
     onSuccess(resp) {
@@ -31,17 +34,14 @@ export const ConnectionSelector = () => {
   }
 
   return (
-    <div className="bg-gray-900 w-full h-screen relative flex flex-col lg:mt-16">
-      <div className="flex flex-col justify-center items-center lg:mt-0">
+    <div className="w-full">
+      <div className="flex flex-col justify-center items-center">
         <div className="w-full sm:w-3/4 md:w-3/4 rounded-xl p-6">
-          <div className="text-gray-50 text-md md:text-2xl font-semibold">
-            Select a connection
-          </div>
           <div className="w-full grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 mt-4">
             {data?.connections?.map((connection) => (
               <div
                 key={connection.id}
-                className="hover:cursor-pointer md:hover:ring-2 ring-gray-600 border px-2 py-2 border-gray-700 aspect-square overflow-hidden rounded-lg flex flex-col justify-between hover:bg-gray-700 transition-all duration-75 w-auto max-w-xs"
+                className="hover:cursor-pointer md:hover:ring-2 ring-gray-300 border px-2 py-2 border-gray-200 bg-white aspect-square overflow-hidden rounded-lg flex flex-col justify-between hover:bg-gray-100 transition-all duration-75 w-auto max-w-xs"
                 onClick={() => selectConnection(connection)}
               >
                 <div className="flex overflow-hidden w-full h-full justify-center items-center sm:mt-4">
@@ -50,9 +50,9 @@ export const ConnectionSelector = () => {
                     name={connection.name}
                   />
                 </div>
-                <div className="w-full flex justify-center items-center gap-2 text-gray-50  sm:-mt-2">
+                <div className="w-full flex justify-center items-center gap-2 text-gray-900 sm:-mt-2">
                   <div className="h-full lg:h-fit flex flex-col justify-center md:items-start w-full ">
-                    <div className="text-xs md:text-sm xxl:text-md font-normal text-gray-400">
+                    <div className="text-xs md:text-sm xxl:text-md font-normal text-gray-500">
                       {connection.dialect.charAt(0).toUpperCase() +
                         connection.dialect.slice(1)}
                     </div>
@@ -64,29 +64,29 @@ export const ConnectionSelector = () => {
 
                   {/** ------ Connection Settings ------ */}
                   <div className="flex flex-col justify-end items-end h-full">
-                    <Link
-                      to={`/connection/$connectionId`}
-                      params={{ connectionId: connection.id }}
+                    <button
+                      type="button"
                       onClick={(e) => {
-                        e.stopPropagation(); // Prevent the click event from propagating to the parent container
+                        e.stopPropagation();
+                        onEditConnection(connection.id);
                       }}
-                      className="flex-none group w-10 h-10 p-1 flex justify-end items-end hover:bg-gray-600 rounded-md duration-100 transition-colors "
+                      className="flex-none group w-10 h-10 p-1 flex justify-end items-end hover:bg-gray-100 rounded-md duration-100 transition-colors"
                     >
-                      <Cog6ToothIcon className="text-gray-50 group-hover:-rotate-45 transition-transform duration-100" />
-                    </Link>
+                      <Cog6ToothIcon className="text-gray-600 group-hover:-rotate-45 transition-transform duration-100" />
+                    </button>
                   </div>
                 </div>
               </div>
             ))}
 
             <div
-              className="hover:cursor-pointer md:hover:ring-2 ring-gray-600 border px-2 py-2 border-gray-700 aspect-square overflow-hidden rounded-lg flex flex-col justify-between hover:bg-gray-700 transition-all duration-75 w-full sm:w-auto sm:max-w-xs"
-              onClick={createConnection}
+              className="hover:cursor-pointer md:hover:ring-2 ring-gray-300 border px-2 py-2 border-gray-200 bg-white aspect-square overflow-hidden rounded-lg flex flex-col justify-between hover:bg-gray-100 transition-all duration-75 w-full sm:w-auto sm:max-w-xs"
+              onClick={onNewConnection}
             >
               {/* Item to add new connection */}
               <div className="flex overflow-hidden w-full justify-center items-center sm:mt-4">
                 <svg
-                  className="h-full w-full text-gray-200"
+                  className="h-full w-full text-gray-400"
                   stroke="currentColor"
                   fill="none"
                   viewBox="0 0 48 48"
@@ -100,9 +100,9 @@ export const ConnectionSelector = () => {
                   />
                 </svg>
               </div>
-              <div className="w-full flex justify-center items-center gap-2 text-gray-50  sm:-mt-2 ">
+              <div className="w-full flex justify-center items-center gap-2 text-gray-900 sm:-mt-2 ">
                 <div className="h-full lg:h-fit flex flex-col justify-center md:items-start w-full">
-                  <div className="text-xs md:text-sm xxl:text-md font-normal text-gray-400">
+                  <div className="text-xs md:text-sm xxl:text-md font-normal text-gray-500">
                     Add
                   </div>
                   <div className="text-base leading-tight xxl:text-xl font-normal">

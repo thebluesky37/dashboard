@@ -65,11 +65,11 @@ export default function Account() {
           <h1 className="sr-only">Settings</h1>
 
           {/* Settings forms */}
-          <div className="divide-y divide-white/5">
+          <div className="divide-y divide-gray-200">
             {/* Personal info */}
             <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
               <div>
-                <h2 className="text-base font-semibold leading-7 text-white">
+                <h2 className="text-base font-semibold leading-7 text-gray-900">
                   Personal Information
                 </h2>
                 {/* <p className="mt-1 text-sm leading-6 text-gray-400">
@@ -92,7 +92,7 @@ export default function Account() {
                     <div>
                       <button
                         type="button"
-                        className="rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-white/20"
+                        className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-800 shadow-sm hover:bg-gray-50"
                         onClick={() => avatarUploadRef.current?.click()}
                       >
                         Change profile pic
@@ -121,7 +121,7 @@ export default function Account() {
                   <div className="sm:col-span-3">
                     <label
                       htmlFor="first-name"
-                      className="block text-sm font-medium leading-6 text-white"
+                      className="block text-sm font-medium leading-6 text-gray-900"
                     >
                       First name
                     </label>
@@ -131,7 +131,7 @@ export default function Account() {
                         name="first-name"
                         id="first-name"
                         autoComplete="given-name"
-                        className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                        className="block w-full rounded-md border border-gray-300 bg-white py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                         value={userInfo?.name || ""}
                         onChange={(event) =>
                           setUserInfo((prevUserInfo) => ({
@@ -149,7 +149,7 @@ export default function Account() {
             {/* Keys */}
             <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
               <div>
-                <h2 className="text-base font-semibold leading-7 text-white">
+                <h2 className="text-base font-semibold leading-7 text-gray-900">
                   API Keys
                 </h2>
                 <p className="mt-1 text-sm leading-6 text-gray-400">
@@ -162,7 +162,7 @@ export default function Account() {
                   <div className="col-span-full">
                     <label
                       htmlFor="current-password"
-                      className="block text-md font-medium leading-6 text-white"
+                      className="block text-md font-medium leading-6 text-gray-900"
                     >
                       OpenAI API Key
                     </label>
@@ -194,7 +194,7 @@ export default function Account() {
                   <div className="col-span-full">
                     <label
                       htmlFor="base-url"
-                      className="block text-md font-medium leading-6 text-white"
+                      className="block text-md font-medium leading-6 text-gray-900"
                     >
                       OpenAI Base URL
                     </label>
@@ -223,7 +223,7 @@ export default function Account() {
                   <div className="col-span-full">
                     <label
                       htmlFor="current-password"
-                      className="block text-md font-medium leading-6 text-white"
+                      className="block text-md font-medium leading-6 text-gray-900"
                     >
                       LangSmith API Key (tracing)
                     </label>
@@ -251,7 +251,7 @@ export default function Account() {
             {/* Sentry Preference */}
             <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
               <div>
-                <h2 className="text-base font-semibold leading-7 text-white">
+                <h2 className="text-base font-semibold leading-7 text-gray-900">
                   Preferences
                 </h2>
               </div>
@@ -262,7 +262,7 @@ export default function Account() {
                     <div className="flex items-center gap-x-6">
                       <label
                         htmlFor="current-password"
-                        className="block text-md font-medium leading-6 text-white"
+                        className="block text-md font-medium leading-6 text-gray-900"
                       >
                         Send error reports
                       </label>
@@ -290,7 +290,7 @@ export default function Account() {
                     <div className="flex items-center gap-x-6">
                       <label
                         htmlFor="current-password"
-                        className="block text-md font-medium leading-6 text-white"
+                        className="block text-md font-medium leading-6 text-gray-900"
                       >
                         Send anonymized & safe analytics
                       </label>
@@ -319,7 +319,7 @@ export default function Account() {
                     <div className="flex items-center gap-x-6">
                       <label
                         htmlFor="hide-sql"
-                        className="block text-md font-medium leading-6 text-white"
+                        className="block text-md font-medium leading-6 text-gray-900"
                       >
                         Hide SQL code blocks
                       </label>
@@ -365,7 +365,7 @@ export default function Account() {
               <div className="md:col-span-2">
                 <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
                   <div className="col-span-full">
-                    <div className="max-w-2xl text-white">
+                    <div className="max-w-2xl text-gray-900">
                       Enjoying DataLine? Subscribe to our newsletter for
                       updates.
                     </div>
@@ -384,7 +384,7 @@ export default function Account() {
                         type="email"
                         autoComplete="email"
                         required
-                        className="min-w-0 flex-auto rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-white sm:text-sm sm:leading-6"
+                        className="min-w-0 flex-auto rounded-md border border-gray-300 bg-white px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                         placeholder="Enter your email"
                       />
 

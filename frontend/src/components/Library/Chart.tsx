@@ -19,7 +19,7 @@ import { Select } from "@catalyst/select";
 import Minimizer from "../Minimizer/Minimizer";
 
 ChartJS.defaults.borderColor = "#334155";
-ChartJS.defaults.color = "#eee";
+ChartJS.defaults.color = "#1f2937";
 ChartJS.defaults.layout.padding = 10;
 
 function classNames(...classes: string[]) {
@@ -38,7 +38,7 @@ const canvasBackgroundColorPlugin = {
     const { ctx } = chart;
     ctx.save();
     ctx.globalCompositeOperation = "destination-over";
-    ctx.fillStyle = options.color || "#111827";
+    ctx.fillStyle = options.color || "#ffffff";
     ctx.fillRect(0, 0, chart.width, chart.height);
     ctx.restore();
   },
@@ -236,13 +236,13 @@ const Chart = ({
       minimized={minimized}
       setMinimized={setMinimized}
       label="Chart"
-      classes="bg-gray-900"
+      classes="bg-white border border-gray-200"
     >
       <div className="pt-8 md:px-4 relative">
         <canvas ref={chartRef} className="overflow-hidden rounded-xl" />
 
         {createdAt && (
-          <div className="absolute top-0 left-0 m-2 text-gray-100/70 text-xs invisible md:visible">
+          <div className="absolute top-0 left-0 m-2 text-gray-600 text-xs invisible md:visible">
             {createdAt?.toLocaleDateString()} @{" "}
             {createdAt?.toLocaleTimeString()}
           </div>
@@ -253,7 +253,7 @@ const Chart = ({
             <Select
               value={chartData.type}
               onChange={updateChartType}
-              style={{ backgroundColor: "rgb(29, 36, 50)" }} // firefox's select element doesn't understand rgba...
+              style={{ backgroundColor: "rgb(255, 255, 255)" }} // firefox's select element doesn't understand rgba...
             >
               <option value="bar">Bar</option>
               <option value="line">Line</option>

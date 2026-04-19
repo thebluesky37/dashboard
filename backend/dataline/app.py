@@ -5,6 +5,7 @@ import fastapi
 from fastapi import Depends, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from dataline.api.auth.router import router as auth_router
 from dataline.api.connection.router import router as connection_router
@@ -17,6 +18,17 @@ from dataline.errors import UserFacingError, ValidationError
 from dataline.repositories.base import NotFoundError, NotUniqueError
 
 logger = logging.getLogger(__name__)
+
+
+class FrameAncestorsMiddleware(BaseHTTPMiddleware):
+    def __init__(self, app: Any, frame_ancestors: str = "*") -> None:
+        super().__init__(app)
+        self.frame_ancestors = frame_ancestors
+
+    async def dispatch(self, request: Request, call_next: Any) -> Any:
+        response = await call_next(request)
+        response.headers["Content-Security-Policy"] = f"frame-ancestors {self.frame_ancestors}"
+        return response
 
 
 def handle_exceptions(request: Request, e: Exception) -> JSONResponse:
@@ -46,6 +58,7 @@ class App(fastapi.FastAPI):
             allow_methods=["*"],
             allow_headers=["*"],
         )
+        self.add_middleware(FrameAncestorsMiddleware, frame_ancestors=config.allowed_frame_ancestors)
 
         if config.has_auth:
             # Add route for login

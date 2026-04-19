@@ -19,6 +19,7 @@ services:
       ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-http://localhost:7377,http://0.0.0.0:7377,http://localhost:5173,http://127.0.0.1:5173}"
       AUTH_USERNAME: "${AUTH_USERNAME:-admin}"
       AUTH_PASSWORD: "${AUTH_PASSWORD:-admin}"
+      ALLOWED_FRAME_ANCESTORS: "${ALLOWED_FRAME_ANCESTORS:-*}"
     working_dir: /home/dataline/backend
     command: ["bash", "-c", "python -m alembic upgrade head && python -m uvicorn dataline.main:app --port=7377 --host=0.0.0.0 --reload"]
     volumes:
@@ -57,5 +58,14 @@ services:
       - "5173:5173"
     volumes:
       - ./frontend/src:/app/src
+    networks:
+      - dataline
+
+  embed-test:
+    image: nginx:alpine
+    ports:
+      - "9000:80"
+    volumes:
+      - ./embed-test:/usr/share/nginx/html:ro
     networks:
       - dataline

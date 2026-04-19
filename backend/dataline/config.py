@@ -50,6 +50,9 @@ class Config(BaseSettings):
         "http://localhost:7377,http://localhost:5173,http://0.0.0.0:7377,http://0.0.0.0:5173,http://127.0.0.1:7377,http://127.0.0.1:5173"  # comma separated list of origins
     )
 
+    # iframe embedding — which sites can embed this app (space-separated origins or * for all)
+    allowed_frame_ancestors: str = "*"
+
     @property
     def has_auth(self) -> bool:
         return bool(self.auth_username and self.auth_password)

@@ -6,6 +6,7 @@ networks:
 
 volumes:
   dataline_dev:
+  samplesdb_data:
 
 services:
   backend:
@@ -26,6 +27,26 @@ services:
       - ./backend/alembic:/home/dataline/backend/alembic
     networks:
       - dataline
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-rootpassword}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE:-dataline}"
+      MYSQL_USER: "${MYSQL_USER:-dataline}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD:-dataline}"
+    ports:
+      - "3306:3306"
+    volumes:
+      - samplesdb_data:/var/lib/mysql
+      - ./samplesdb:/docker-entrypoint-initdb.d
+    networks:
+      - dataline
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-rootpassword}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   frontend:
     build:

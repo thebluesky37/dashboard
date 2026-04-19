@@ -8,157 +8,117 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as AdminRouteImport } from './routes/admin'
-import { Route as UserRouteImport } from './routes/_user'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as UserChatRouteImport } from './routes/_user/chat'
-import { Route as AdminConfigRouteImport } from './routes/_admin/config'
-import { Route as UserChatIndexRouteImport } from './routes/_user/chat.index'
-import { Route as UserChatConversationIdRouteImport } from './routes/_user/chat.$conversationId'
+// Import Routes
 
-const AdminRoute = AdminRouteImport.update({
+import { Route as rootRoute } from './routes/__root'
+import { Route as AdminImport } from './routes/admin'
+import { Route as UserImport } from './routes/_user'
+import { Route as IndexImport } from './routes/index'
+import { Route as UserChatImport } from './routes/_user/chat'
+import { Route as AdminConfigImport } from './routes/_admin/config'
+import { Route as UserChatIndexImport } from './routes/_user/chat.index'
+import { Route as UserChatConversationIdImport } from './routes/_user/chat.$conversationId'
+
+// Create/Update Routes
+
+const AdminRoute = AdminImport.update({
   id: '/admin',
   path: '/admin',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => rootRoute,
 } as any)
-const UserRoute = UserRouteImport.update({
+
+const UserRoute = UserImport.update({
   id: '/_user',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => rootRoute,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+
+const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => rootRoute,
 } as any)
-const UserChatRoute = UserChatRouteImport.update({
+
+const UserChatRoute = UserChatImport.update({
   id: '/chat',
   path: '/chat',
   getParentRoute: () => UserRoute,
 } as any)
-const AdminConfigRoute = AdminConfigRouteImport.update({
+
+const AdminConfigRoute = AdminConfigImport.update({
   id: '/_admin/config',
   path: '/config',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => rootRoute,
 } as any)
-const UserChatIndexRoute = UserChatIndexRouteImport.update({
+
+const UserChatIndexRoute = UserChatIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => UserChatRoute,
 } as any)
-const UserChatConversationIdRoute = UserChatConversationIdRouteImport.update({
+
+const UserChatConversationIdRoute = UserChatConversationIdImport.update({
   id: '/$conversationId',
   path: '/$conversationId',
   getParentRoute: () => UserChatRoute,
 } as any)
 
-export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
-  '/config': typeof AdminConfigRoute
-  '/chat': typeof UserChatRouteWithChildren
-  '/chat/$conversationId': typeof UserChatConversationIdRoute
-  '/chat/': typeof UserChatIndexRoute
-}
-export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
-  '/config': typeof AdminConfigRoute
-  '/chat/$conversationId': typeof UserChatConversationIdRoute
-  '/chat': typeof UserChatIndexRoute
-}
-export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/_user': typeof UserRouteWithChildren
-  '/admin': typeof AdminRoute
-  '/_admin/config': typeof AdminConfigRoute
-  '/_user/chat': typeof UserChatRouteWithChildren
-  '/_user/chat/$conversationId': typeof UserChatConversationIdRoute
-  '/_user/chat/': typeof UserChatIndexRoute
-}
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/admin'
-    | '/config'
-    | '/chat'
-    | '/chat/$conversationId'
-    | '/chat/'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/config' | '/chat/$conversationId' | '/chat'
-  id:
-    | '__root__'
-    | '/'
-    | '/_user'
-    | '/admin'
-    | '/_admin/config'
-    | '/_user/chat'
-    | '/_user/chat/$conversationId'
-    | '/_user/chat/'
-  fileRoutesById: FileRoutesById
-}
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  UserRoute: typeof UserRouteWithChildren
-  AdminRoute: typeof AdminRoute
-  AdminConfigRoute: typeof AdminConfigRoute
-}
+// Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_user': {
-      id: '/_user'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof UserRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
     }
-    '/_user/chat': {
-      id: '/_user/chat'
-      path: '/chat'
-      fullPath: '/chat'
-      preLoaderRoute: typeof UserChatRouteImport
-      parentRoute: typeof UserRoute
+    '/_user': {
+      id: '/_user'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof UserImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminImport
+      parentRoute: typeof rootRoute
     }
     '/_admin/config': {
       id: '/_admin/config'
       path: '/config'
       fullPath: '/config'
-      preLoaderRoute: typeof AdminConfigRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AdminConfigImport
+      parentRoute: typeof rootRoute
     }
-    '/_user/chat/': {
-      id: '/_user/chat/'
-      path: '/'
-      fullPath: '/chat/'
-      preLoaderRoute: typeof UserChatIndexRouteImport
-      parentRoute: typeof UserChatRoute
+    '/_user/chat': {
+      id: '/_user/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof UserChatImport
+      parentRoute: typeof UserImport
     }
     '/_user/chat/$conversationId': {
       id: '/_user/chat/$conversationId'
       path: '/$conversationId'
       fullPath: '/chat/$conversationId'
-      preLoaderRoute: typeof UserChatConversationIdRouteImport
-      parentRoute: typeof UserChatRoute
+      preLoaderRoute: typeof UserChatConversationIdImport
+      parentRoute: typeof UserChatImport
+    }
+    '/_user/chat/': {
+      id: '/_user/chat/'
+      path: '/'
+      fullPath: '/chat/'
+      preLoaderRoute: typeof UserChatIndexImport
+      parentRoute: typeof UserChatImport
     }
   }
 }
+
+// Create and export the route tree
 
 interface UserChatRouteChildren {
   UserChatConversationIdRoute: typeof UserChatConversationIdRoute
@@ -184,12 +144,121 @@ const UserRouteChildren: UserRouteChildren = {
 
 const UserRouteWithChildren = UserRoute._addFileChildren(UserRouteChildren)
 
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '': typeof UserRouteWithChildren
+  '/admin': typeof AdminRoute
+  '/config': typeof AdminConfigRoute
+  '/chat': typeof UserChatRouteWithChildren
+  '/chat/$conversationId': typeof UserChatConversationIdRoute
+  '/chat/': typeof UserChatIndexRoute
+}
+
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '': typeof UserRouteWithChildren
+  '/admin': typeof AdminRoute
+  '/config': typeof AdminConfigRoute
+  '/chat/$conversationId': typeof UserChatConversationIdRoute
+  '/chat': typeof UserChatIndexRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/_user': typeof UserRouteWithChildren
+  '/admin': typeof AdminRoute
+  '/_admin/config': typeof AdminConfigRoute
+  '/_user/chat': typeof UserChatRouteWithChildren
+  '/_user/chat/$conversationId': typeof UserChatConversationIdRoute
+  '/_user/chat/': typeof UserChatIndexRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | ''
+    | '/admin'
+    | '/config'
+    | '/chat'
+    | '/chat/$conversationId'
+    | '/chat/'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '' | '/admin' | '/config' | '/chat/$conversationId' | '/chat'
+  id:
+    | '__root__'
+    | '/'
+    | '/_user'
+    | '/admin'
+    | '/_admin/config'
+    | '/_user/chat'
+    | '/_user/chat/$conversationId'
+    | '/_user/chat/'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  UserRoute: typeof UserRouteWithChildren
+  AdminRoute: typeof AdminRoute
+  AdminConfigRoute: typeof AdminConfigRoute
+}
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   UserRoute: UserRouteWithChildren,
   AdminRoute: AdminRoute,
   AdminConfigRoute: AdminConfigRoute,
 }
-export const routeTree = rootRouteImport
+
+export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+/* ROUTE_MANIFEST_START
+{
+  "routes": {
+    "__root__": {
+      "filePath": "__root.tsx",
+      "children": [
+        "/",
+        "/_user",
+        "/admin",
+        "/_admin/config"
+      ]
+    },
+    "/": {
+      "filePath": "index.tsx"
+    },
+    "/_user": {
+      "filePath": "_user.tsx",
+      "children": [
+        "/_user/chat"
+      ]
+    },
+    "/admin": {
+      "filePath": "admin.tsx"
+    },
+    "/_admin/config": {
+      "filePath": "_admin/config.tsx"
+    },
+    "/_user/chat": {
+      "filePath": "_user/chat.tsx",
+      "parent": "/_user",
+      "children": [
+        "/_user/chat/$conversationId",
+        "/_user/chat/"
+      ]
+    },
+    "/_user/chat/$conversationId": {
+      "filePath": "_user/chat.$conversationId.tsx",
+      "parent": "/_user/chat"
+    },
+    "/_user/chat/": {
+      "filePath": "_user/chat.index.tsx",
+      "parent": "/_user/chat"
+    }
+  }
+}
+ROUTE_MANIFEST_END */

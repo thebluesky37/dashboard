@@ -5,6 +5,7 @@ from sqlalchemy import Engine, MetaData, Row, create_engine, inspect, text
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.engine import CursorResult
 from sqlalchemy.schema import CreateTable
+from sqlalchemy.types import NullType
 
 from dataline.models.connection.schema import ConnectionOptions
 
@@ -229,6 +230,10 @@ class DatalineSQLDatabase(SQLDatabase):
                 continue
 
             # add create table command
+            # Remove columns with unresolvable types (e.g. MySQL spatial types reflected as NullType)
+            for col in list(table.columns):
+                if isinstance(col.type, NullType):
+                    table._columns.remove(col)
             create_table = str(CreateTable(table).compile(self._engine))
             table_info = f"{create_table.rstrip()}"
             has_extra_info = self._indexes_in_table_info or self._sample_rows_in_table_info

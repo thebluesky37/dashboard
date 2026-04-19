@@ -201,7 +201,7 @@ export const Sidebar = () => {
                 {/* Hideable sidebar for small screens */}
                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-2 ring-1 ring-gray-200">
                   <div className="flex h-16 shrink-0 items-center">
-                    <img className="h-8 w-auto" src={logo} alt="DataLine" />
+                    <img className="h-8 w-auto" src={logo} alt="RocketLevel" />
                   </div>
                   <nav className="flex flex-1 flex-col">
                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -283,7 +283,7 @@ export const Sidebar = () => {
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col border-r border-gray-200 bg-white">
         {/* Dataline logo */}
         <Link to="/" className="flex h-16 shrink-0 items-center px-6">
-          <img className="h-8 w-auto" src={logo} alt="DataLine" />
+          <img className="h-8 w-auto" src={logo} alt="RocketLevel" />
         </Link>
         {/* New chat button */}
         <Link

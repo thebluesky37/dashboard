@@ -5,6 +5,7 @@ from uuid import UUID
 from fastapi import APIRouter, Body, Depends, BackgroundTasks
 from fastapi.responses import StreamingResponse
 
+from dataline.api.embed.router import decode_embed_token
 from dataline.models.conversation.schema import (
     ConversationOut,
     ConversationWithMessagesWithResultsOut,
@@ -42,8 +43,10 @@ async def get_conversation(
 async def conversations(
     session: AsyncSession = Depends(get_session),
     conversation_service: ConversationService = Depends(),
+    embed_token: str | None = None,
 ) -> SuccessListResponse[ConversationWithMessagesWithResultsOut]:
-    conversations = await conversation_service.get_conversations(session)
+    resolved_client_id: str | None = decode_embed_token(embed_token) if embed_token else None
+    conversations = await conversation_service.get_conversations(session, client_id=resolved_client_id)
     return SuccessListResponse(
         data=conversations,
     )
@@ -70,8 +73,16 @@ async def create_conversation(
     background_tasks: BackgroundTasks,
 ) -> SuccessResponse[ConversationOut]:
     background_tasks.add_task(posthog_capture, "conversation_created")
+    # embed_token takes precedence over client_id — it is cryptographically verified
+    if conversation_in.embed_token:
+        resolved_client_id = decode_embed_token(conversation_in.embed_token)
+    else:
+        resolved_client_id = conversation_in.client_id
     conversation = await conversation_service.create_conversation(
-        session, connection_id=conversation_in.connection_id, name=conversation_in.name
+        session,
+        connection_id=conversation_in.connection_id,
+        name=conversation_in.name,
+        client_id=resolved_client_id,
     )
     return SuccessResponse(
         data=conversation,
@@ -86,7 +97,10 @@ async def update_conversation(
     conversation_service: Annotated[ConversationService, Depends()],
 ) -> SuccessResponse[ConversationOut]:
     conversation = await conversation_service.update_conversation_name(
-        session, conversation_id=conversation_id, name=conversation_in.name
+        session,
+        conversation_id=conversation_id,
+        name=conversation_in.name,
+        client_id=conversation_in.client_id,
     )
     return SuccessResponse(data=conversation)
 

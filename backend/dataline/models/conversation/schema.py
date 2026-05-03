@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Optional, Self
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
@@ -29,6 +29,8 @@ class ConversationsOut(BaseModel):
 class CreateConversationIn(BaseModel):
     connection_id: UUID
     name: str
+    client_id: Optional[str] = None
+    embed_token: Optional[str] = None
 
 
 class ConversationOut(BaseModel):
@@ -38,10 +40,12 @@ class ConversationOut(BaseModel):
     connection_id: UUID
     name: str
     created_at: datetime
+    client_id: Optional[str] = None
 
 
 class UpdateConversationRequest(BaseModel):
     name: str
+    client_id: Optional[str] = None
 
 
 def render_stored_results(results: list[ResultModel]) -> list[ResultOut]:
@@ -79,5 +83,6 @@ class ConversationWithMessagesWithResultsOut(ConversationOut):
             connection_id=conversation.connection_id,
             name=conversation.name,
             created_at=conversation.created_at,
+            client_id=conversation.client_id,
             messages=messages,
         )

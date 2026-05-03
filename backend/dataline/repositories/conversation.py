@@ -17,6 +17,7 @@ class ConversationCreate(BaseModel):
     connection_id: UUID
     name: str
     created_at: datetime = Field(default_factory=datetime.now)
+    client_id: str | None = None
 
 
 class ConversationUpdate(BaseModel):
@@ -24,6 +25,7 @@ class ConversationUpdate(BaseModel):
 
     connection_id: UUID | None = None
     name: str | None = None
+    client_id: str | None = None
 
 
 class ConversationRepository(BaseRepository[ConversationModel, ConversationCreate, ConversationUpdate]):
@@ -39,8 +41,12 @@ class ConversationRepository(BaseRepository[ConversationModel, ConversationCreat
         )
         return await self.get_unique(session, query)
 
-    async def list_with_messages_with_results(self, session: AsyncSession) -> Sequence[ConversationModel]:
+    async def list_with_messages_with_results(
+        self, session: AsyncSession, client_id: str | None = None
+    ) -> Sequence[ConversationModel]:
         query = select(ConversationModel).options(
             joinedload(ConversationModel.messages).joinedload(MessageModel.results)
         )
+        if client_id is not None:
+            query = query.filter_by(client_id=client_id)
         return await self.list_unique(session, query)

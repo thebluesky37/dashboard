@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-query";
 import { getBackendStatusQuery } from "@/hooks/settings";
 import { useEffect } from "react";
-import { useParams } from "@tanstack/react-router";
+import { useParams, useSearch } from "@tanstack/react-router";
 import { useGetConnections } from "./connections";
 import { isAxiosError } from "axios";
 
@@ -16,9 +16,12 @@ export const CONVERSATIONS_QUERY_KEY = ["CONVERSATIONS"];
 
 export function useGetConversations() {
   const { isSuccess } = useQuery(getBackendStatusQuery());
+  const search = useSearch({ strict: false }) as { embed_token?: string };
+  const locationSearch = new URLSearchParams(window.location.search);
+  const embedToken = search.embed_token ?? locationSearch.get("embed_token") ?? undefined;
   const result = useQuery({
-    queryKey: CONVERSATIONS_QUERY_KEY,
-    queryFn: async () => (await api.listConversations()).data,
+    queryKey: [...CONVERSATIONS_QUERY_KEY, embedToken ?? ""],
+    queryFn: async () => (await api.listConversations(embedToken)).data,
     enabled: isSuccess,
   });
   const isError = result.isError;
@@ -43,9 +46,12 @@ export function useCreateConversation(
   > = {}
 ) {
   const queryClient = useQueryClient();
+  const search = useSearch({ strict: false }) as { embed_token?: string };
+  const locationSearch = new URLSearchParams(window.location.search);
+  const embedToken = search.embed_token ?? locationSearch.get("embed_token") ?? undefined;
   return useMutation({
     mutationFn: ({ id, name }: { id: string; name: string }) =>
-      api.createConversation(id, name),
+      api.createConversation(id, name, embedToken),
     onError() {
       enqueueSnackbar({
         variant: "error",

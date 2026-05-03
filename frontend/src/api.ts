@@ -170,13 +170,14 @@ const deleteConnection = async (
 export type ConversationCreationResult = ApiResponse<{
   id: string;
 }>;
-const createConversation = async (connectionId: string, name: string) => {
+const createConversation = async (connectionId: string, name: string, embedToken?: string) => {
   const response = await backendApi<ConversationCreationResult>({
     url: `/conversation`,
     method: "post",
     data: {
       connection_id: connectionId,
       name,
+      ...(embedToken ? { embed_token: embedToken } : {}),
     },
     withCredentials: true,
   });
@@ -238,8 +239,13 @@ const deleteConversation = async (conversationId: string) => {
 export type ListConversations = ApiResponse<
   IConversationWithMessagesWithResultsOut[]
 >;
-const listConversations = async (): Promise<ListConversations> => {
-  return (await backendApi<ListConversations>({ url: "/conversations", withCredentials: true })).data;
+const listConversations = async (embedToken?: string): Promise<ListConversations> => {
+  const params = embedToken ? { embed_token: embedToken } : undefined;
+  return (await backendApi<ListConversations>({
+    url: "/conversations",
+    params,
+    withCredentials: true,
+  })).data;
 };
 
 export type GetMessagesResponse = ApiResponse<IMessageWithResultsOut[]>;

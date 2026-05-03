@@ -10,6 +10,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from dataline.api.auth.router import router as auth_router
 from dataline.api.connection.router import router as connection_router
 from dataline.api.conversation.router import router as conversation_router
+from dataline.api.embed.router import router as embed_router
 from dataline.api.result.router import router as result_router
 from dataline.api.settings.router import public_settings_router, router as settings_router
 from dataline.auth import authenticate
@@ -72,6 +73,9 @@ class App(fastapi.FastAPI):
         # User-accessible (no auth required): conversations, results
         self.include_router(conversation_router)
         self.include_router(result_router)
+
+        # Embed token: server-to-server, auth is done at endpoint level via Bearer API key
+        self.include_router(embed_router)
 
         # Handle 500s separately to play well with TestClient and allow re-raising in tests
         self.add_exception_handler(NotFoundError, handle_exceptions)

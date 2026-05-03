@@ -53,6 +53,12 @@ class Config(BaseSettings):
     # iframe embedding — which sites can embed this app (space-separated origins or * for all)
     allowed_frame_ancestors: str = "*"
 
+    # Embed token settings (for server-to-server client_id injection)
+    # Set EMBED_SECRET to a long random string (e.g. openssl rand -hex 32)
+    # Set EMBED_API_KEY to the pre-shared key the embedding app sends in Authorization: Bearer <key>
+    embed_secret: str | None = None
+    embed_api_key: str | None = None
+
     @property
     def has_auth(self) -> bool:
         return bool(self.auth_username and self.auth_password)

@@ -25,6 +25,7 @@ export const ConnectionSelector = ({
       navigate({
         to: "/chat/$conversationId",
         params: { conversationId: resp.data.id },
+        search: (prev) => prev,
       });
     },
   });

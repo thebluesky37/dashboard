@@ -29,6 +29,24 @@
       border-radius: 8px;
     }
 
+    /* User ID / API key fields */
+    .field-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .field-row label { font-size: 0.9rem; color: #374151; font-weight: 500; white-space: nowrap; width: 160px; }
+    .field-row input {
+      flex: 1;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      padding: 7px 12px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .field-row input:focus { border-color: #6366f1; box-shadow: 0 0 0 2px rgba(99,102,241,0.2); }
+    #open-error { font-size: 0.85rem; color: #dc2626; display: none; }
+
     /* Floating chat button */
     #chat-btn {
       position: fixed;
@@ -70,29 +88,6 @@
     }
     #chat-panel.open { transform: translateX(0); }
 
-    .panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 20px;
-      border-bottom: 1px solid #e5e7eb;
-      flex-shrink: 0;
-    }
-    .panel-header span { font-weight: 600; font-size: 0.95rem; color: #111827; }
-    #close-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: #6b7280;
-      padding: 4px;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      transition: background 0.15s;
-    }
-    #close-btn:hover { background: #f3f4f6; color: #111827; }
-    #close-btn svg { width: 20px; height: 20px; }
-
     #chat-panel iframe {
       flex: 1;
       width: 100%;
@@ -118,6 +113,15 @@
   <div class="page-content">
     <h1>Welcome to Our Website</h1>
     <p>This page simulates an external website. Click the button in the bottom-right corner to open the RocketLevel chat panel.</p>
+    <div class="field-row">
+      <label for="user-id">User ID (client_id):</label>
+      <input id="user-id" type="text" placeholder="e.g. user-123" value="test-user-1" />
+    </div>
+    <div class="field-row">
+      <label for="api-key">Embed API Key:</label>
+      <input id="api-key" type="text" placeholder="your EMBED_API_KEY" />
+    </div>
+    <div id="open-error"></div>
     <div class="placeholder-block"></div>
     <div class="placeholder-block"></div>
   </div>
@@ -135,19 +139,48 @@
 
   <!-- Slide-in panel -->
   <div id="chat-panel">
-    <div class="panel-header">
-      <span>RocketLevel Chat</span>
-      <button id="close-btn" onclick="closeChat()" title="Close">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-    <iframe src="http://localhost:5173" title="RocketLevel Chat" loading="lazy"></iframe>
+    <iframe src="about:blank" title="RocketLevel Chat" loading="lazy"></iframe>
   </div>
 
   <script>
-    function openChat() {
+    async function openChat() {
+      const clientId = document.getElementById('user-id').value.trim();
+      const apiKey = document.getElementById('api-key').value.trim();
+      const errorEl = document.getElementById('open-error');
+      errorEl.style.display = 'none';
+
+      if (!clientId || !apiKey) {
+        errorEl.textContent = 'Please enter both User ID and Embed API Key.';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      let iframeSrc = 'http://localhost:5173/?embed=1';
+
+      try {
+        const res = await fetch('http://localhost:7377/embed-token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + apiKey,
+          },
+          body: JSON.stringify({ client_id: clientId }),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          errorEl.textContent = 'Failed to get embed token: ' + (err.detail || res.status);
+          errorEl.style.display = 'block';
+          return;
+        }
+        const { token } = await res.json();
+        iframeSrc = 'http://localhost:5173/?embed=1&embed_token=' + encodeURIComponent(token);
+      } catch (e) {
+        errorEl.textContent = 'Network error calling /embed-token: ' + e.message;
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      document.querySelector('#chat-panel iframe').src = iframeSrc;
       document.getElementById('chat-panel').classList.add('open');
       document.getElementById('backdrop').classList.add('visible');
     }
@@ -156,6 +189,7 @@
       document.getElementById('backdrop').classList.remove('visible');
     }
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeChat(); });
+    window.addEventListener('message', (e) => { if (e.data?.type === 'dataline:close') closeChat(); });
   </script>
 
 </body>

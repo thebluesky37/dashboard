@@ -16,10 +16,12 @@ services:
     ports:
       - "7377:7377"
     environment:
-      ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-http://localhost:7377,http://0.0.0.0:7377,http://localhost:5173,http://127.0.0.1:5173}"
+      ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-http://localhost:7377,http://0.0.0.0:7377,http://localhost:5173,http://127.0.0.1:5173,http://localhost:9000}"
       AUTH_USERNAME: "${AUTH_USERNAME:-admin}"
       AUTH_PASSWORD: "${AUTH_PASSWORD:-admin}"
       ALLOWED_FRAME_ANCESTORS: "${ALLOWED_FRAME_ANCESTORS:-*}"
+      EMBED_SECRET: "521aa2ef26dabc78f11f0335e11250c04b2dfb8e95c0a4cced4606c30578cbab"
+      EMBED_API_KEY: "3469160ea637040eb805f6e6867f743c9c8e51a00f8b536d689b0e8b06d448f2"
     working_dir: /home/dataline/backend
     command: ["bash", "-c", "python -m alembic upgrade head && python -m uvicorn dataline.main:app --port=7377 --host=0.0.0.0 --reload"]
     volumes:
@@ -58,6 +60,7 @@ services:
       - "5173:5173"
     volumes:
       - ./frontend/src:/app/src
+      - ./frontend/.tanstack:/app/.tanstack
     networks:
       - dataline
 

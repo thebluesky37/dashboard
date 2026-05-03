@@ -57,7 +57,7 @@ class QueryGraphService:
         self.tracer = None  # no tracing by default
 
     async def query(
-        self, query: str, options: QueryOptions, history: Sequence[BaseMessage] | None = None
+        self, query: str, options: QueryOptions, history: Sequence[BaseMessage] | None = None, client_id: str | None = None
     ) -> AsyncGenerator[tuple[Sequence[BaseMessage] | None, Sequence[ResultType] | None], None]:
         # Setup tracing with langsmith if api key is provided
         if options.langsmith_api_key:
@@ -78,6 +78,7 @@ class QueryGraphService:
                     query,
                     history,
                     extra_instructions=getattr(self.connection, "instructions", None),
+                    client_id=client_id,
                 ),
             ],
             "results": [],
@@ -114,9 +115,19 @@ class QueryGraphService:
         top_k: int = 10,
         suffix: str = SQL_FUNCTIONS_SUFFIX,
         extra_instructions: str | None = None,
+        client_id: str | None = None,
     ):
         prefix = SQL_PREFIX
         prefix = prefix.format(dialect=self.toolkit.dialect, top_k=top_k)
+        if client_id:
+            prefix = (
+                f"{prefix}\n\n"
+                f"MANDATORY CONSTRAINT - CLIENT DATA ISOLATION:\n"
+                f"You are authorized to query data ONLY for client ID: '{client_id}'.\n"
+                f"Every SQL query you generate MUST include a filter restricting results to this client.\n"
+                f"NEVER return data belonging to any other client, even if explicitly asked.\n"
+                f"If asked about other clients respond: 'I only have access to data for the current active client.'"
+            )
         if extra_instructions:
             prefix = f"{prefix}\n\nAdditional instructions:\n{extra_instructions}"
 

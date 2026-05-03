@@ -1,4 +1,6 @@
 import logging
+import re
+from decimal import Decimal
 from typing import AsyncGenerator, cast
 from uuid import UUID
 
@@ -16,6 +18,7 @@ from dataline.models.llm_flow.schema import (
     QueryOptions,
     RenderableResultMixin,
     ResultType,
+    SQLQueryRunResult,
     SQLQueryStringResultContent,
     StorableResultMixin,
 )
@@ -50,6 +53,9 @@ from dataline.services.settings import SettingsService
 from dataline.utils.utils import stream_event_str
 
 logger = logging.getLogger(__name__)
+_AGGREGATE_QUESTION_PATTERN = re.compile(
+    r"\b(how many|count|total|sum|average|avg|min|max|number of)\b", re.IGNORECASE
+)
 
 
 class ConversationService:
@@ -102,9 +108,10 @@ class ConversationService:
         session: AsyncSession,
         connection_id: UUID,
         name: str,
+        client_id: str | None = None,
     ) -> ConversationOut:
         conversation = await self.conversation_repo.create(
-            session, ConversationCreate(connection_id=connection_id, name=name)
+            session, ConversationCreate(connection_id=connection_id, name=name, client_id=client_id)
         )
         return ConversationOut.model_validate(conversation)
 
@@ -118,8 +125,10 @@ class ConversationService:
         conversation = await self.conversation_repo.get_with_messages_with_results(session, conversation_id)
         return ConversationWithMessagesWithResultsOut.from_conversation(conversation)
 
-    async def get_conversations(self, session: AsyncSession) -> list[ConversationWithMessagesWithResultsOut]:
-        conversations = await self.conversation_repo.list_with_messages_with_results(session)
+    async def get_conversations(
+        self, session: AsyncSession, client_id: str | None = None
+    ) -> list[ConversationWithMessagesWithResultsOut]:
+        conversations = await self.conversation_repo.list_with_messages_with_results(session, client_id=client_id)
         return [
             ConversationWithMessagesWithResultsOut.from_conversation(conversation) for conversation in conversations
         ]
@@ -128,10 +137,13 @@ class ConversationService:
         await self.conversation_repo.delete_by_uuid(session, record_id=conversation_id)
 
     async def update_conversation_name(
-        self, session: AsyncSession, conversation_id: UUID, name: str
+        self, session: AsyncSession, conversation_id: UUID, name: str, client_id: str | None = None
     ) -> ConversationOut:
+        update_payload = ConversationUpdate(name=name)
+        if client_id is not None:
+            update_payload.client_id = client_id
         conversation = await self.conversation_repo.update_by_uuid(
-            session, conversation_id, ConversationUpdate(name=name)
+            session, conversation_id, update_payload
         )
         return ConversationOut.model_validate(conversation)
 
@@ -167,6 +179,7 @@ class ConversationService:
                 llm_model=user_with_model_details.preferred_openai_model,
             ),
             history=history,
+            client_id=conversation.client_id,
         ):
             (chunk_messages, chunk_results) = chunk
             if chunk_messages is not None:
@@ -190,6 +203,12 @@ class ConversationService:
         else:
             raise Exception("No AI message found in conversation")
 
+        final_ai_content = self._ground_aggregate_answer_if_needed(
+            user_query=query,
+            llm_answer=str(last_ai_message.content),
+            results=results,
+        )
+
         # Store human message and final AI message without flushing
         human_message = await self.message_repo.create(
             session,
@@ -207,7 +226,7 @@ class ConversationService:
             session,
             MessageCreate(
                 role=BaseMessageType.AI.value,
-                content=str(last_ai_message.content),
+                content=final_ai_content,
                 conversation_id=conversation_id,
                 options=MessageOptions(secure_data=secure_data),
             ),
@@ -252,6 +271,47 @@ class ConversationService:
             ),
         )
         yield stream_event_str(event=QueryStreamingEventType.STORED_MESSAGES.value, data=query_out.model_dump_json())
+
+    def _ground_aggregate_answer_if_needed(
+        self,
+        user_query: str,
+        llm_answer: str,
+        results: list[ResultType],
+    ) -> str:
+        # Only enforce grounding for aggregate-style questions.
+        if not _AGGREGATE_QUESTION_PATTERN.search(user_query):
+            return llm_answer
+
+        numeric_result = self._latest_scalar_numeric_sql_result(results)
+        if numeric_result is None:
+            return llm_answer
+
+        column_name, value = numeric_result
+        rendered_value = int(value) if isinstance(value, float) and value.is_integer() else value
+        readable_column = column_name.replace("_", " ")
+        return f"Based on the latest SQL result, {readable_column} is {rendered_value}."
+
+    def _latest_scalar_numeric_sql_result(self, results: list[ResultType]) -> tuple[str, float] | None:
+        for result in reversed(results):
+            if not isinstance(result, SQLQueryRunResult):
+                continue
+            if result.for_chart:
+                continue
+            if len(result.columns) != 1 or len(result.rows) != 1:
+                continue
+
+            row = result.rows[0]
+            if isinstance(row, list):
+                if len(row) != 1:
+                    continue
+                value = row[0]
+            else:
+                value = row
+
+            if isinstance(value, (int, float, Decimal)) and not isinstance(value, bool):
+                return result.columns[0], float(value)
+
+        return None
 
     async def get_conversation_history(self, session: AsyncSession, conversation_id: UUID) -> list[BaseMessage]:
         """

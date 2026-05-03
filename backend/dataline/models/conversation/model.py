@@ -7,6 +7,7 @@ from dataline.models.connection.model import ConnectionModel
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+
 if TYPE_CHECKING:
     from dataline.models.message.model import MessageModel
 
@@ -16,6 +17,8 @@ class ConversationModel(DBModel, UUIDMixin, kw_only=True):
     connection_id: Mapped[UUID] = mapped_column(ForeignKey(ConnectionModel.id, ondelete="CASCADE"))
     name: Mapped[str] = mapped_column("name", String, nullable=False)
     created_at: Mapped[datetime] = mapped_column("created_at", String)
+    client_id: Mapped[str | None] = mapped_column("client_id", String, nullable=True)
+
 
     # Relationships
     messages: Mapped[list["MessageModel"]] = relationship("MessageModel", back_populates="conversation")

@@ -30,18 +30,18 @@ const FeatureComparisonTable = () => {
           <TableHead>
             <TableRow>
               <TableHeader className="text-center">Feature</TableHeader>
-              <TableHeader className="text-center">DataLine</TableHeader>
+              <TableHeader className="text-center">RLDashboard</TableHeader>
               <TableHeader className="text-center">ChatGPT Plus</TableHeader>
             </TableRow>
           </TableHead>
           <TableBody>
-            {features.features.map(({ feature, dataline, chatgpt }) => (
+            {features.features.map(({ feature, rldashboard, chatgpt }) => (
               <TableRow key={feature}>
                 <TableCell className="text-zinc-400 text-wrap">
                   {feature}
                 </TableCell>
                 <TableCell className="text-zinc-400">
-                  {dataline && renderEntry(dataline)}
+                  {rldashboard && renderEntry(rldashboard)}
                 </TableCell>
                 <TableCell className="text-zinc-400">
                   {chatgpt && renderEntry(chatgpt)}

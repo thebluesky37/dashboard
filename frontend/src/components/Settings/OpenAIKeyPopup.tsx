@@ -77,7 +77,7 @@ export function OpenAIKeyPopup() {
         >
           full permissions{" "}
         </a>
-        to use DataLine. You can create one on the{" "}
+        to use RLDashboard. You can create one on the{" "}
         <a
           className="underline"
           target="_blank"

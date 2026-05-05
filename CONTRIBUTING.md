@@ -1,6 +1,6 @@
-# Contributing to Dataline
+# Contributing to Rldashboard
 
-Thank you for considering contributing to Dataline! We welcome contributions from the community and are excited to see what you can bring to the project.
+Thank you for considering contributing to Rldashboard! We welcome contributions from the community and are excited to see what you can bring to the project.
 
 ## Getting Started
 

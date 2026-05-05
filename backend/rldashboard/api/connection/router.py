@@ -5,8 +5,8 @@ from uuid import UUID
 from fastapi import APIRouter, BackgroundTasks, Body, Depends, HTTPException, UploadFile
 from pydantic import BaseModel
 
-from dataline.auth import require_admin
-from dataline.models.connection.schema import (
+from rldashboard.auth import require_admin
+from rldashboard.models.connection.schema import (
     DB_SAMPLES,
     ConnectionOut,
     ConnectionUpdateIn,
@@ -16,11 +16,11 @@ from dataline.models.connection.schema import (
     GetConnectionOut,
     SampleOut,
 )
-from dataline.old_models import SuccessListResponse, SuccessResponse
-from dataline.repositories.base import AsyncSession, get_session
-from dataline.services.connection import ConnectionService
-from dataline.utils.posthog import posthog_capture
-from dataline.utils.utils import get_sqlite_dsn, is_valid_sqlite_file
+from rldashboard.old_models import SuccessListResponse, SuccessResponse
+from rldashboard.repositories.base import AsyncSession, get_session
+from rldashboard.services.connection import ConnectionService
+from rldashboard.utils.posthog import posthog_capture
+from rldashboard.utils.utils import get_sqlite_dsn, is_valid_sqlite_file
 
 logger = logging.getLogger(__name__)
 

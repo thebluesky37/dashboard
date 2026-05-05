@@ -5,12 +5,12 @@ import pytest
 from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
-from dataline.auth import require_admin
+from rldashboard.auth import require_admin
 
 
 def test_require_admin_raises_403_for_anonymous(monkeypatch):
-    monkeypatch.setattr("dataline.auth.config.auth_username", "admin")
-    monkeypatch.setattr("dataline.auth.config.auth_password", "secret")
+    monkeypatch.setattr("rldashboard.auth.config.auth_username", "admin")
+    monkeypatch.setattr("rldashboard.auth.config.auth_password", "secret")
     # No credentials supplied → credentials will be None from Optional dependency
     with pytest.raises(HTTPException) as exc_info:
         asyncio.get_event_loop().run_until_complete(require_admin(None))
@@ -18,9 +18,9 @@ def test_require_admin_raises_403_for_anonymous(monkeypatch):
 
 
 def test_anonymous_can_access_connections(monkeypatch):
-    monkeypatch.setattr("dataline.config.config.auth_username", "admin")
-    monkeypatch.setattr("dataline.config.config.auth_password", "adminpass")
-    from dataline.app import App
+    monkeypatch.setattr("rldashboard.config.config.auth_username", "admin")
+    monkeypatch.setattr("rldashboard.config.config.auth_password", "adminpass")
+    from rldashboard.app import App
     test_app = App()
     client = TestClient(test_app, raise_server_exceptions=False)
     # No auth at all — anonymous request should still read connections
@@ -29,9 +29,9 @@ def test_anonymous_can_access_connections(monkeypatch):
 
 
 def test_admin_can_access_connections(monkeypatch):
-    monkeypatch.setattr("dataline.config.config.auth_username", "admin")
-    monkeypatch.setattr("dataline.config.config.auth_password", "adminpass")
-    from dataline.app import App
+    monkeypatch.setattr("rldashboard.config.config.auth_username", "admin")
+    monkeypatch.setattr("rldashboard.config.config.auth_password", "adminpass")
+    from rldashboard.app import App
     test_app = App()
     client = TestClient(test_app, raise_server_exceptions=False)
     # HTTPBasicCustomized reads from cookie "Authorization", not the HTTP header
@@ -41,20 +41,23 @@ def test_admin_can_access_connections(monkeypatch):
 
 
 def test_anonymous_cannot_create_connections(monkeypatch):
-    monkeypatch.setattr("dataline.config.config.auth_username", "admin")
-    monkeypatch.setattr("dataline.config.config.auth_password", "adminpass")
-    from dataline.app import App
+    monkeypatch.setattr("rldashboard.config.config.auth_username", "admin")
+    monkeypatch.setattr("rldashboard.config.config.auth_password", "adminpass")
+    from rldashboard.app import App
 
     test_app = App()
     client = TestClient(test_app, raise_server_exceptions=False)
-    response = client.post("/connect", json={"dsn": "sqlite:///test.db", "name": "Test"})
+    response = client.post(
+        "/connect",
+        json={"dsn": "postgresql://postgres:secret@localhost:5432/rldashboard_test", "name": "Test"},
+    )
     assert response.status_code == 403
 
 
 def test_anonymous_can_access_settings_info(monkeypatch):
-    monkeypatch.setattr("dataline.config.config.auth_username", "admin")
-    monkeypatch.setattr("dataline.config.config.auth_password", "adminpass")
-    from dataline.app import App
+    monkeypatch.setattr("rldashboard.config.config.auth_username", "admin")
+    monkeypatch.setattr("rldashboard.config.config.auth_password", "adminpass")
+    from rldashboard.app import App
 
     test_app = App()
     client = TestClient(test_app, raise_server_exceptions=False)
@@ -64,9 +67,9 @@ def test_anonymous_can_access_settings_info(monkeypatch):
 
 
 def test_anonymous_can_access_settings_avatar(monkeypatch):
-    monkeypatch.setattr("dataline.config.config.auth_username", "admin")
-    monkeypatch.setattr("dataline.config.config.auth_password", "adminpass")
-    from dataline.app import App
+    monkeypatch.setattr("rldashboard.config.config.auth_username", "admin")
+    monkeypatch.setattr("rldashboard.config.config.auth_password", "adminpass")
+    from rldashboard.app import App
 
     test_app = App()
     client = TestClient(test_app, raise_server_exceptions=False)
@@ -76,9 +79,9 @@ def test_anonymous_can_access_settings_avatar(monkeypatch):
 
 
 def test_anonymous_can_access_conversations(monkeypatch):
-    monkeypatch.setattr("dataline.config.config.auth_username", "admin")
-    monkeypatch.setattr("dataline.config.config.auth_password", "adminpass")
-    from dataline.app import App
+    monkeypatch.setattr("rldashboard.config.config.auth_username", "admin")
+    monkeypatch.setattr("rldashboard.config.config.auth_password", "adminpass")
+    from rldashboard.app import App
     test_app = App()
     client = TestClient(test_app, raise_server_exceptions=False)
     # No auth — anonymous user can list conversations

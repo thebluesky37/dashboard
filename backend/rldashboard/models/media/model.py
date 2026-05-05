@@ -1,7 +1,7 @@
 from sqlalchemy import LargeBinary, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from dataline.models.base import DBModel, UUIDMixin
+from rldashboard.models.base import DBModel, UUIDMixin
 
 
 class MediaModel(DBModel, UUIDMixin, kw_only=True):

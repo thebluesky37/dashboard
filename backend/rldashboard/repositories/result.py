@@ -3,13 +3,13 @@ from uuid import UUID
 
 from sqlalchemy import select
 
-from dataline.models.connection.model import ConnectionModel
-from dataline.models.conversation.model import ConversationModel
-from dataline.models.llm_flow.enums import QueryResultType
-from dataline.models.message.model import MessageModel
-from dataline.models.result.model import ResultModel
-from dataline.models.result.schema import ResultCreate, ResultUpdate
-from dataline.repositories.base import AsyncSession, BaseRepository, NotFoundError
+from rldashboard.models.connection.model import ConnectionModel
+from rldashboard.models.conversation.model import ConversationModel
+from rldashboard.models.llm_flow.enums import QueryResultType
+from rldashboard.models.message.model import MessageModel
+from rldashboard.models.result.model import ResultModel
+from rldashboard.models.result.schema import ResultCreate, ResultUpdate
+from rldashboard.repositories.base import AsyncSession, BaseRepository, NotFoundError
 
 
 class ResultRepository(BaseRepository[ResultModel, ResultCreate, ResultUpdate]):

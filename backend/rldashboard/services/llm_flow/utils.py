@@ -7,7 +7,7 @@ from sqlalchemy.engine import CursorResult
 from sqlalchemy.schema import CreateTable
 from sqlalchemy.types import NullType
 
-from dataline.models.connection.schema import ConnectionOptions
+from rldashboard.models.connection.schema import ConnectionOptions
 
 
 class ConnectionProtocol(Protocol):
@@ -15,7 +15,7 @@ class ConnectionProtocol(Protocol):
     options: ConnectionOptions | None
 
 
-class DatalineSQLDatabase(SQLDatabase):
+class RldashboardSQLDatabase(SQLDatabase):
     """SQLAlchemy wrapper around a database."""
 
     def __init__(
@@ -178,10 +178,10 @@ class DatalineSQLDatabase(SQLDatabase):
             )
 
     @classmethod
-    def from_dataline_connection(
+    def from_rldashboard_connection(
         cls, connection: ConnectionProtocol, engine_args: dict | None = None, **kwargs: Any
     ) -> Self:
-        """Construct a SQLAlchemy engine from Dataline connection."""
+        """Construct a SQLAlchemy engine from Rldashboard connection."""
         if connection.options:
             enabled_schemas = [schema for schema in connection.options.schemas if schema.enabled]
             schemas_str = [schema.name for schema in enabled_schemas]

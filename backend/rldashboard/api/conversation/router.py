@@ -5,24 +5,24 @@ from uuid import UUID
 from fastapi import APIRouter, Body, Depends, BackgroundTasks
 from fastapi.responses import StreamingResponse
 
-from dataline.api.embed.router import decode_embed_token
-from dataline.models.conversation.schema import (
+from rldashboard.api.embed.router import decode_embed_token
+from rldashboard.models.conversation.schema import (
     ConversationOut,
     ConversationWithMessagesWithResultsOut,
     CreateConversationIn,
     UpdateConversationRequest,
 )
-from dataline.models.llm_flow.schema import SQLQueryRunResult
-from dataline.models.message.schema import MessageOptions, MessageWithResultsOut
-from dataline.models.result.schema import ResultOut
-from dataline.old_models import SuccessListResponse, SuccessResponse
-from dataline.repositories.base import AsyncSession, get_session
-from dataline.services.connection import ConnectionService
-from dataline.services.conversation import ConversationService
-from dataline.services.llm_flow.toolkit import execute_sql_query
-from dataline.services.llm_flow.utils import DatalineSQLDatabase as SQLDatabase
-from dataline.utils.posthog import posthog_capture
-from dataline.utils.utils import generate_with_errors
+from rldashboard.models.llm_flow.schema import SQLQueryRunResult
+from rldashboard.models.message.schema import MessageOptions, MessageWithResultsOut
+from rldashboard.models.result.schema import ResultOut
+from rldashboard.old_models import SuccessListResponse, SuccessResponse
+from rldashboard.repositories.base import AsyncSession, get_session
+from rldashboard.services.connection import ConnectionService
+from rldashboard.services.conversation import ConversationService
+from rldashboard.services.llm_flow.toolkit import execute_sql_query
+from rldashboard.services.llm_flow.utils import RldashboardSQLDatabase as SQLDatabase
+from rldashboard.utils.posthog import posthog_capture
+from rldashboard.utils.utils import generate_with_errors
 
 logger = logging.getLogger(__name__)
 
@@ -160,7 +160,7 @@ async def execute_sql(
     connection = await connection_service.get_connection(session, connection_id)
 
     # Refresh chart data
-    db = SQLDatabase.from_dataline_connection(connection)
+    db = SQLDatabase.from_rldashboard_connection(connection)
     query_run_data = execute_sql_query(db, sql)
 
     # Execute query

@@ -5,8 +5,8 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
-from dataline.models.conversation.schema import ConversationOut
-from dataline.repositories.base import AsyncSession
+from rldashboard.models.conversation.schema import ConversationOut
+from rldashboard.repositories.base import AsyncSession
 from tests.evaluation.conftest import populate_conversation_history
 from tests.evaluation.test_cases import TEST_CASES
 

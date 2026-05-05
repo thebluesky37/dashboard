@@ -10,7 +10,7 @@ from fastapi.security.utils import get_authorization_scheme_param
 from starlette.requests import Request
 from starlette.status import HTTP_401_UNAUTHORIZED
 
-from dataline.config import config
+from rldashboard.config import config
 
 logger = logging.getLogger(__name__)
 

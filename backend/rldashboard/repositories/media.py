@@ -2,8 +2,8 @@ from typing import Optional, Type
 
 from pydantic import BaseModel, ConfigDict
 
-from dataline.models.media.model import MediaModel
-from dataline.repositories.base import BaseRepository
+from rldashboard.models.media.model import MediaModel
+from rldashboard.repositories.base import BaseRepository
 
 
 class MediaCreate(BaseModel):

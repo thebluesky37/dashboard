@@ -5,9 +5,9 @@ from sentry_sdk.hub import GLOBAL_HUB
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 from sqlalchemy.exc import OperationalError
 
-from dataline.config import config
-from dataline.repositories.base import SessionCreator
-from dataline.repositories.user import UserRepository
+from rldashboard.config import config
+from rldashboard.repositories.base import SessionCreator
+from rldashboard.repositories.user import UserRepository
 
 logger = logging.getLogger(__name__)
 

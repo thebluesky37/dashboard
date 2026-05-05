@@ -4,20 +4,20 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 
-from dataline.models.llm_flow.enums import QueryResultType
-from dataline.models.llm_flow.schema import (
+from rldashboard.models.llm_flow.enums import QueryResultType
+from rldashboard.models.llm_flow.schema import (
     ChartGenerationResult,
     SelectedTablesResult,
     SQLQueryRunResult,
     SQLQueryStringResult,
 )
-from dataline.models.message.schema import MessageOut, MessageWithResultsOut
-from dataline.models.result.model import ResultModel
-from dataline.models.result.schema import ResultOut
-from dataline.old_models import ConversationWithMessagesWithResults
+from rldashboard.models.message.schema import MessageOut, MessageWithResultsOut
+from rldashboard.models.result.model import ResultModel
+from rldashboard.models.result.schema import ResultOut
+from rldashboard.old_models import ConversationWithMessagesWithResults
 
 if TYPE_CHECKING:
-    from dataline.models.conversation.model import ConversationModel
+    from rldashboard.models.conversation.model import ConversationModel
 
 
 class ConversationsOut(BaseModel):

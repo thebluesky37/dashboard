@@ -11,18 +11,18 @@ export default function Privacy() {
           <div className="py-24 sm:py-32">
             <div className="mx-auto max-w-7xl px-6 lg:px-8 text-white text-md lg:text-xl font-light">
               <br></br>
-              <h1 className="text-3xl font-bold">DataLine Privacy Policy</h1>
+              <h1 className="text-3xl font-bold">RLDashboard Privacy Policy</h1>
               <br></br>
               <h1>Effective Date: June 21, 2024</h1>
               <br></br>
-              Welcome to DataLine ("DataLine," "we," "us," and/or "our"). This
+              Welcome to RLDashboard ("RLDashboard," "we," "us," and/or "our"). This
               Privacy Policy provides information about how we handle personal
               data in connection with the use of our software and services,
               which are designed for local use on your device or for
               self-hosting to connect to databases and perform queries and
               generate charts using auto-generated SQL.
               <br></br>
-              Data Controller: DataLine is responsible for the processing of
+              Data Controller: RLDashboard is responsible for the processing of
               your personal data as described in this Privacy Policy.
               <br></br>
               <br></br>
@@ -74,7 +74,7 @@ export default function Privacy() {
               <strong className="font-bold">Legal Requirements:</strong> We may
               disclose your stored information if required by law or if
               necessary to protect our rights or the rights of others. Very
-              little information is stored however, given the fact that DataLine
+              little information is stored however, given the fact that RLDashboard
               is self-hosted and no data is stored on servers.
               <br></br>
               <br></br>
@@ -82,7 +82,7 @@ export default function Privacy() {
               industry-standard security measures designed to protect the
               information collected. However, please be aware that no security
               measures are perfect or impenetrable. Very little information is
-              stored however, given the fact that DataLine is self-hosted and no
+              stored however, given the fact that RLDashboard is self-hosted and no
               data is stored on servers.
               <br></br> <br></br>
               <strong className="font-bold">Your Rights:</strong> You have
@@ -99,7 +99,7 @@ export default function Privacy() {
               your information.
               <br></br>
               Contact Us: If you have questions about this Privacy Policy or our
-              data practices, please contact us at support@dataline.app.
+              data practices, please contact us at support@rldashboard.app.
             </div>
           </div>
         </div>

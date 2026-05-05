@@ -7,19 +7,19 @@ from asyncpg import (  # type: ignore[import-untyped]
     UniqueViolationError,
 )
 from pydantic import BaseModel
-from sqlalchemy import Delete, Select, Update, delete, insert, select, text, update
+from sqlalchemy import Delete, Select, Update, delete, insert, select, update
 from sqlalchemy.exc import IntegrityError, MultipleResultsFound, NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession as _AsyncSession
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
-from dataline.config import config
+from rldashboard.config import config
 
 # Load all sqlalchemy models
-from dataline.models import *  # noqa: F401, F403
-from dataline.models.base import DBModel
-from dataline.utils.utils import get_sqlite_dsn_async
+from rldashboard.models import *  # noqa: F401, F403
+from rldashboard.models.base import DBModel
 
-engine = create_async_engine(get_sqlite_dsn_async(config.sqlite_path))
+
+engine = create_async_engine(config.database_url, echo=config.database_echo)
 
 # We set expire_on_commit to False so that subsequent access to objects that came from a session do not
 # need to emit new SQL queries to refresh the objects if the transaction has been committed already
@@ -31,14 +31,12 @@ AsyncSession = _AsyncSession
 async def get_session_no_commit() -> AsyncGenerator[AsyncSession, None]:
     """FastAPI dependency to get a db session without committing or closing"""
     session = SessionCreator()
-    await session.execute(text("PRAGMA foreign_keys=ON"))
     yield session
 
 
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
     """FastAPI dependency to get a db session"""
     session = SessionCreator()
-    await session.execute(text("PRAGMA foreign_keys=ON"))
 
     try:
         yield session

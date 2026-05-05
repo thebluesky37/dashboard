@@ -3,8 +3,8 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from sqlalchemy.exc import OperationalError
 
-from dataline.sentry import maybe_init_sentry
-from dataline.utils.posthog import posthog_capture
+from rldashboard.sentry import maybe_init_sentry
+from rldashboard.utils.posthog import posthog_capture
 
 
 def make_operational_error() -> OperationalError:
@@ -17,11 +17,11 @@ def make_operational_error() -> OperationalError:
 
 @pytest.mark.asyncio
 async def test_maybe_init_sentry_ignores_schema_mismatch() -> None:
-    with patch("dataline.sentry.UserRepository.get_one_or_none", new=AsyncMock(side_effect=make_operational_error())):
+    with patch("rldashboard.sentry.UserRepository.get_one_or_none", new=AsyncMock(side_effect=make_operational_error())):
         await maybe_init_sentry()
 
 
 @pytest.mark.asyncio
 async def test_posthog_capture_ignores_schema_mismatch() -> None:
-    with patch("dataline.utils.posthog.UserRepository.get_one_or_none", new=AsyncMock(side_effect=make_operational_error())):
-        await posthog_capture("dataline_started")
+    with patch("rldashboard.utils.posthog.UserRepository.get_one_or_none", new=AsyncMock(side_effect=make_operational_error())):
+        await posthog_capture("rldashboard_started")

@@ -4,8 +4,8 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy import select
 
-from dataline.models.user.model import UserModel
-from dataline.repositories.base import AsyncSession, BaseRepository, NotFoundError
+from rldashboard.models.user.model import UserModel
+from rldashboard.repositories.base import AsyncSession, BaseRepository, NotFoundError
 
 
 class UserCreate(BaseModel):

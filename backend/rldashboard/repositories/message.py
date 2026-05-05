@@ -4,11 +4,11 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.orm import contains_eager
 
-from dataline.models.llm_flow.enums import QueryResultType
-from dataline.models.message.model import MessageModel
-from dataline.models.message.schema import MessageCreate, MessageUpdate
-from dataline.models.result.model import ResultModel
-from dataline.repositories.base import AsyncSession, BaseRepository
+from rldashboard.models.llm_flow.enums import QueryResultType
+from rldashboard.models.message.model import MessageModel
+from rldashboard.models.message.schema import MessageCreate, MessageUpdate
+from rldashboard.models.result.model import ResultModel
+from rldashboard.repositories.base import AsyncSession, BaseRepository
 
 
 class MessageRepository(BaseRepository[MessageModel, MessageCreate, MessageUpdate]):

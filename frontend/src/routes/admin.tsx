@@ -331,7 +331,7 @@ function AdminPanel({
                     >
                       full permissions
                     </a>{" "}
-                    to use DataLine.
+                    to use RLDashboard.
                   </p>
                 </div>
 

@@ -1,11 +1,12 @@
 version: "3.8"
 
 networks:
-  dataline:
+  rldashboard:
     driver: bridge
 
 volumes:
-  dataline_dev:
+  rldashboard_dev:
+  rldashboard_pg_data:
   samplesdb_data:
 
 services:
@@ -13,40 +14,68 @@ services:
     build:
       context: .
       target: base
+    env_file:
+      - .env
     ports:
       - "7377:7377"
     environment:
-      ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-http://localhost:7377,http://0.0.0.0:7377,http://localhost:5173,http://127.0.0.1:5173,http://localhost:9000}"
-      AUTH_USERNAME: "${AUTH_USERNAME:-admin}"
-      AUTH_PASSWORD: "${AUTH_PASSWORD:-admin}"
-      ALLOWED_FRAME_ANCESTORS: "${ALLOWED_FRAME_ANCESTORS:-*}"
-      EMBED_SECRET: "521aa2ef26dabc78f11f0335e11250c04b2dfb8e95c0a4cced4606c30578cbab"
-      EMBED_API_KEY: "3469160ea637040eb805f6e6867f743c9c8e51a00f8b536d689b0e8b06d448f2"
-    working_dir: /home/dataline/backend
-    command: ["bash", "-c", "python -m alembic upgrade head && python -m uvicorn dataline.main:app --port=7377 --host=0.0.0.0 --reload"]
+      DATABASE_URL: "${DATABASE_URL}"
+      DB_SCHEMA: "${DB_SCHEMA}"
+      ALLOWED_ORIGINS: "${ALLOWED_ORIGINS}"
+      AUTH_USERNAME: "${AUTH_USERNAME}"
+      AUTH_PASSWORD: "${AUTH_PASSWORD}"
+      ALLOWED_FRAME_ANCESTORS: "${ALLOWED_FRAME_ANCESTORS}"
+      EMBED_SECRET: "${EMBED_SECRET}"
+      EMBED_API_KEY: "${EMBED_API_KEY}"
+    working_dir: /home/rldashboard/backend
+    command: ["bash", "-c", "python -m alembic upgrade head && python -m uvicorn rldashboard.main:app --port=7377 --host=0.0.0.0 --reload"]
     volumes:
-      - dataline_dev:/home/.dataline # persist local sqlite db
-      - ./backend/dataline:/home/dataline/backend/dataline
-      - ./backend/alembic:/home/dataline/backend/alembic
+      - rldashboard_dev:/home/.rldashboard # persist uploads and generated local files
+      - ./backend/rldashboard:/home/rldashboard/backend/rldashboard
+      - ./backend/alembic:/home/rldashboard/backend/alembic
+      - ./backend/alembic.ini:/home/rldashboard/backend/alembic.ini
     networks:
-      - dataline
+      - rldashboard
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASS}"
+      POSTGRES_DB: "${DB_NAME}"
+    ports:
+      - "5432:5432"
+    volumes:
+      - rldashboard_pg_data:/var/lib/postgresql/data
+    networks:
+      - rldashboard
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -p ${DB_PORT} -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   mysql:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-rootpassword}"
-      MYSQL_DATABASE: "${MYSQL_DATABASE:-dataline}"
-      MYSQL_USER: "${MYSQL_USER:-dataline}"
-      MYSQL_PASSWORD: "${MYSQL_PASSWORD:-dataline}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
     ports:
       - "3306:3306"
     volumes:
       - samplesdb_data:/var/lib/mysql
       - ./samplesdb:/docker-entrypoint-initdb.d
     networks:
-      - dataline
+      - rldashboard
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-rootpassword}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -62,7 +91,7 @@ services:
       - ./frontend/src:/app/src
       - ./frontend/.tanstack:/app/.tanstack
     networks:
-      - dataline
+      - rldashboard
 
   embed-test:
     image: nginx:alpine
@@ -71,4 +100,4 @@ services:
     volumes:
       - ./embed-test:/usr/share/nginx/html:ro
     networks:
-      - dataline
+      - rldashboard

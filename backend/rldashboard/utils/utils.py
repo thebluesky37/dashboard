@@ -6,8 +6,8 @@ from typing import AsyncGenerator
 from fastapi import UploadFile
 from sqlalchemy.exc import NoSuchModuleError, ProgrammingError
 
-from dataline.errors import UserFacingError, ValidationError
-from dataline.models.llm_flow.enums import QueryStreamingEventType
+from rldashboard.errors import UserFacingError, ValidationError
+from rldashboard.models.llm_flow.enums import QueryStreamingEventType
 
 logger = logging.getLogger(__name__)
 
@@ -65,4 +65,4 @@ def forward_connection_errors(error: Exception) -> None:
                 )
             )
     if isinstance(error, NoSuchModuleError):
-        raise UserFacingError(f"Your version of DataLine does not support this database yet - {str(error)}")
+        raise UserFacingError(f"Your version of RLDashboard does not support this database yet - {str(error)}")

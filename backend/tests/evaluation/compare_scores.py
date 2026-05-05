@@ -85,7 +85,7 @@ def compare_scores(current_scores_path, main_scores_path):
 
     # Write to markdown file
     with open("comparison.md", "w") as f:
-        f.write("## DataLine Workflow Evaluation Score\n\n")
+        f.write("## RLDashboard Workflow Evaluation Score\n\n")
         f.write("| Skills | Pull-Request Score | Baseline Score (main) | Difference (%) | Status |\n")
         f.write("|-----|----------|-------------------|----------------|--------|\n")
         for _, row in output_df.iterrows():

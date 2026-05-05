@@ -1,10 +1,10 @@
-from dataline.models.base import DBModel
-from dataline.models.connection.model import ConnectionModel
-from dataline.models.conversation.model import ConversationModel
-from dataline.models.media.model import MediaModel
-from dataline.models.message.model import MessageModel
-from dataline.models.result.model import ResultModel
-from dataline.models.user.model import UserModel
+from rldashboard.models.base import DBModel
+from rldashboard.models.connection.model import ConnectionModel
+from rldashboard.models.conversation.model import ConversationModel
+from rldashboard.models.media.model import MediaModel
+from rldashboard.models.message.model import MessageModel
+from rldashboard.models.result.model import ResultModel
+from rldashboard.models.user.model import UserModel
 
 __all__ = [
     "DBModel",

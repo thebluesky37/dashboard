@@ -36,7 +36,7 @@ export const InstallSection = () => {
     {
       title: "Docker",
       isDownloadable: false,
-      code: "docker run -p 7377:7377 -v dataline:/home/.dataline --name dataline ramiawar/dataline:latest",
+      code: "docker run -p 7377:7377 -v rldashboard:/home/.rldashboard --name rldashboard ramiawar/rldashboard:latest",
     },
     {
       title: "MacOS (Intel)",
@@ -61,11 +61,11 @@ export const InstallSection = () => {
     {
       title: "Homebrew",
       isDownloadable: false,
-      code: "brew tap ramiawar/dataline && brew install dataline",
+      code: "brew tap ramiawar/rldashboard && brew install rldashboard",
     },
     {
       title: "GH Releases",
-      code: "https://github.com/RamiAwar/dataline/releases",
+      code: "https://github.com/RamiAwar/rldashboard/releases",
       isDownloadable: false,
     },
   ];
@@ -82,7 +82,7 @@ export const InstallSection = () => {
           <div className="mt-4 lg:mt-0 flex w-full flex-col items-center lg:flex-auto lg:items-start">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl text-center md:text-left">
               <span className="text-indigo-600">Heard enough?</span> Install
-              DataLine.
+              RLDashboard.
             </h2>
             <div className="mt-6 flex justify-left">
               {installationSections.map((item) => (

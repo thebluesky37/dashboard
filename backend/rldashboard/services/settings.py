@@ -7,14 +7,14 @@ import openai
 from fastapi import Depends, UploadFile
 from pydantic import SecretStr
 
-from dataline.config import config
-from dataline.errors import ValidationError
-from dataline.models.media.model import MediaModel
-from dataline.models.user.schema import UserOut, UserUpdateIn, UserWithKeys
-from dataline.repositories.base import AsyncSession, NotFoundError
-from dataline.repositories.media import MediaCreate, MediaRepository
-from dataline.repositories.user import UserCreate, UserRepository, UserUpdate
-from dataline.sentry import opt_out_of_sentry, setup_sentry
+from rldashboard.config import config
+from rldashboard.errors import ValidationError
+from rldashboard.models.media.model import MediaModel
+from rldashboard.models.user.schema import UserOut, UserUpdateIn, UserWithKeys
+from rldashboard.repositories.base import AsyncSession, NotFoundError
+from rldashboard.repositories.media import MediaCreate, MediaRepository
+from rldashboard.repositories.user import UserCreate, UserRepository, UserUpdate
+from rldashboard.sentry import opt_out_of_sentry, setup_sentry
 
 logger = logging.getLogger(__name__)
 

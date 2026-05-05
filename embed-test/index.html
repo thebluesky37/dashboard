@@ -189,7 +189,7 @@
       document.getElementById('backdrop').classList.remove('visible');
     }
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeChat(); });
-    window.addEventListener('message', (e) => { if (e.data?.type === 'dataline:close') closeChat(); });
+    window.addEventListener('message', (e) => { if (e.data?.type === 'rldashboard:close') closeChat(); });
   </script>
 
 </body>

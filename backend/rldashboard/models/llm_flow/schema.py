@@ -5,11 +5,11 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, SecretStr
 
-from dataline.models.llm_flow.enums import QueryResultType
-from dataline.models.result.model import ResultModel
-from dataline.models.result.schema import ResultCreate, ResultOut
-from dataline.repositories.base import AsyncSession
-from dataline.repositories.result import ResultRepository
+from rldashboard.models.llm_flow.enums import QueryResultType
+from rldashboard.models.result.model import ResultModel
+from rldashboard.models.result.schema import ResultCreate, ResultOut
+from rldashboard.repositories.base import AsyncSession
+from rldashboard.repositories.result import ResultRepository
 
 
 class QueryOptions(BaseModel):

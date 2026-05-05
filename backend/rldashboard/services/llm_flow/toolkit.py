@@ -20,7 +20,7 @@ from langchain_core.tools import BaseTool, BaseToolkit
 from langgraph.prebuilt import ToolExecutor
 from pydantic import BaseModel, Field, SkipValidation
 
-from dataline.models.llm_flow.schema import (
+from rldashboard.models.llm_flow.schema import (
     ChartGenerationResult,
     QueryOptions,
     QueryResultSchema,
@@ -29,17 +29,17 @@ from dataline.models.llm_flow.schema import (
     SQLQueryRunResult,
     SQLQueryStringResult,
 )
-from dataline.services.llm_flow.llm_calls.chart_generator import (
+from rldashboard.services.llm_flow.llm_calls.chart_generator import (
     TEMPLATES,
     ChartType,
     GeneratedChart,
     generate_chart_prompt,
 )
-from dataline.services.llm_flow.llm_calls.mirascope_utils import (
+from rldashboard.services.llm_flow.llm_calls.mirascope_utils import (
     OpenAIClientOptions,
     call,
 )
-from dataline.services.llm_flow.utils import DatalineSQLDatabase as SQLDatabase
+from rldashboard.services.llm_flow.utils import RldashboardSQLDatabase as SQLDatabase
 
 
 class QueryGraphStateUpdate(TypedDict):

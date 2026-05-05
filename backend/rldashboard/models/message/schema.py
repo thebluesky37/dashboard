@@ -5,7 +5,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from dataline.models.result.schema import ResultOut
+from rldashboard.models.result.schema import ResultOut
 
 
 class BaseMessageType(Enum):

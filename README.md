@@ -3,28 +3,28 @@
     <strong>💬 Chat with your data using natural language 📊</strong>
 </p>
 <p align="center">
-    Introducing DataLine, <em>the simplest and fastest way</em>⚡️ to analyze and visualize your data!<br><em>Generate and export charts, tables, reports in seconds with DataLine - Your AI-driven data analysis and visualization tool</em> 🤓
+    Introducing RLDashboard, <em>the simplest and fastest way</em>⚡️ to analyze and visualize your data!<br><em>Generate and export charts, tables, reports in seconds with RLDashboard - Your AI-driven data analysis and visualization tool</em> 🤓
 </p>
 
 <p align="center">⚠️ We're looking for maintainers! If you're interested, message me on Discord ⚠️
 </p>
 <div align="center">
-<img src="https://img.shields.io/github/downloads/ramiawar/dataline/total?style=flat&color=%2322c55e">
-<img src="https://img.shields.io/docker/pulls/ramiawar/dataline?color=%2338bdf8">
+<img src="https://img.shields.io/github/downloads/ramiawar/rldashboard/total?style=flat&color=%2322c55e">
+<img src="https://img.shields.io/docker/pulls/ramiawar/rldashboard?color=%2338bdf8">
 <img src="https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat">
 
 
 </div>
 
 <div align="center">
-  <a href="https://github.com/RamiAwar/dataline/actions/workflows/test.yml">
-    <img src="https://github.com/RamiAwar/dataline/actions/workflows/test.yml/badge.svg?branch=main&event=push" />
+  <a href="https://github.com/RamiAwar/rldashboard/actions/workflows/test.yml">
+    <img src="https://github.com/RamiAwar/rldashboard/actions/workflows/test.yml/badge.svg?branch=main&event=push" />
   </a>
 </div>
 
 ## 🍿 Watch a quick demo
 
-<a href="https://youtu.be/NN99OTVy7uA"><img src="https://github.com/user-attachments/assets/34dfba7c-7ab5-4a35-8fe1-e40b298ef1ae" height="300" alt="DataLine logo"></a>
+<a href="https://youtu.be/NN99OTVy7uA"><img src="https://github.com/user-attachments/assets/34dfba7c-7ab5-4a35-8fe1-e40b298ef1ae" height="300" alt="RLDashboard logo"></a>
 
 ---
 
@@ -61,13 +61,13 @@ It's especially well-suited for businesses given its security-first 🔒 and ope
 
 ## What is it?
 
-DataLine is an AI-driven data analysis and visualization tool.
+RLDashboard is an AI-driven data analysis and visualization tool.
 
 It's privacy-focused, storing everything on your device. No ☁️, only ☀️!
 
 It hides your data from the LLMs used by default, but this can be disabled if the data is not deemed sensitive.
 
-It can connect to a variety of data sources (Postgres, Snowflake, MySQL, Azure SQL Server, Microsoft SQL Server, [Excel](#excel-support), SQLite, CSV, sas7bdat, and more), execute queries, generate charts, and allow for copying the results to build reports quickly.
+It can connect to a variety of data sources (Postgres, Snowflake, MySQL, Azure SQL Server, Microsoft SQL Server, [Excel](#excel-support), CSV, sas7bdat, and more), execute queries, generate charts, and allow for copying the results to build reports quickly.
 
 ## Where is it going?
 
@@ -79,11 +79,11 @@ But you can still influence the direction we go in. We're building this for you,
 
 ## Feature Support
 
-- [x] Broad DB support: Postgres, MySQL, Snowflake, [Excel](#excel-support), CSV, SQLite, and more
+- [x] Broad DB support: Postgres, MySQL, Snowflake, [Excel](#excel-support), CSV, and more
 - [x] Generating and executing SQL from natural language
 - [x] Ability to modify SQL results, save them, and re-run
 - [x] Better support for explorative questions
-- [x] Querying data files like CSV, [Excel](#excel-support), SQLite, sas7bdat (more connection types)
+- [x] Querying data files like CSV, [Excel](#excel-support), sas7bdat (more connection types)
 - [x] Charting via natural language
 - [x] Modifying chart queries and re-rendering/refreshing charts
 - [ ] Dashboards and triggers
@@ -97,13 +97,13 @@ With a lot more coming soon. You can still influence what we build, so if you're
 
 ## Getting started
 
-There are multiple ways of setting up DataLine, simplest being using a binary executable. This allows you to download a file and run it to get started.
+There are multiple ways of setting up RLDashboard, simplest being using a binary executable. This allows you to download a file and run it to get started.
 
 A more flexible option is using our hosted Docker image. This allows you to setup authentication and other features if you need them.
 
 #### Windows
 
-Head over to our [releases](https://github.com/RamiAwar/dataline/tags) page, and open the most recent one. There you should find a windows-exe.zip file. Download it, unzip it, and run the `DataLine.exe` file.
+Head over to our [releases](https://github.com/RamiAwar/rldashboard/tags) page, and open the most recent one. There you should find a windows-exe.zip file. Download it, unzip it, and run the `RLDashboard.exe` file.
 
 You might get a `"Windows protected your PC"` message, which is normal (more info -> run anyway). Finally, open http://localhost:7377/ in your browser.
 
@@ -112,39 +112,39 @@ You might get a `"Windows protected your PC"` message, which is normal (more inf
 Homebrew
 
 ```bash
-# install dataline
-brew tap ramiawar/dataline
-brew install dataline
+# install rldashboard
+brew tap ramiawar/rldashboard
+brew install rldashboard
 
-# run dataline
-dataline
+# run rldashboard
+rldashboard
 ```
 
 If you don't like Homebrew, a binary can be found in the latest release!
 
-DataLine should then be running on port 7377 accessible from your browser: http://localhost:7377
+RLDashboard should then be running on port 7377 accessible from your browser: http://localhost:7377
 
 #### Linux
 
 You can use Homebrew, see the [Mac](#mac) section.
 
-You may also wish to use the binary instead, to do so, follow the instructions in the [Windows](#windows) section, and use the `dataline-linux.tar.zip` file instead.
+You may also wish to use the binary instead, to do so, follow the instructions in the [Windows](#windows) section, and use the `rldashboard-linux.tar.zip` file instead.
 
 #### Docker
 
 You can also use our official docker image and get started in one command. This is more suitable for business use:
 
 ```bash
-docker run -p 7377:7377 -v dataline:/home/.dataline --name dataline ramiawar/dataline:latest
+docker run -p 7377:7377 -v rldashboard:/home/.rldashboard --name rldashboard ramiawar/rldashboard:latest
 ```
 
-You can manage this as you would any other container. `docker start dataline`, `docker stop dataline`
+You can manage this as you would any other container. `docker start rldashboard`, `docker stop rldashboard`
 
 For updating to a new version, just remove the container and rerun the command. This way the volume is persisted across updates.
 
 ```bash
-docker rm dataline
-docker run -p 7377:7377 -v dataline:/home/.dataline --name dataline ramiawar/dataline:latest
+docker rm rldashboard
+docker run -p 7377:7377 -v rldashboard:/home/.rldashboard --name rldashboard ramiawar/rldashboard:latest
 ```
 
 To connect to the frontend, you can then visit:
@@ -160,7 +160,7 @@ Same as installation, just replace old exe with new exe! Your data will still be
 Homebrew (retains your data, don't worry about that!)
 
 ```bash
-brew update && brew upgrade dataline
+brew update && brew upgrade rldashboard
 ```
 
 If you don't like Homebrew, a binary can be found in the latest release! Data will still be retained there as well.
@@ -174,14 +174,14 @@ If using Homebrew, same as above. Otherwise simply replace the old binary with t
 For updating to a new version, just remove the container and rerun the command. This way the volume is persisted across updates.
 
 ```bash
-docker rm dataline
-docker run -p 7377:7377 -v dataline:/home/.dataline --name dataline ramiawar/dataline:latest
+docker rm rldashboard
+docker run -p 7377:7377 -v rldashboard:/home/.rldashboard --name rldashboard ramiawar/rldashboard:latest
 ```
 
 ## Running manually
 
 Feeling spicy are we? 🌶️
-There are a few things you should know. DataLine is split into two parts: the backend and the frontend.
+There are a few things you should know. RLDashboard is split into two parts: the backend and the frontend.
 
 The backend is a Python FastAPI server, and the frontend is a React app.
 The frontend also includes our landing page, so you need to set up an env var first!
@@ -190,22 +190,22 @@ Check the [backend](./backend/README.md) and [frontend](./frontend/README.md) re
 
 ## Authentication
 
-DataLine also supports basic auth 🔒 in self-hosted mode 🥳 in case you're hosting it and would like to secure it with a username/password.
+RLDashboard also supports basic auth 🔒 in self-hosted mode 🥳 in case you're hosting it and would like to secure it with a username/password.
 
-Auth is NOT supported ❌ when running the DataLine executable.
+Auth is NOT supported ❌ when running the RLDashboard executable.
 
 To enable authentication on the self-hosted version, add the environment variables AUTH_USERNAME and AUTH_PASSWORD while launching the service. ✅
 
 ### With Docker
 
 Inject the env vars with the docker run command as follows:
-`docker run -p 7377:7377 -v dataline:/home/.dataline --name dataline -e AUTH_USERNAME=admin -e AUTH_PASSWORD=admin ramiawar/dataline:latest`
+`docker run -p 7377:7377 -v rldashboard:/home/.rldashboard --name rldashboard -e AUTH_USERNAME=admin -e AUTH_PASSWORD=admin ramiawar/rldashboard:latest`
 
 We plan on supporting multiple user auth in the future, but for now it supports a single user by default.
 
 ## Startup Quest
 
-Go through the following checklist to explore DataLine's features!
+Go through the following checklist to explore RLDashboard's features!
 
 - [ ] Create a sample database connection
 - [ ] Create a new chat and rename it
@@ -223,7 +223,7 @@ See [instructions file](./dsn-instructions.md) for more details.
 
 ### Deployment
 
-The one thing you must configure when deploying DataLine to a custom domain is CORS allowed origins.
+The one thing you must configure when deploying RLDashboard to a custom domain is CORS allowed origins.
 To do this, add the environment variable `ALLOWED_ORIGINS` (comma separated list of origins) to your domain name(s).
 
 By default, it is set to `http://localhost:7377,http://0.0.0.0:7377` to make it work with local Docker and local binaries.
@@ -231,7 +231,7 @@ By default, it is set to `http://localhost:7377,http://0.0.0.0:7377` to make it 
 For example, running the docker image on a remote server with IP `123.123.12.34`:
 
 ```bash
-docker run -p 7377:7377 -v dataline:/home/.dataline --name dataline -e ALLOWED_ORIGINS="http://123.123.12.34:7377,https://123.123.12.34:7377" ramiawar/dataline:latest
+docker run -p 7377:7377 -v rldashboard:/home/.rldashboard --name rldashboard -e ALLOWED_ORIGINS="http://123.123.12.34:7377,https://123.123.12.34:7377" ramiawar/rldashboard:latest
 ```
 
 ### Excel Support
@@ -254,13 +254,13 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://ramiawar.github.io/"><img src="https://avatars.githubusercontent.com/u/8523191?v=4?s=100" width="100px;" alt="Rami Awar"/><br /><sub><b>Rami Awar</b></sub></a><br /><a href="https://github.com/RamiAwar/dataline/commits?author=RamiAwar" title="Code">💻</a> <a href="#design-RamiAwar" title="Design">🎨</a> <a href="https://github.com/RamiAwar/dataline/commits?author=RamiAwar" title="Documentation">📖</a> <a href="#infra-RamiAwar" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#platform-RamiAwar" title="Packaging/porting to new platform">📦</a> <a href="#blog-RamiAwar" title="Blogposts">📝</a> <a href="https://github.com/RamiAwar/dataline/issues?q=author%3ARamiAwar" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://anthonymalkoun.com"><img src="https://avatars.githubusercontent.com/u/26882839?v=4?s=100" width="100px;" alt="anthony2261"/><br /><sub><b>anthony2261</b></sub></a><br /><a href="https://github.com/RamiAwar/dataline/commits?author=anthony2261" title="Code">💻</a> <a href="#ideas-anthony2261" title="Ideas, Planning, & Feedback">🤔</a> <a href="#infra-anthony2261" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#platform-anthony2261" title="Packaging/porting to new platform">📦</a> <a href="#mentoring-anthony2261" title="Mentoring">🧑‍🏫</a> <a href="#maintenance-anthony2261" title="Maintenance">🚧</a> <a href="https://github.com/RamiAwar/dataline/issues?q=author%3Aanthony2261" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/wmahad"><img src="https://avatars.githubusercontent.com/u/11237598?v=4?s=100" width="100px;" alt="Walusimbi Mahad"/><br /><sub><b>Walusimbi Mahad</b></sub></a><br /><a href="https://github.com/RamiAwar/dataline/commits?author=wmahad" title="Code">💻</a> <a href="#ideas-wmahad" title="Ideas, Planning, & Feedback">🤔</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://peter.gy"><img src="https://avatars.githubusercontent.com/u/40776291?v=4?s=100" width="100px;" alt="Péter Gyarmati"/><br /><sub><b>Péter Gyarmati</b></sub></a><br /><a href="https://github.com/RamiAwar/dataline/commits?author=peter-gy" title="Code">💻</a> <a href="https://github.com/RamiAwar/dataline/commits?author=peter-gy" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/joehaddad2000"><img src="https://avatars.githubusercontent.com/u/71342036?v=4?s=100" width="100px;" alt="Joe Haddad"/><br /><sub><b>Joe Haddad</b></sub></a><br /><a href="https://github.com/RamiAwar/dataline/commits?author=joehaddad2000" title="Code">💻</a> <a href="https://github.com/RamiAwar/dataline/commits?author=joehaddad2000" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/maryamalki"><img src="https://avatars.githubusercontent.com/u/27642194?v=4?s=100" width="100px;" alt="maryamalki"/><br /><sub><b>maryamalki</b></sub></a><br /><a href="https://github.com/RamiAwar/dataline/commits?author=maryamalki" title="Code">💻</a> <a href="https://github.com/RamiAwar/dataline/commits?author=maryamalki" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/filip65"><img src="https://avatars.githubusercontent.com/u/50335272?v=4?s=100" width="100px;" alt="Filip Katušin"/><br /><sub><b>Filip Katušin</b></sub></a><br /><a href="https://github.com/RamiAwar/dataline/commits?author=filip65" title="Code">💻</a> <a href="https://github.com/RamiAwar/dataline/issues?q=author%3Afilip65" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://ramiawar.github.io/"><img src="https://avatars.githubusercontent.com/u/8523191?v=4?s=100" width="100px;" alt="Rami Awar"/><br /><sub><b>Rami Awar</b></sub></a><br /><a href="https://github.com/RamiAwar/rldashboard/commits?author=RamiAwar" title="Code">💻</a> <a href="#design-RamiAwar" title="Design">🎨</a> <a href="https://github.com/RamiAwar/rldashboard/commits?author=RamiAwar" title="Documentation">📖</a> <a href="#infra-RamiAwar" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#platform-RamiAwar" title="Packaging/porting to new platform">📦</a> <a href="#blog-RamiAwar" title="Blogposts">📝</a> <a href="https://github.com/RamiAwar/rldashboard/issues?q=author%3ARamiAwar" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://anthonymalkoun.com"><img src="https://avatars.githubusercontent.com/u/26882839?v=4?s=100" width="100px;" alt="anthony2261"/><br /><sub><b>anthony2261</b></sub></a><br /><a href="https://github.com/RamiAwar/rldashboard/commits?author=anthony2261" title="Code">💻</a> <a href="#ideas-anthony2261" title="Ideas, Planning, & Feedback">🤔</a> <a href="#infra-anthony2261" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#platform-anthony2261" title="Packaging/porting to new platform">📦</a> <a href="#mentoring-anthony2261" title="Mentoring">🧑‍🏫</a> <a href="#maintenance-anthony2261" title="Maintenance">🚧</a> <a href="https://github.com/RamiAwar/rldashboard/issues?q=author%3Aanthony2261" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/wmahad"><img src="https://avatars.githubusercontent.com/u/11237598?v=4?s=100" width="100px;" alt="Walusimbi Mahad"/><br /><sub><b>Walusimbi Mahad</b></sub></a><br /><a href="https://github.com/RamiAwar/rldashboard/commits?author=wmahad" title="Code">💻</a> <a href="#ideas-wmahad" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://peter.gy"><img src="https://avatars.githubusercontent.com/u/40776291?v=4?s=100" width="100px;" alt="Péter Gyarmati"/><br /><sub><b>Péter Gyarmati</b></sub></a><br /><a href="https://github.com/RamiAwar/rldashboard/commits?author=peter-gy" title="Code">💻</a> <a href="https://github.com/RamiAwar/rldashboard/commits?author=peter-gy" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/joehaddad2000"><img src="https://avatars.githubusercontent.com/u/71342036?v=4?s=100" width="100px;" alt="Joe Haddad"/><br /><sub><b>Joe Haddad</b></sub></a><br /><a href="https://github.com/RamiAwar/rldashboard/commits?author=joehaddad2000" title="Code">💻</a> <a href="https://github.com/RamiAwar/rldashboard/commits?author=joehaddad2000" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/maryamalki"><img src="https://avatars.githubusercontent.com/u/27642194?v=4?s=100" width="100px;" alt="maryamalki"/><br /><sub><b>maryamalki</b></sub></a><br /><a href="https://github.com/RamiAwar/rldashboard/commits?author=maryamalki" title="Code">💻</a> <a href="https://github.com/RamiAwar/rldashboard/commits?author=maryamalki" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/filip65"><img src="https://avatars.githubusercontent.com/u/50335272?v=4?s=100" width="100px;" alt="Filip Katušin"/><br /><sub><b>Filip Katušin</b></sub></a><br /><a href="https://github.com/RamiAwar/rldashboard/commits?author=filip65" title="Code">💻</a> <a href="https://github.com/RamiAwar/rldashboard/issues?q=author%3Afilip65" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>

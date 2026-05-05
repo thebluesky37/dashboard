@@ -3,8 +3,8 @@ from typing import Annotated
 
 from fastapi import APIRouter, BackgroundTasks, Response, Body
 
-from dataline.auth import validate_credentials
-from dataline.utils.posthog import posthog_capture
+from rldashboard.auth import validate_credentials
+from rldashboard.utils.posthog import posthog_capture
 
 router = APIRouter(
     prefix="/auth",

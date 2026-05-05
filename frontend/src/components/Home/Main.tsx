@@ -47,7 +47,7 @@ export const AppLayout: FC = () => {
             Could not connect to the backend.{" "}
             <a
               className="underline"
-              href="https://github.com/RamiAwar/dataline/blob/main/TROUBLESHOOTING.md"
+              href="https://github.com/RamiAwar/rldashboard/blob/main/TROUBLESHOOTING.md"
               target="_blank"
             >
               Troubleshooting

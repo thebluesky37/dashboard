@@ -8,16 +8,16 @@ from uuid import UUID
 from fastapi import Depends
 from fastapi.responses import StreamingResponse
 
-from dataline.errors import ValidationError
-from dataline.models.connection.schema import Connection
-from dataline.models.llm_flow.enums import QueryResultType
-from dataline.models.llm_flow.schema import ChartGenerationResultContent, SQLQueryStringResultContent
-from dataline.models.result.schema import ChartRefreshOut, ResultUpdate
-from dataline.repositories.base import AsyncSession, NotFoundError
-from dataline.repositories.result import ResultRepository
-from dataline.services.llm_flow.llm_calls.chart_generator import ChartType
-from dataline.services.llm_flow.toolkit import RunException, execute_sql_query, query_run_result_to_chart_json
-from dataline.services.llm_flow.utils import DatalineSQLDatabase as SQLDatabase
+from rldashboard.errors import ValidationError
+from rldashboard.models.connection.schema import Connection
+from rldashboard.models.llm_flow.enums import QueryResultType
+from rldashboard.models.llm_flow.schema import ChartGenerationResultContent, SQLQueryStringResultContent
+from rldashboard.models.result.schema import ChartRefreshOut, ResultUpdate
+from rldashboard.repositories.base import AsyncSession, NotFoundError
+from rldashboard.repositories.result import ResultRepository
+from rldashboard.services.llm_flow.llm_calls.chart_generator import ChartType
+from rldashboard.services.llm_flow.toolkit import RunException, execute_sql_query, query_run_result_to_chart_json
+from rldashboard.services.llm_flow.utils import RldashboardSQLDatabase as SQLDatabase
 
 
 logger = logging.getLogger(__name__)
@@ -83,7 +83,7 @@ class ResultService:
 
         # Get DSN from linked connection
         connection = await self.result_repo.get_connection_from_result(session, chart_id)
-        db = SQLDatabase.from_dataline_connection(Connection.model_validate(connection))
+        db = SQLDatabase.from_rldashboard_connection(Connection.model_validate(connection))
 
         # Refresh chart data
         query_run_data = execute_sql_query(db, sql_string, for_chart=True, chart_type=chart_type)
@@ -105,7 +105,7 @@ class ResultService:
     ) -> None:
         # Get DSN from linked connection
         connection = await self.result_repo.get_connection_from_result(session, result_id)
-        db = SQLDatabase.from_dataline_connection(Connection.model_validate(connection))
+        db = SQLDatabase.from_rldashboard_connection(Connection.model_validate(connection))
 
         # Run query to ensure it's compatible with the linked chart
         try:
@@ -145,7 +145,7 @@ class ResultService:
 
         # Get the connection for the result
         connection = await self.result_repo.get_connection_from_result(session, result_id)
-        db = SQLDatabase.from_dataline_connection(Connection.model_validate(connection))
+        db = SQLDatabase.from_rldashboard_connection(Connection.model_validate(connection))
 
         # Create and return the StreamingResponse
         response = StreamingResponse(self.generate_csv(sql_query, db), media_type="text/csv")

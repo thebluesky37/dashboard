@@ -8,7 +8,7 @@ import pytest_asyncio
 from fastapi.testclient import TestClient
 from openai.resources.models import Models as OpenAIModels
 
-from dataline.models.connection.schema import Connection
+from rldashboard.models.connection.schema import Connection
 
 logger = logging.getLogger(__name__)
 
@@ -213,7 +213,7 @@ async def test_get_settings_returns_default_connection(client: TestClient, dvdre
 def test_anonymous_can_read_default_connection() -> None:
     # This must work WITHOUT any auth credentials
     # The endpoint should be registered with no auth dependencies
-    from dataline.main import app
+    from rldashboard.main import app
     from fastapi.testclient import TestClient
     import os
 

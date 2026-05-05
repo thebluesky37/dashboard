@@ -202,7 +202,7 @@ function AdminConfigPage() {
                     >
                       full permissions{" "}
                     </a>
-                    to use DataLine.
+                    to use RLDashboard.
                   </p>
                 </div>
 

@@ -7,7 +7,7 @@ from fastapi.security.utils import get_authorization_scheme_param
 from pydantic import BaseModel
 from starlette.requests import Request
 
-from dataline.config import config
+from rldashboard.config import config
 
 router = APIRouter(tags=["embed"])
 
@@ -57,9 +57,9 @@ async def create_embed_token(
     pre-shared API key to obtain a short-lived JWT that encodes a client_id.
 
     The JWT is then embedded in the iframe URL:
-        <iframe src="https://dataline.app/?embed=1&embed_token=<token>" />
+        <iframe src="https://rldashboard.app/?embed=1&embed_token=<token>" />
 
-    The token is verified by DataLine when creating a conversation, so end
+    The token is verified by RLDashboard when creating a conversation, so end
     users cannot forge or tamper with the client_id.
 
     Authentication: Authorization: Bearer <EMBED_API_KEY>

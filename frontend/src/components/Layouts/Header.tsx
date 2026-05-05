@@ -63,7 +63,7 @@ const Header = () => {
         <div className="flex lg:hidden">
           <div className="text-md mx-3 px-3 py-2 text-base font-semibold leading-7">
             <a
-              href="https://github.com/RamiAwar/dataline"
+              href="https://github.com/RamiAwar/rldashboard"
               data-umami-event="go_to_github"
               className="flex group border rounded-xl transition-colors w-fit p-1 hover:bg-gray-700 duration-150"
             >
@@ -101,7 +101,7 @@ const Header = () => {
         <div className="hidden lg:flex lg:flex-1 lg:gap-x-12 lg:justify-end items-center lg:mr-12">
           <a
             data-umami-event="go_to_github"
-            href="https://github.com/RamiAwar/dataline"
+            href="https://github.com/RamiAwar/rldashboard"
             className="flex group border rounded-xl transition-colors w-fit shrink-0 p-1 hover:bg-gray-700 duration-150"
           >
             <div className="flex items-center">
@@ -155,7 +155,7 @@ const Header = () => {
             <div className="text-md -mx-3 px-3 py-2 text-base font-semibold leading-7">
               <a
                 data-umami-event="go_to_github"
-                href="https://github.com/RamiAwar/dataline"
+                href="https://github.com/RamiAwar/rldashboard"
                 className="flex group border rounded-xl transition-colors w-fit p-1 hover:bg-gray-700 duration-150"
               >
                 <div className="flex items-center">

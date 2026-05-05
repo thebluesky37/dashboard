@@ -47,7 +47,7 @@ mysql://[username]:[password]@[host]:[port]/[database_name]
 snowflake://[username]:[password]@[host]/[database_path]
 ```
 
-See [this article](https://ramiawar.medium.com/chat-with-your-snowflake-database-27bfd5c50d48) for more examples on linking a snowflake db to Dataline.
+See [this article](https://ramiawar.medium.com/chat-with-your-snowflake-database-27bfd5c50d48) for more examples on linking a snowflake db to Rldashboard.
 
 ### SQL Server
 
@@ -58,11 +58,11 @@ mssql://[username]:[password]@[host]:[port]/[database_name]?driver=[driver_name]
 ```
 
 Example `driver_name`: `ODBC+Driver+18+for+SQL+Server`. Note that spaces are replaced by plus signs `+`.<br/>
-Make sure the driver you specify in the DSN is installed locally on the device running Dataline. Driver installation instructions can be found [here](https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server).
+Make sure the driver you specify in the DSN is installed locally on the device running Rldashboard. Driver installation instructions can be found [here](https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server).
 
 ### File-based databases
 
-You can simply upload the file into Dataline when creating a new connection!
+You can simply upload the file into Rldashboard when creating a new connection!
 
 <!-- ## Troubleshooting
 

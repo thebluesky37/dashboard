@@ -36,7 +36,7 @@ function UserLayout() {
             <span className="flex-1 text-sm font-semibold text-gray-800">RocketLevel Chat</span>
             <button
               type="button"
-              onClick={() => window.parent.postMessage({ type: "dataline:close" }, "*")}
+              onClick={() => window.parent.postMessage({ type: "rldashboard:close" }, "*")}
               className="inline-flex items-center justify-center rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-800"
               aria-label="Close chat"
             >

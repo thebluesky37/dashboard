@@ -1,6 +1,6 @@
 # Troubleshooting Guide
 
-This document aims to help you resolve common issues you might encounter while using Dataline. If you don't find a solution to your problem here, we've also included steps for manual debugging and reporting issues.
+This document aims to help you resolve common issues you might encounter while using Rldashboard. If you don't find a solution to your problem here, we've also included steps for manual debugging and reporting issues.
 
 ## Table of Contents
 
@@ -40,4 +40,4 @@ If you're experiencing an issue not covered in this guide, follow these steps to
 
 Use a clear and descriptive title for your issue, and provide all the information you've gathered in the issue description. The more detailed your report, the easier it will be for us to reproduce and fix the problem.
 
-Thank you for your help in improving Dataline! We appreciate your patience and contributions to making our project better.
+Thank you for your help in improving Rldashboard! We appreciate your patience and contributions to making our project better.

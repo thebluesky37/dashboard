@@ -5,7 +5,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from dataline.config import config
+from rldashboard.config import config
 
 
 class ConnecitonSchemaTable(BaseModel):

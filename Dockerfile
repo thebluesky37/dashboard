@@ -15,7 +15,7 @@ RUN apk --update --no-cache add \
     zlib-dev \
     python3 make gcc g++
 
-WORKDIR /home/dataline/frontend
+WORKDIR /home/rldashboard/frontend
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm install
 
@@ -36,7 +36,7 @@ RUN npm run build
 # -------------------------------
 FROM python:3.11-slim AS base
 
-WORKDIR /home/dataline/backend
+WORKDIR /home/rldashboard/backend
 
 # set env variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -46,7 +46,7 @@ ENV UV_COMPILE_BYTECODE=1
 # Install postgres connector dependencies
 RUN apt update && apt install --no-install-recommends libpq5 -y
 
-RUN mkdir -p /home/dataline/backend
+RUN mkdir -p /home/rldashboard/backend
 
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
@@ -56,36 +56,36 @@ COPY backend/uv.lock backend/pyproject.toml ./
 RUN uv sync --no-dev --frozen --no-install-project --compile-bytecode
 
 
-ENV PATH="/home/dataline/backend/.venv/bin:$PATH"
+ENV PATH="/home/rldashboard/backend/.venv/bin:$PATH"
 
 # Copy in backend files
 COPY backend/*.py .
 COPY backend/samples ./samples
-COPY backend/dataline ./dataline
+COPY backend/rldashboard ./rldashboard
 COPY backend/alembic ./alembic
 COPY backend/templates ./templates
 COPY backend/alembic.ini .
 
-WORKDIR /home/dataline
+WORKDIR /home/rldashboard
 
-RUN mkdir -p /home/.dataline
+RUN mkdir -p /home/.rldashboard
 
-ENV SQLITE_PATH="/home/.dataline/db.sqlite3"
-ENV DATA_DIRECTORY="/home/.dataline/data"
+ENV DATABASE_URL="postgresql+asyncpg://postgres:secret@localhost:5432/rldashboard"
+ENV DATA_DIRECTORY="/home/.rldashboard/data"
 
 # -------------------------------
 # SPA BUILD WITH MINIMAL DEPS
 # -------------------------------
 FROM base AS spa
 
-WORKDIR /home/dataline/backend
+WORKDIR /home/rldashboard/backend
 
 # Copy in frontend build so we can serve it from FastAPI
-COPY --from=temp-frontend /home/dataline/frontend/dist /home/dataline/frontend/dist
+COPY --from=temp-frontend /home/rldashboard/frontend/dist /home/rldashboard/frontend/dist
 RUN \
-    cp -r /home/dataline/frontend/dist/assets /home/dataline/backend && \
-    cp /home/dataline/frontend/dist/favicon.ico /home/dataline/backend/assets && \
-    cp /home/dataline/frontend/dist/.vite/manifest.json /home/dataline/backend/assets
+    cp -r /home/rldashboard/frontend/dist/assets /home/rldashboard/backend && \
+    cp /home/rldashboard/frontend/dist/favicon.ico /home/rldashboard/backend/assets && \
+    cp /home/rldashboard/frontend/dist/.vite/manifest.json /home/rldashboard/backend/assets
 
 # This stage is meant to be used as an SPA server with FastAPI serving a React build
 ENV SPA_MODE=1
@@ -98,5 +98,5 @@ ENV ALLOWED_ORIGINS=$ALLOWED_ORIGINS
 
 
 # Running alembic and uvicorn without combining them in a bash -c command won't work
-CMD ["bash", "-c", "python -m dataline.main"]
+CMD ["bash", "-c", "python -m rldashboard.main"]
 

@@ -187,7 +187,7 @@ export default function Account() {
                       >
                         full permissions{" "}
                       </a>
-                      to use DataLine.
+                      to use RLDashboard.
                     </p>
                   </div>
 
@@ -366,13 +366,13 @@ export default function Account() {
                 <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
                   <div className="col-span-full">
                     <div className="max-w-2xl text-gray-900">
-                      Enjoying DataLine? Subscribe to our newsletter for
+                      Enjoying RLDashboard? Subscribe to our newsletter for
                       updates.
                     </div>
                     <form
                       className="mt-4 flex max-w-md gap-x-4"
                       method="POST"
-                      action="https://listmonk.dataline.app/subscription/form"
+                      action="https://listmonk.rldashboard.app/subscription/form"
                     >
                       <input type="hidden" name="nonce" />
                       <label htmlFor="email-address" className="sr-only">

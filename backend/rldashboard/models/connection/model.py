@@ -3,10 +3,10 @@ from typing import TYPE_CHECKING, TypedDict
 from sqlalchemy import Boolean, JSON, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from dataline.models.base import DBModel, UUIDMixin
+from rldashboard.models.base import DBModel, UUIDMixin
 
 if TYPE_CHECKING:
-    from dataline.models.conversation.model import ConversationModel
+    from rldashboard.models.conversation.model import ConversationModel
 
 
 class ConnectionSchemaTable(TypedDict):

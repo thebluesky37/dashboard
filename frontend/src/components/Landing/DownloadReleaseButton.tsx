@@ -50,13 +50,13 @@ export const DownloadReleaseButton = ({ os }: { os: OS }) => {
   const getAssetName = (os: OS) => {
     switch (os) {
       case "darwin-x86_64":
-        return "dataline-macos-x86_64.tar.zip";
+        return "rldashboard-macos-x86_64.tar.zip";
       case "darwin-arm64":
-        return "dataline-macos-arm64.tar.zip";
+        return "rldashboard-macos-arm64.tar.zip";
       case "windows":
-        return "dataline-windows.zip";
+        return "rldashboard-windows.zip";
       case "linux":
-        return "dataline-linux.tar.zip";
+        return "rldashboard-linux.tar.zip";
       default:
         throw new Error("Unsupported operating system");
     }
@@ -66,7 +66,7 @@ export const DownloadReleaseButton = ({ os }: { os: OS }) => {
     const fetchLatestRelease = async () => {
       try {
         const response = await fetch(
-          "https://api.github.com/repos/RamiAwar/dataline/releases/latest"
+          "https://api.github.com/repos/RamiAwar/rldashboard/releases/latest"
         );
         if (!response.ok) {
           throw new Error("Failed to fetch latest release");

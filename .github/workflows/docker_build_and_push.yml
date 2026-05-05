@@ -10,7 +10,7 @@ on:
         description: 'Tag to build and push'
         required: true
 env:
-  REGISTRY_IMAGE: ramiawar/dataline
+  REGISTRY_IMAGE: ramiawar/rldashboard
 
 jobs:
   build:

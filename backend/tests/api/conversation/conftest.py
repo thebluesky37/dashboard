@@ -1,9 +1,9 @@
 import pytest_asyncio
 from fastapi.testclient import TestClient
 
-from dataline.models.connection.schema import Connection
-from dataline.models.conversation.schema import ConversationOut
-from dataline.repositories.base import AsyncSession
+from rldashboard.models.connection.schema import Connection
+from rldashboard.models.conversation.schema import ConversationOut
+from rldashboard.repositories.base import AsyncSession
 
 
 @pytest_asyncio.fixture

@@ -7,9 +7,9 @@ from langchain_openai import ChatOpenAI
 from langgraph.graph import END
 from openai import AuthenticationError, RateLimitError
 
-from dataline.errors import UserFacingError
-from dataline.models.llm_flow.schema import QueryResultSchema
-from dataline.services.llm_flow.toolkit import (
+from rldashboard.errors import UserFacingError
+from rldashboard.models.llm_flow.schema import QueryResultSchema
+from rldashboard.services.llm_flow.toolkit import (
     ChartGeneratorTool,
     QueryGraphState,
     QueryGraphStateUpdate,

@@ -2,7 +2,7 @@ from sqlalchemy import Boolean, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import true, false
 
-from dataline.models.base import CustomUUIDType, DBModel, UUIDMixin
+from rldashboard.models.base import CustomUUIDType, DBModel, UUIDMixin
 
 
 class UserModel(DBModel, UUIDMixin, kw_only=True):

@@ -6,9 +6,9 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 
-from dataline.models.conversation.model import ConversationModel
-from dataline.models.message.model import MessageModel
-from dataline.repositories.base import AsyncSession, BaseRepository
+from rldashboard.models.conversation.model import ConversationModel
+from rldashboard.models.message.model import MessageModel
+from rldashboard.repositories.base import AsyncSession, BaseRepository
 
 
 class ConversationCreate(BaseModel):

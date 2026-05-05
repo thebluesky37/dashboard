@@ -1,16 +1,16 @@
 [
   {
     "id": 1,
-    "title": "DataLine vs Vanna.AI",
-    "href": "https://ramiawar.medium.com/vanna-ai-vs-dataline-4829b1d2fad5",
-    "description": "DataLine and Vanna are open source platforms to query data with natural language. This article explores their quality, security, and technical differences.",
+    "title": "RLDashboard vs Vanna.AI",
+    "href": "https://ramiawar.medium.com/vanna-ai-vs-rldashboard-4829b1d2fad5",
+    "description": "RLDashboard and Vanna are open source platforms to query data with natural language. This article explores their quality, security, and technical differences.",
     "imageUrl": "https://miro.medium.com/v2/resize:fit:1400/format:webp/1*owgGXvs0Z8h1cuw95HHETA.png",
     "date": "Jun 20, 2024",
     "datetime": "2024-06-20",
     "category": { "title": "Comparison", "href": "#" },
     "author": {
       "name": "Rami Awar",
-      "role": "Founder @ DataLine",
+      "role": "Founder @ RLDashboard",
       "href": "https://ramiawar.medium.com/",
       "imageUrl": "https://miro.medium.com/v2/resize:fill:64:64/2*WeXvsSk5yZPqGEZzqOkzNg.png"
     }
@@ -26,14 +26,14 @@
     "category": { "title": "Integration", "href": "#" },
     "author": {
       "name": "Rami Awar",
-      "role": "Founder @ DataLine",
+      "role": "Founder @ RLDashboard",
       "href": "https://ramiawar.medium.com/",
       "imageUrl": "https://miro.medium.com/v2/resize:fill:64:64/2*WeXvsSk5yZPqGEZzqOkzNg.png"
     }
   },
   {
     "id": 3,
-    "title": "How DataLine does result streaming",
+    "title": "How RLDashboard does result streaming",
     "href": "https://www.softgrade.org/sse-with-fastapi-react-langgraph/",
     "description": "Learn all you need to implement streaming in production using SSE and how to handle streaming errors.",
     "imageUrl": "https://www.softgrade.org/content/images/size/w1920/2024/07/Backend-Route-Design--1-.jpg",
@@ -42,7 +42,7 @@
     "category": { "title": "Tutorial", "href": "#" },
     "author": {
       "name": "Anthony Malkoun",
-      "role": "Co-founder @ DataLine",
+      "role": "Co-founder @ RLDashboard",
       "href": "https://www.softgrade.org/author/anthony/",
       "imageUrl": "https://www.softgrade.org/content/images/size/w150/2024/06/profile_picture.jpg"
     }

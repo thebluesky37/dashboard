@@ -3,12 +3,12 @@ from pathlib import Path
 
 from pydantic_settings import BaseSettings
 
-from dataline.utils.appdirs import user_data_dir
+from rldashboard.utils.appdirs import user_data_dir
 
 # https://pyinstaller.org/en/v6.6.0/runtime-information.html
 IS_BUNDLED = bool(getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"))
 
-USER_DATA_DIR = user_data_dir(appname="DataLine")
+USER_DATA_DIR = user_data_dir(appname="RLDashboard")
 
 
 class EnvironmentType(str):
@@ -17,11 +17,11 @@ class EnvironmentType(str):
 
 
 class Config(BaseSettings):
-    # SQLite database will be mounted in the configuration directory
-    # This is where all DataLine data is stored
-    # Current dir / db.sqlite3
-    sqlite_path: str = str(Path(USER_DATA_DIR) / "db.sqlite3")
-    sqlite_echo: bool = False
+    # App storage database URL (conversations, messages, settings, etc.)
+    # Override with DATABASE_URL env var.
+    database_url: str = "postgresql+asyncpg://postgres:secret@localhost:5432/rldashboard"
+    database_echo: bool = False
+    db_schema: str = "public"
 
     # This is where all uploaded files are stored (ex. uploaded sqlite DBs)
     data_directory: str = str(Path(USER_DATA_DIR) / "data")
@@ -58,6 +58,10 @@ class Config(BaseSettings):
     # Set EMBED_API_KEY to the pre-shared key the embedding app sends in Authorization: Bearer <key>
     embed_secret: str | None = None
     embed_api_key: str | None = None
+
+    @property
+    def is_postgres_storage(self) -> bool:
+        return self.database_url.startswith("postgresql")
 
     @property
     def has_auth(self) -> bool:

@@ -1,4 +1,4 @@
-# Dataline Backend
+# RLDashboard Backend
 
 - [Installation](#installation)
 - [Environment setup](#environment-setup)
@@ -16,10 +16,10 @@ We're going with 3.11 for now cause of all the nice features.
 uv sync
 ```
 
-# Define a custom SQLITE_PATH
+# Define a custom DATABASE_URL
 
 ```
-export SQLITE_PATH="./db.sqlite3" # Define where sqlite DB will be stored
+export DATABASE_URL="postgresql+asyncpg://postgres:secret@localhost:5432/rldashboard" # Define app storage DB
 
 uv run alembic upgrade head # Run migrations
 ```
@@ -34,7 +34,7 @@ Currently, the environment can be setup through the settings page on the fronten
 
 ![Environment settings page](../media/env-settings.png)
 
-You only need an OpenAI API key to start using DataLine. You may optionally use Langsmith to record logs for your LLM flow.
+You only need an OpenAI API key to start using RLDashboard. You may optionally use Langsmith to record logs for your LLM flow.
 
 !NOTE that adding Langsmith will send the graph state to Langsmith to log. The graph state includes your **private results**. Only enable this feature if you are okay with sharing your data with Langsmith. We use this mainly for debugging during development.
 
@@ -49,32 +49,23 @@ uv run alembic upgrade head
 You can then run uvicorn to start the backend:
 
 ```bash
-# don't forget to specify your SQLITE path
-# export SQLITE_PATH="./db.sqlite3"
+# don't forget to specify your app storage database URL
+# export DATABASE_URL="postgresql+asyncpg://postgres:secret@localhost:5432/rldashboard"
 
-uv run uvicorn dataline.main:app --reload --port=7377
+uv run uvicorn rldashboard.main:app --reload --port=7377
 ```
 
 To run tests: `uv run pytest . -vv`
 
 ## Alembic Migrations
 
-When adding new migrations using Alembic, please remember to include the following PRAGMA FK commands if your migration requires foreign key relationship support:
+Storage migrations run against PostgreSQL. Set `DB_SCHEMA` in your environment to control the target schema, then run:
 
-```sql
-PRAGMA foreign_keys=OFF;
--- Your migration commands here
-PRAGMA foreign_keys=ON;
+```bash
+uv run alembic upgrade head
 ```
 
-Alembic:
-
-```python
-# disable foreign key checking
-op.execute("PRAGMA foreign_keys=OFF;")
-```
-
-This ensures that foreign key constraints are properly handled during the migration process.
+Use PostgreSQL-native migration commands in new revisions.
 
 ## Current state
 

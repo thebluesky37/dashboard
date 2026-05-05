@@ -18,7 +18,7 @@ export const EmailSignupForm = ({
       <form
         className="mx-auto mt-10 flex max-w-md gap-x-4"
         method="POST"
-        action="https://listmonk.dataline.app/subscription/form"
+        action="https://listmonk.rldashboard.app/subscription/form"
       >
         <input type="hidden" name="nonce" />
         <label htmlFor="email-address" className="sr-only">

@@ -1,8 +1,8 @@
 import operator
 from uuid import uuid4
 
-from dataline.models.llm_flow.enums import QueryResultType
-from dataline.models.llm_flow.schema import (
+from rldashboard.models.llm_flow.enums import QueryResultType
+from rldashboard.models.llm_flow.schema import (
     SelectedTablesResult,
     SQLQueryRunResult,
     SQLQueryStringResult,

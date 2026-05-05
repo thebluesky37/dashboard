@@ -1,8 +1,8 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from dataline.models.connection.schema import Connection
-from dataline.models.conversation.schema import ConversationOut
+from rldashboard.models.connection.schema import Connection
+from rldashboard.models.conversation.schema import ConversationOut
 
 
 @pytest.mark.asyncio

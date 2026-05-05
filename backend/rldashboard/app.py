@@ -7,16 +7,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from dataline.api.auth.router import router as auth_router
-from dataline.api.connection.router import router as connection_router
-from dataline.api.conversation.router import router as conversation_router
-from dataline.api.embed.router import router as embed_router
-from dataline.api.result.router import router as result_router
-from dataline.api.settings.router import public_settings_router, router as settings_router
-from dataline.auth import authenticate
-from dataline.config import config
-from dataline.errors import UserFacingError, ValidationError
-from dataline.repositories.base import NotFoundError, NotUniqueError
+from rldashboard.api.auth.router import router as auth_router
+from rldashboard.api.connection.router import router as connection_router
+from rldashboard.api.conversation.router import router as conversation_router
+from rldashboard.api.embed.router import router as embed_router
+from rldashboard.api.result.router import router as result_router
+from rldashboard.api.settings.router import public_settings_router, router as settings_router
+from rldashboard.auth import authenticate
+from rldashboard.config import config
+from rldashboard.errors import UserFacingError, ValidationError
+from rldashboard.repositories.base import NotFoundError, NotUniqueError
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +51,7 @@ class App(fastapi.FastAPI):
         self,
         lifespan: Callable[[Self], AsyncContextManager[Mapping[str, Any]]] | None = None,
     ) -> None:
-        super().__init__(title="Dataline API", lifespan=lifespan)
+        super().__init__(title="Rldashboard API", lifespan=lifespan)
         self.add_middleware(
             CORSMiddleware,
             allow_origins=config.allowed_origins.split(",") if config.has_auth else ["*"],

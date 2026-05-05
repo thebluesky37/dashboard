@@ -14,11 +14,11 @@ from fastapi.templating import Jinja2Templates
 
 from alembic import command
 from alembic.config import Config
-from dataline.app import App
-from dataline.config import IS_BUNDLED, config
-from dataline.old_models import SuccessResponse
-from dataline.sentry import maybe_init_sentry
-from dataline.utils.posthog import posthog_capture
+from rldashboard.app import App
+from rldashboard.config import IS_BUNDLED, config
+from rldashboard.old_models import SuccessResponse
+from rldashboard.sentry import maybe_init_sentry
+from rldashboard.utils.posthog import posthog_capture
 
 logging.basicConfig(level=logging.INFO)
 
@@ -57,7 +57,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
     await maybe_init_sentry()
 
-    await posthog_capture("dataline_started")
+    await posthog_capture("rldashboard_started")
 
     yield
 

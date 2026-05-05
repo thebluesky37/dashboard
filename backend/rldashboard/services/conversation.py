@@ -8,13 +8,13 @@ from fastapi import Depends
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
 from openai._exceptions import APIError
 
-from dataline.errors import UserFacingError
-from dataline.models.conversation.schema import (
+from rldashboard.errors import UserFacingError
+from rldashboard.models.conversation.schema import (
     ConversationOut,
     ConversationWithMessagesWithResultsOut,
 )
-from dataline.models.llm_flow.enums import QueryStreamingEventType
-from dataline.models.llm_flow.schema import (
+from rldashboard.models.llm_flow.enums import QueryStreamingEventType
+from rldashboard.models.llm_flow.schema import (
     QueryOptions,
     RenderableResultMixin,
     ResultType,
@@ -22,7 +22,7 @@ from dataline.models.llm_flow.schema import (
     SQLQueryStringResultContent,
     StorableResultMixin,
 )
-from dataline.models.message.schema import (
+from rldashboard.models.message.schema import (
     BaseMessageType,
     MessageCreate,
     MessageOptions,
@@ -30,27 +30,27 @@ from dataline.models.message.schema import (
     MessageWithResultsOut,
     QueryOut,
 )
-from dataline.models.result.schema import ResultUpdate
-from dataline.repositories.base import AsyncSession
-from dataline.repositories.conversation import (
+from rldashboard.models.result.schema import ResultUpdate
+from rldashboard.repositories.base import AsyncSession
+from rldashboard.repositories.conversation import (
     ConversationCreate,
     ConversationRepository,
     ConversationUpdate,
 )
-from dataline.repositories.message import MessageRepository
-from dataline.repositories.result import ResultRepository
-from dataline.services.connection import ConnectionService
-from dataline.services.llm_flow.graph import QueryGraphService
-from dataline.services.llm_flow.llm_calls.conversation_title_generator import (
+from rldashboard.repositories.message import MessageRepository
+from rldashboard.repositories.result import ResultRepository
+from rldashboard.services.connection import ConnectionService
+from rldashboard.services.llm_flow.graph import QueryGraphService
+from rldashboard.services.llm_flow.llm_calls.conversation_title_generator import (
     ConversationTitleGeneratorResponse,
     conversation_title_generator_prompt,
 )
-from dataline.services.llm_flow.llm_calls.mirascope_utils import (
+from rldashboard.services.llm_flow.llm_calls.mirascope_utils import (
     OpenAIClientOptions,
     call,
 )
-from dataline.services.settings import SettingsService
-from dataline.utils.utils import stream_event_str
+from rldashboard.services.settings import SettingsService
+from rldashboard.utils.utils import stream_event_str
 
 logger = logging.getLogger(__name__)
 _AGGREGATE_QUESTION_PATTERN = re.compile(

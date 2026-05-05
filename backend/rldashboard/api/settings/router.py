@@ -2,15 +2,15 @@ import base64
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, BackgroundTasks
 
-from dataline.auth import require_admin
-from dataline.models.connection.schema import Connection as ConnectionSchema
-from dataline.models.user.schema import AvatarOut, UserOut, UserUpdateIn
-from dataline.old_models import SuccessResponse
-from dataline.repositories.base import AsyncSession, get_session
-from dataline.repositories.connection import ConnectionRepository
-from dataline.repositories.user import UserCreate, UserRepository
-from dataline.services.settings import SettingsService
-from dataline.utils.posthog import posthog_capture
+from rldashboard.auth import require_admin
+from rldashboard.models.connection.schema import Connection as ConnectionSchema
+from rldashboard.models.user.schema import AvatarOut, UserOut, UserUpdateIn
+from rldashboard.old_models import SuccessResponse
+from rldashboard.repositories.base import AsyncSession, get_session
+from rldashboard.repositories.connection import ConnectionRepository
+from rldashboard.repositories.user import UserCreate, UserRepository
+from rldashboard.services.settings import SettingsService
+from rldashboard.utils.posthog import posthog_capture
 
 router = APIRouter(prefix="/settings", tags=["settings"])
 public_settings_router = APIRouter(tags=["settings"])

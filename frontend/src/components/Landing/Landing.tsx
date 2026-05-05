@@ -23,7 +23,7 @@ const CohortData = {
   "ab-test-1-landing": {
     headline: "Your data just learned to talk. What do you wanna know?",
     description:
-      "DataLine is an AI-driven open source and privacy-first platform for data exploration. Your data is accessed using your device and stored on your device. No clouds, only sunshine.",
+      "RLDashboard is an AI-driven open source and privacy-first platform for data exploration. Your data is accessed using your device and stored on your device. No clouds, only sunshine.",
     feature_group_1: {
       title: "Plugs into your database. Securely.",
       description:
@@ -32,7 +32,7 @@ const CohortData = {
     feature_group_2: {
       title: "Ask, Explore, Edit, Iterate.",
       description:
-        "Your time is too valuable to be looking up column names.<br>Focus on the questions. DataLine will handle the rest, instantly.",
+        "Your time is too valuable to be looking up column names.<br>Focus on the questions. RLDashboard will handle the rest, instantly.",
     },
     comparison: {
       title: "How do we compare?",
@@ -74,7 +74,7 @@ export const Landing = () => {
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 flex gap-4 sm:gap-8 justify-center">
                   {/* <div className="mx-auto grid max-w-lg grid-cols-4 items-center gap-x-8 gap-y-12 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 sm:gap-y-14 lg:mx-0 lg:max-w-none lg:grid-cols-5"> */}
                   <div className="shrink">
-                    <a href="https://devhunt.org/tool/dataline">
+                    <a href="https://devhunt.org/tool/rldashboard">
                       <img
                         className="mx-auto col-span-2 max-h-12 w-full object-contain lg:col-span-1"
                         src={devhunt_orange}
@@ -86,7 +86,7 @@ export const Landing = () => {
                   </div>
                   <div className="shrink">
                     <a
-                      href="https://theresanaiforthat.com/ai/dataline/?ref=featured&v=1901847"
+                      href="https://theresanaiforthat.com/ai/rldashboard/?ref=featured&v=1901847"
                       target="_blank"
                       rel="nofollow"
                     >
@@ -102,7 +102,7 @@ export const Landing = () => {
 
               <img
                 src={headline_image}
-                alt="DataLine platform screenshot"
+                alt="RLDashboard platform screenshot"
                 width={2432}
                 height={1442}
                 className="mt-4 bg-white/5 ring-1 ring-white/10 rounded-xl shadow-2xl"

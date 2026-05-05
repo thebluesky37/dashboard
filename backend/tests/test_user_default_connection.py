@@ -1,4 +1,4 @@
-from dataline.models.user.model import UserModel
+from rldashboard.models.user.model import UserModel
 
 
 def test_user_model_has_default_connection_id():

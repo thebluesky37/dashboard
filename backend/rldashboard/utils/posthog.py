@@ -4,10 +4,10 @@ from posthog import Posthog
 from posthog.client import Client as PosthogClient
 from sqlalchemy.exc import OperationalError
 
-from dataline.config import EnvironmentType, config
-from dataline.models.user.model import UserModel
-from dataline.repositories.base import SessionCreator
-from dataline.repositories.user import UserRepository
+from rldashboard.config import EnvironmentType, config
+from rldashboard.models.user.model import UserModel
+from rldashboard.repositories.base import SessionCreator
+from rldashboard.repositories.user import UserRepository
 
 logger = logging.getLogger(__name__)
 posthog: PosthogClient = Posthog(  # type: ignore[no-untyped-call]
@@ -27,6 +27,9 @@ class PosthogAnalytics:
     """
 
     async def __aenter__(self) -> tuple[PosthogClient, UserModel | None]:
+        if posthog.disabled:
+            return posthog, None
+
         try:
             async with SessionCreator.begin() as session:
                 user_repo = UserRepository()

@@ -1,19 +1,19 @@
+import os
 from typing import AsyncGenerator
 
 import pytest_asyncio
 from fastapi.testclient import TestClient
 
-from dataline.config import config
-from dataline.models.connection.schema import Connection, TableSchema
-from dataline.utils.utils import get_sqlite_dsn
+from rldashboard.models.connection.schema import Connection, TableSchema
 
 
 @pytest_asyncio.fixture
 async def dvdrental_connection(client: TestClient) -> AsyncGenerator[Connection, None]:
+    database_url = os.environ["DATABASE_URL"]
     connection_in = {
-        "dsn": get_sqlite_dsn(config.sample_dvdrental_path),
+        "dsn": database_url,
         "name": "Test",
-        "is_sample": True,
+        "is_sample": False,
     }
     response = client.post("/connect", json=connection_in)
 

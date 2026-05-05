@@ -4,11 +4,11 @@ from uuid import UUID
 import pytest_asyncio
 from fastapi.testclient import TestClient
 
-from dataline.models.llm_flow.schema import StorableResultMixin
-from dataline.models.message.schema import BaseMessageType, MessageCreate
-from dataline.repositories.base import AsyncSession
-from dataline.repositories.message import MessageRepository
-from dataline.repositories.result import ResultRepository
+from rldashboard.models.llm_flow.schema import StorableResultMixin
+from rldashboard.models.message.schema import BaseMessageType, MessageCreate
+from rldashboard.repositories.base import AsyncSession
+from rldashboard.repositories.message import MessageRepository
+from rldashboard.repositories.result import ResultRepository
 from tests.evaluation.utils import MessagePair
 
 

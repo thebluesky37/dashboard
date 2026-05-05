@@ -4,9 +4,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for your interest in DataLine! 🚀
+        Thanks for your interest in RLDashboard! 🚀
 
-        If you are not @ramiawar or he didn't ask you directly to create an issue here, please start the conversation in a [Question in GitHub Discussions](https://github.com/ramiawar/dataline/discussions/categories/questions) instead.
+        If you are not @ramiawar or he didn't ask you directly to create an issue here, please start the conversation in a [Question in GitHub Discussions](https://github.com/ramiawar/rldashboard/discussions/categories/questions) instead.
   - type: checkboxes
     id: privileged
     attributes:

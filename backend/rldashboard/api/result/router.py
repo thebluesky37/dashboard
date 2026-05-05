@@ -4,11 +4,11 @@ from uuid import UUID
 from fastapi import APIRouter, Body, Depends, BackgroundTasks, HTTPException
 from fastapi.responses import StreamingResponse
 
-from dataline.models.result.schema import ChartRefreshOut
-from dataline.old_models import SuccessResponse
-from dataline.repositories.base import AsyncSession, get_session
-from dataline.services.result import ResultService
-from dataline.utils.posthog import posthog_capture
+from rldashboard.models.result.schema import ChartRefreshOut
+from rldashboard.old_models import SuccessResponse
+from rldashboard.repositories.base import AsyncSession, get_session
+from rldashboard.services.result import ResultService
+from rldashboard.utils.posthog import posthog_capture
 
 router = APIRouter(tags=["results"])
 

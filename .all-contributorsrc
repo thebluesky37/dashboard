@@ -92,6 +92,6 @@
   "skipCi": true,
   "repoType": "github",
   "repoHost": "https://github.com",
-  "projectName": "dataline",
+  "projectName": "rldashboard",
   "projectOwner": "RamiAwar"
 }

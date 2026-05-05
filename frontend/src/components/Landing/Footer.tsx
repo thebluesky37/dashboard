@@ -7,8 +7,8 @@ const navigation = {
   ],
   support: [
     { name: "Discord", href: "https://discord.gg/f2dC4CJK8d" },
-    { name: "Email", href: "mailto:support@dataline.app" },
-    { name: "GitHub", href: "https://github.com/RamiAwar/dataline" },
+    { name: "Email", href: "mailto:support@rldashboard.app" },
+    { name: "GitHub", href: "https://github.com/RamiAwar/rldashboard" },
     // { name: "Guides", href: "#" },
     // { name: "API Status", href: "#" },
   ],
@@ -46,7 +46,7 @@ const socials = [
   },
   {
     name: "GitHub",
-    href: "https://github.com/RamiAwar/dataline",
+    href: "https://github.com/RamiAwar/rldashboard",
     icon: (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
       <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
         <path
@@ -90,7 +90,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-6 pb-8 pt-4 sm:pt-24 lg:px-8 lg:pt-8">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-8">
-            <img className="h-7 rounded-md" src={logomd} alt="DataLine" />
+            <img className="h-7 rounded-md" src={logomd} alt="RLDashboard" />
             <p className="text-sm leading-6 text-gray-300">
               Making data accessible to everyone.
             </p>
@@ -193,7 +193,7 @@ export default function Footer() {
         </div>
         <div className="mt-16 border-t border-white/10 pt-8 sm:mt-20 lg:mt-24">
           <p className="mt-8 text-sm leading-5 text-gray-400 md:order-1 md:mt-0">
-            &copy; 2024 DataLine B.V. All rights reserved.
+            &copy; 2024 RLDashboard B.V. All rights reserved.
           </p>
         </div>
       </div>

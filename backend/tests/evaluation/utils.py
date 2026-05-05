@@ -9,10 +9,10 @@ from deepeval.test_case import LLMTestCase, LLMTestCaseParams
 from fastapi.testclient import TestClient
 from pydantic import BaseModel, Field, model_validator
 
-from dataline.models.llm_flow.enums import QueryResultType
-from dataline.models.llm_flow.schema import ResultType, SQLQueryRunResult
-from dataline.models.message.schema import QueryOut
-from dataline.models.result.schema import ResultOut
+from rldashboard.models.llm_flow.enums import QueryResultType
+from rldashboard.models.llm_flow.schema import ResultType, SQLQueryRunResult
+from rldashboard.models.message.schema import QueryOut
+from rldashboard.models.result.schema import ResultOut
 
 
 def snake(s: str) -> str:

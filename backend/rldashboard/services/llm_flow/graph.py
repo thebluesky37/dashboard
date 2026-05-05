@@ -8,22 +8,22 @@ from langgraph.graph import StateGraph
 from langgraph.prebuilt import ToolExecutor
 from langsmith import Client
 
-from dataline.models.llm_flow.schema import QueryOptions, ResultType
-from dataline.services.llm_flow.nodes import (
+from rldashboard.models.llm_flow.schema import QueryOptions, ResultType
+from rldashboard.services.llm_flow.nodes import (
     CallModelNode,
     CallToolNode,
     Condition,
     Node,
     ShouldCallToolCondition,
 )
-from dataline.services.llm_flow.prompt import SQL_FUNCTIONS_SUFFIX, SQL_PREFIX
-from dataline.services.llm_flow.toolkit import (
+from rldashboard.services.llm_flow.prompt import SQL_FUNCTIONS_SUFFIX, SQL_PREFIX
+from rldashboard.services.llm_flow.toolkit import (
     ChartGeneratorTool,
     QueryGraphState,
     SQLDatabaseToolkit,
 )
-from dataline.services.llm_flow.utils import ConnectionProtocol, DatalineSQLDatabase as SQLDatabase
-from dataline.utils.utils import forward_connection_errors
+from rldashboard.services.llm_flow.utils import ConnectionProtocol, RldashboardSQLDatabase as SQLDatabase
+from rldashboard.utils.utils import forward_connection_errors
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +44,7 @@ class QueryGraphService:
     def __init__(self, connection: ConnectionProtocol) -> None:
         # Enable this try catch once we support errors with streaming responses
         try:
-            self.db = SQLDatabase.from_dataline_connection(connection)
+            self.db = SQLDatabase.from_rldashboard_connection(connection)
         except Exception as e:
             forward_connection_errors(e)
             raise e

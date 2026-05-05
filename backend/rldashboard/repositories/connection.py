@@ -4,9 +4,9 @@ from typing import Type
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy import select
 
-from dataline.models.connection.model import ConnectionModel
-from dataline.repositories.base import AsyncSession, BaseRepository
-from dataline.models.connection.schema import ConnectionOptions
+from rldashboard.models.connection.model import ConnectionModel
+from rldashboard.repositories.base import AsyncSession, BaseRepository
+from rldashboard.models.connection.schema import ConnectionOptions
 
 
 class ConnectionType(Enum):

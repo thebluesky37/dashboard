@@ -1,20 +1,19 @@
 import logging
-import pathlib
+import os
 
 import pytest
 from fastapi.testclient import TestClient
 
-from dataline.config import config
-from dataline.models.connection.schema import Connection
-from dataline.utils.utils import get_sqlite_dsn
+from rldashboard.models.connection.schema import Connection
 
 logger = logging.getLogger(__name__)
 
 
 @pytest.mark.asyncio
 async def test_connect_db(client: TestClient) -> None:
+    database_url = os.environ["DATABASE_URL"]
     connection_in = {
-        "dsn": "sqlite:///test.db",
+        "dsn": database_url,
         "name": "Test",
     }
     response = client.post("/connect", json=connection_in)
@@ -25,44 +24,39 @@ async def test_connect_db(client: TestClient) -> None:
     assert data["id"]
     assert data["dsn"] == connection_in["dsn"]
     assert data["name"] == connection_in["name"]
-    assert data["dialect"] == "sqlite"
+    assert data["dialect"] == "postgresql"
     assert data["database"]
     assert data["is_sample"] is False
 
-    # Delete database after tests
-    pathlib.Path("test.db").unlink(missing_ok=True)
-
 
 @pytest.mark.asyncio
-async def test_connect_sample_db(client: TestClient) -> None:
+async def test_connect_db_marked_as_sample(client: TestClient) -> None:
+    database_url = os.environ["DATABASE_URL"]
     connection_in = {
-        "sample_name": "dvdrental",
-        "connection_name": "My DB",
+        "dsn": database_url,
+        "name": "My DB",
+        "is_sample": True,
     }
-    response = client.post("/connect/sample", json=connection_in)
+    response = client.post("/connect", json=connection_in)
 
     assert response.status_code == 200
 
     data = response.json()["data"]
     assert data["id"]
-    assert data["dsn"] is not None
-    assert data["dsn"].startswith("sqlite:///")
-    assert data["name"] == connection_in["connection_name"]
-    assert data["dialect"] == "sqlite"
+    assert data["dsn"] == database_url
+    assert data["name"] == connection_in["name"]
+    assert data["dialect"] == "postgresql"
     assert data["database"]
     assert data["is_sample"] is True
 
-    # Delete database after tests
-    file_path = data["dsn"].replace("sqlite:///", "")
-    pathlib.Path(file_path).unlink(missing_ok=True)
-
 
 @pytest.mark.asyncio
-async def test_create_sample_db_connection_twice_409(client: TestClient) -> None:
+async def test_create_connection_twice_409(client: TestClient) -> None:
+    database_url = os.environ["DATABASE_URL"]
     connection_in = {
-        "dsn": get_sqlite_dsn(config.sample_dvdrental_path),
+        "dsn": database_url,
         "name": "Test",
-        "is_sample": True,
+        "is_sample": False,
     }
     response = client.post("/connect", json=connection_in)
     assert response.status_code == 200
@@ -99,7 +93,6 @@ async def test_get_connection(client: TestClient, dvdrental_connection: Connecti
 @pytest.mark.asyncio
 async def test_update_connection(client: TestClient, dvdrental_connection: Connection) -> None:
     update_in = {
-        "dsn": "sqlite:///new.db",
         "name": "New name",
     }
     response = client.patch(f"/connection/{str(dvdrental_connection.id)}", json=update_in)
@@ -107,11 +100,8 @@ async def test_update_connection(client: TestClient, dvdrental_connection: Conne
     assert response.status_code == 200
 
     data = response.json()["data"]
-    assert data["connection"]["dsn"] == update_in["dsn"]
+    assert data["connection"]["dsn"] == dvdrental_connection.dsn
     assert data["connection"]["name"] == update_in["name"]
-
-    # Delete database after tests
-    pathlib.Path("new.db").unlink(missing_ok=True)
 
 
 @pytest.mark.asyncio

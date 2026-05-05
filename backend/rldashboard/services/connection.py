@@ -11,26 +11,26 @@ import pyreadstat
 from fastapi import Depends, UploadFile
 from sqlalchemy.exc import OperationalError
 
-from dataline.config import config
-from dataline.errors import ValidationError
-from dataline.models.connection.model import ConnectionModel
-from dataline.models.connection.schema import (
+from rldashboard.config import config
+from rldashboard.errors import ValidationError
+from rldashboard.models.connection.model import ConnectionModel
+from rldashboard.models.connection.schema import (
     ConnecitonSchemaTable,
     ConnectionOptions,
     ConnectionOut,
     ConnectionSchema,
     ConnectionUpdateIn,
 )
-from dataline.repositories.base import AsyncSession, NotFoundError, NotUniqueError
-from dataline.repositories.connection import (
+from rldashboard.repositories.base import AsyncSession, NotFoundError, NotUniqueError
+from rldashboard.repositories.connection import (
     ConnectionCreate,
     ConnectionRepository,
     ConnectionType,
     ConnectionUpdate,
 )
-from dataline.services.file_parsers.excel_parser import ExcelParserService
-from dataline.services.llm_flow.utils import DatalineSQLDatabase as SQLDatabase
-from dataline.utils.utils import (
+from rldashboard.services.file_parsers.excel_parser import ExcelParserService
+from rldashboard.services.llm_flow.utils import RldashboardSQLDatabase as SQLDatabase
+from rldashboard.utils.utils import (
     forward_connection_errors,
     generate_short_uuid,
     get_sqlite_dsn,
@@ -321,7 +321,7 @@ class ConnectionService:
     async def refresh_connection_schema(self, session: AsyncSession, connection_id: UUID) -> ConnectionOut:
         """
         Refresh the schema of a connection. Flow of the function:
-        1. Get the latest schema information from the database (using DatalineSQLDatabase)
+        1. Get the latest schema information from the database (using RldashboardSQLDatabase)
         2.a. If ConnectionOptions is null in the db,  create new ConnectionOptions with everything enabled
         2.b. Otherwise, fetch stored ConnectionOptions from the database and merge with new schema information
         3. Sort schemas and tables by name

@@ -62,12 +62,12 @@ jobs:
       - name: Run pyinstaller
         run: |
           uv run --no-sync --with pyinstaller==5.13.2 pyinstaller --clean --distpath linux_dist -y linux.spec
-          tar -cvf ../dataline.tar linux_dist
+          tar -cvf ../rldashboard.tar linux_dist
       - uses: actions/upload-artifact@v4
         with:
-          name: dataline-linux.tar
+          name: rldashboard-linux.tar
           # default workdir is only for runs, here we are using "uses" so it does not apply
-          path: dataline.tar
+          path: rldashboard.tar
           overwrite: true
 
   bundle-windows:
@@ -96,7 +96,7 @@ jobs:
           uv run --no-sync --with pyinstaller==6.11.1 pyinstaller --clean --distpath ../win64_dist -y windows.spec
       - uses: actions/upload-artifact@v4
         with:
-          name: dataline-windows
+          name: rldashboard-windows
           # default workdir is only for runs, here we are using "uses" so it does not apply
           path: win64_dist/
           overwrite: true
@@ -152,10 +152,10 @@ jobs:
         run: |
           uv run --no-sync --with pyinstaller==5.13.2 pyinstaller --clean --distpath macos_dist -y macos.spec
           cd macos_dist
-          tar -cf ../../dataline.tar dataline
+          tar -cf ../../rldashboard.tar rldashboard
       - uses: actions/upload-artifact@v4
         with:
-          name: dataline-macos-${{ steps.calculate_architecture.outputs.result }}.tar
+          name: rldashboard-macos-${{ steps.calculate_architecture.outputs.result }}.tar
           # default workdir is only for runs, here we are using "uses" so it does not apply
-          path: dataline.tar
+          path: rldashboard.tar
           overwrite: true

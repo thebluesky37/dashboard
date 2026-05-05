@@ -1,15 +1,90 @@
 # flake8: noqa
+import os
 from logging.config import fileConfig
 from typing import Any
 
-from sqlalchemy import text
+from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Connection
 
 from alembic import context
-from dataline.config import config as dataline_config
-from dataline.models import DBModel
+from rldashboard.config import config as rldashboard_config
+from rldashboard.models import DBModel
 
-from dataline.utils.utils import get_sqlite_dsn_async, get_sqlite_dsn  # noqa: F401 isort:skip
+
+def quote_ident(identifier: str) -> str:
+    return '"' + identifier.replace('"', '""') + '"'
+
+
+def get_postgres_schema() -> str | None:
+    if not rldashboard_config.is_postgres_storage:
+        return None
+    return rldashboard_config.db_schema or "public"
+
+
+def get_search_path_sql() -> str | None:
+    schema_name = get_postgres_schema()
+    if schema_name is None:
+        return None
+    return f"{quote_ident(schema_name)}, public"
+
+
+def get_search_path_setting() -> str | None:
+    schema_name = get_postgres_schema()
+    if schema_name is None:
+        return None
+    return f"{schema_name},public"
+
+
+def get_alembic_schema_config() -> dict[str, Any]:
+    schema_name = get_postgres_schema()
+    if schema_name is not None:
+        return {
+            "version_table_schema": schema_name,
+            "include_schemas": True,
+        }
+    return {}
+
+
+def to_sync_database_url(database_url: str) -> str:
+    if database_url.startswith("postgresql+asyncpg://"):
+        return database_url.replace("+asyncpg", "+psycopg2", 1)
+    if database_url.startswith("sqlite+aiosqlite://"):
+        return database_url.replace("+aiosqlite", "", 1)
+    return database_url
+
+
+def get_sync_database_url() -> str:
+    database_url = os.environ.get("DATABASE_URL")
+    if database_url:
+        return to_sync_database_url(database_url)
+    configured_url = config.get_main_option("sqlalchemy.url")
+    if configured_url:
+        return configured_url
+    return to_sync_database_url(rldashboard_config.database_url)
+
+
+def configure_postgres_schema(dsn: str) -> None:
+    schema_name = get_postgres_schema()
+    search_path = get_search_path_sql()
+    if schema_name is None or search_path is None:
+        return
+
+    bootstrap_engine = create_engine(dsn, echo=rldashboard_config.database_echo, isolation_level="AUTOCOMMIT")
+    try:
+        with bootstrap_engine.connect() as connection:
+            if schema_name != "public":
+                connection.execute(text(f"CREATE SCHEMA IF NOT EXISTS {quote_ident(schema_name)}"))
+
+            current_user = connection.execute(text("SELECT current_user")).scalar_one()
+            current_database = connection.execute(text("SELECT current_database()")) .scalar_one()
+            connection.execute(
+                text(
+                    f"ALTER ROLE {quote_ident(current_user)} IN DATABASE {quote_ident(current_database)} "
+                    f"SET search_path TO {search_path}"
+                )
+            )
+    finally:
+        bootstrap_engine.dispose()
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -44,13 +119,12 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url,
+        url=get_sync_database_url(),
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
-        render_as_batch=True,
+        **get_alembic_schema_config(),
     )
 
     with context.begin_transaction():
@@ -58,7 +132,16 @@ def run_migrations_offline() -> None:
 
 
 def do_run_migrations(connection: Connection) -> None:
-    context.configure(connection=connection, target_metadata=target_metadata, render_as_batch=True)
+    search_path = get_search_path_sql()
+    if search_path is not None:
+        connection.execute(text(f"SET search_path TO {search_path}"))
+        connection.commit()
+
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        **get_alembic_schema_config(),
+    )
 
     with context.begin_transaction():
         context.run_migrations()
@@ -78,10 +161,17 @@ async def run_async_migrations() -> None:
     """
     from sqlalchemy.ext.asyncio import create_async_engine
 
-    dsn = get_sqlite_dsn_async(dataline_config.sqlite_path)
-    engine = create_async_engine(dsn, echo=dataline_config.sqlite_echo)
+    dsn = rldashboard_config.database_url
+    engine = create_async_engine(dsn, echo=rldashboard_config.database_echo)
 
     async with engine.connect() as connection:
+        search_path = get_search_path_sql()
+        if search_path is not None:
+            schema_name = get_postgres_schema()
+            if schema_name is not None and schema_name != "public":
+                await connection.execute(text(f"CREATE SCHEMA IF NOT EXISTS {quote_ident(schema_name)}"))
+            await connection.execute(text(f"SET search_path TO {search_path}"))
+            await connection.commit()
         await connection.run_sync(do_run_migrations)
 
     await engine.dispose()
@@ -94,16 +184,25 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    from sqlalchemy import create_engine
-
-    dsn = get_sqlite_dsn(dataline_config.sqlite_path)
-    engine = create_engine(dsn, echo=dataline_config.sqlite_echo)
+    dsn = get_sync_database_url()
+    configure_postgres_schema(dsn)
+    engine = create_engine(dsn, echo=rldashboard_config.database_echo)
 
     with engine.connect() as connection:
-        context.configure(connection=connection, target_metadata=target_metadata, render_as_batch=True)
+        search_path = get_search_path_sql()
+        if search_path is not None:
+            connection.execute(text(f"SET search_path TO {search_path}"))
+            connection.commit()
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata,
+            **get_alembic_schema_config(),
+        )
 
         with context.begin_transaction():
             context.run_migrations()
+
+    engine.dispose()
 
 
 if context.is_offline_mode():
